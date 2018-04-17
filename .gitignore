@@ -1,0 +1,7 @@
+# ignore everything except the named directories/files
+#*
+#!src/*
+#!lib/**
+#!LICENSE
+#!README
+#!example/**
