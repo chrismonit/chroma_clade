@@ -5,15 +5,16 @@ from itertools import chain
 import os.path
 
 from Bio.Nexus import Nexus 
-from Bio.Phylo import Newick, NewickIO 
+from Bio.Phylo import Newick, NewickIO, PhyloXML
 from Bio.Phylo.BaseTree import BranchColor
 import copy
 
 AA_STATES = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y", "*", "-", "X"]
 N_STATES = len(AA_STATES)
 
+# TODO check these colours carefully
 BLANK_BRANCH_COL = '#797D7F' # dark grey
-COLOURS = { 'A':'#FF0000', 'C':'#009933', 'D':'#990000', 'E':'#FF0066', 'F':'#6666FF', 'G':'#00CC33', 'H':'#FFCC00', 'I':'#660066', 'K':'#CC3300', 'L':'#00CCFF', 'M':'#FF9900', 'N':'#FF9966', 'P':'#CC0099', 'Q':'#FF00CC', 'R':'#990000', 'S':'#336600', 'T':'#FF6699', 'V':'#FF66FF', 'W':'#0000FF', 'Y':'#0099FF', '*':BLANK_BRANCH_COL, '-':BLANK_BRANCH_COL, 'X':BLANK_BRANCH_COL }
+COLOURS = { 'A':'#FF0000', 'C':'#009933', 'D':'#990000', 'E':'#FF0066', 'F':'#6666FF', 'G':'#00CC33', 'H':'#FFCC00', 'I':'#660066', 'K':'#CC3300', 'L':'#00CCFF', 'M':'#FF9900', 'N':'#FF9966', 'P':'#CC0099', 'Q':'#FF00CC', 'R':'#992600', 'S':'#336600', 'T':'#FF6699', 'V':'#FF66FF', 'W':'#0000FF', 'Y':'#0099FF', '*':BLANK_BRANCH_COL, '-':BLANK_BRANCH_COL, 'X':BLANK_BRANCH_COL }
 
 COL_ATTRIB = "[&!color=%s]"
 STATE_SUFFIX = "__site_%d__%s"
@@ -57,7 +58,6 @@ def main():
     taxon_dict = dict([ (aln[i].id, i) for i in range(len(aln)) ]) # maps taxon identifiers to their alignment indices 
     
     trees = []
-    colour_type = "native" if args.xml else "figtree"
     for iSite in range(len(aln)):
         tree_copy = copy.deepcopy(tree)
         colour_tree(tree_copy.root, aln, taxon_dict, iSite)
@@ -66,9 +66,28 @@ def main():
     
     directory, filename = os.path.split(args.tree)
     outpath = directory + (OUT_PREFIX + filename) 
-
-    output_figtree(trees, outpath, args.b)
     
+    if args.xml:
+        output_xml(trees, outpath, args.b)
+    else:
+        output_figtree(trees, outpath, args.b)
+
+def output_xml(coloured_trees, path, colour_branches):
+    
+    # adding font as a property of each tip clade, to show colour
+    coloured_trees = [ PhyloXML.Phylogeny.from_tree(tree) for tree in coloured_trees ]# convert to PhyloNexus
+    for tree in coloured_trees:
+        for clade in tree.get_terminals():
+            value = BranchColor.to_hex(clade.color) # value of the property (ie the colour)
+            clade.properties = [PhyloXML.Property(value, "style:font_color", "node", "xsd:token")]
+        
+        if not colour_branches: 
+            for clade in tree.get_nonterminals() + tree.get_terminals():
+                clade.color = None
+    Phylo.write(coloured_trees, path, "phyloxml")
+
+
+
 def output_figtree(coloured_trees, path, colour_branches):
 
     if colour_branches:
@@ -123,7 +142,6 @@ def colour_tree(parent, alignment, taxon_dict, site, states=AA_STATES):
         parent.color = col # stored as RGB tuple
         return parent_vector
 
-# io
 def colour_taxon(name, value_dict=COLOURS, n_chars=1, annotation_string=COL_ATTRIB):
     return name + annotation_string % value_dict[name[-n_chars]]
 
