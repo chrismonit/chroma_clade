@@ -41,6 +41,9 @@ def main():
     parser.add_argument( "-xml", action="store_true", help="Save as PhyloXML format, e.g. compatible with Archeopteryx")
     parser.add_argument( "-tf", default="newick", help="Tree file format, 'newick' (default), 'nexus' or 'phyloxml'" )
     parser.add_argument( "-af", default="fasta", help="Alignment file format, 'fasta' (default)" ) # TODO give more info
+    parser.add_argument( "-start", default=None, type=int, help="If selecting a subrange of sites, specify first site (inclusive; default is first site in the alignment)" )
+    parser.add_argument( "-end", default=None, type=int, help="If selecting a subrange of sites, specify last site (inclusive; default is last site in the alignment)" )
+
     args = parser.parse_args()
 
     try:
@@ -56,9 +59,21 @@ def main():
         exit()
     
     taxon_dict = dict([ (aln[i].id, i) for i in range(len(aln)) ]) # maps taxon identifiers to their alignment indices 
+
+    if args.start != None:
+        start = args.start - 1
+        if start < 0:
+            raise ValueError("Input start site (%d) lower than 1" % args.start)
+    else: start = 0
     
+    if args.end != None:
+        end = args.end - 1 # make zero based, inclusive
+        if end > len(aln) - 1:
+            raise ValueError("Input end site (%d) greater than length of alignment" % args.end)
+    else: end = len(aln)
+
     trees = []
-    for iSite in range(len(aln)):
+    for iSite in range(start, end+1):
         tree_copy = copy.deepcopy(tree)
         colour_tree(tree_copy.root, aln, taxon_dict, iSite)
         annotate_tips_only(tree_copy, aln, taxon_dict, iSite) # add site and state info
