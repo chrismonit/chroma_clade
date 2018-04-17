@@ -2,6 +2,7 @@
 from Bio import Phylo
 from Bio import AlignIO, SeqIO
 from itertools import chain 
+import os.path
 
 from Bio.Nexus import Nexus 
 from Bio.Phylo import Newick, NewickIO 
@@ -28,6 +29,7 @@ Begin Trees;
 End;""" 
 # 'index' starts from 1; 'tree' is the Newick tree string 
 TREE_TEMPLATE = "Tree tree%(index)d=%(tree)s" 
+OUT_PREFIX = "col_"
 
 def main():
     import argparse
@@ -62,12 +64,12 @@ def main():
         annotate_tips_only(tree_copy, aln, taxon_dict, iSite) # add site and state info
         trees.append(tree_copy)
     
-#    if args.xml:
-#        Phylo.write(trees, "xml.out.tre", "phyloxml")
-#    else:
-    output_figtree(trees, args.b)
+    directory, filename = os.path.split(args.tree)
+    outpath = directory + (OUT_PREFIX + filename) 
+
+    output_figtree(trees, outpath, args.b)
     
-def output_figtree(coloured_trees, colour_branches):
+def output_figtree(coloured_trees, path, colour_branches):
 
     if colour_branches:
         for tree in coloured_trees:
@@ -79,7 +81,9 @@ def output_figtree(coloured_trees, colour_branches):
     else:
         tip_annotation_func = colour_taxon
 
-    print nexus_text(trees, tip_annotation_func).replace("'", "")
+    f = open(path, "w")
+    f.write(nexus_text(coloured_trees, tip_annotation_func).replace("'", ""))
+    f.close()
     # the Bio code automatically adds inverted commas to colour attribute lables, which prevents figtree reading them as annotations
 
 
