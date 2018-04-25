@@ -9,7 +9,7 @@ from Bio.Phylo import Newick, NewickIO, PhyloXML
 from Bio.Phylo.BaseTree import BranchColor
 import copy
 
-import check_input
+from check_input import *
 
 AA_STATES = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y", "*", "-", "X"]
 N_STATES = len(AA_STATES)
@@ -34,63 +34,51 @@ End;"""
 TREE_TEMPLATE = "Tree tree%(index)d=%(tree)s" # TODO could have rooting information here
 OUT_PREFIX = "col_"
 
+# for running as a CLI app
 def main():
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument( "tree" )
-    parser.add_argument( "alignment")
+    parser.add_argument( "tree", type=str)
+    parser.add_argument( "alignment", type=str)
     parser.add_argument( "-b", action="store_true", help="Colour branches in addition to tip names")
-    parser.add_argument( "-xml", action="store_true", help="Save as PhyloXML format, e.g. compatible with Archeopteryx")
-    parser.add_argument( "-tf", default="newick", help="Tree file format, 'newick' (default), 'nexus' or 'phyloxml'" )
-    parser.add_argument( "-af", default="fasta", help="Alignment file format, 'fasta' (default)" ) # TODO give more info
-    parser.add_argument( "-start", default=None, type=int, help="If selecting a subrange of sites, specify first site (inclusive; default is first site in the alignment)" )
-    parser.add_argument( "-end", default=None, type=int, help="If selecting a subrange of sites, specify last site (inclusive; default is last site in the alignment)" )
+    parser.add_argument( "-tf", metavar="<tree_format>", default="newick", help="Tree file format, 'newick' (default), 'nexus' or 'phyloxml'" )
+    parser.add_argument( "-af", metavar="<alignment_format>", default="fasta", help="Alignment file format, 'fasta' (default) or 'nexus'" )
+    parser.add_argument( "-start", metavar="<start_site>", default=None, type=str, help="If selecting a subrange of sites, specify first site (inclusive; default is first site in the alignment)" )
+    parser.add_argument( "-end", metavar="<end_site>", default=None, type=str, help="If selecting a subrange of sites, specify last site (inclusive; default is last site in the alignment)" )
+    parser.add_argument( "-f", metavar="<output_format>", default="figtree", type=str, help="Output tree format, either FigTree-compatible Nexus (default) or Phylo-XML" )
 
     args = parser.parse_args()
     
-    #usr_input = Input()
-
-
     try:
-        tree = Phylo.read(args.tree, args.tf) 
-    except ValueError: # raised if 0 or >1 trees in file
-        print "Error: cannot read tree file"
-        exit()
-
-    try:
-        aln = AlignIO.read(args.alignment, args.af)
-    except ValueError: # raised if 0 or >1 alignments in file
-        print "Error: cannot read alignment file"
+        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, tree_out_format=args.f, start_site=args.start, end_site=args.end)
+    except InputError as e:
+        print str(e)
+        print ""
+        parser.print_help()
         exit()
     
+    run(usr)
+
+
+def run(usr):
+    tree, aln = usr.get_tree(), usr.get_align()
+
     taxon_dict = dict([ (aln[i].id, i) for i in range(len(aln)) ]) # maps taxon identifiers to their alignment indices 
 
-    if args.start != None:
-        start = args.start - 1
-        if start < 0:
-            raise ValueError("Input start site (%d) lower than 1" % args.start)
-    else: start = 0
-    
-    if args.end != None:
-        end = args.end - 1 # make zero based, inclusive
-        if end > aln.get_alignment_length() - 1:
-            raise ValueError("Input end site (%d) greater than length of alignment" % args.end)
-    else: end = aln.get_alignment_length() - 1
-
     trees = []
-    for iSite in range(start, end+1):
+    for iSite in range(usr.get_start_site(), usr.get_end_site()+1):
         tree_copy = copy.deepcopy(tree)
         colour_tree(tree_copy.root, aln, taxon_dict, iSite)
         annotate_tips_only(tree_copy, aln, taxon_dict, iSite) # add site and state info
         trees.append(tree_copy)
     
-    directory, filename = os.path.split(args.tree)
+    directory, filename = os.path.split(usr.get_tree_path())
     outpath = directory + (OUT_PREFIX + filename) 
     
-    if args.xml:
-        output_xml(trees, outpath, args.b)
+    if usr.get_tree_out_format() == "xml":
+        output_xml(trees, outpath, usr.get_branches())
     else:
-        output_figtree(trees, outpath, args.b)
+        output_figtree(trees, outpath, usr.get_branches())
 
 def output_xml(coloured_trees, path, colour_branches):
     

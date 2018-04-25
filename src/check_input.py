@@ -31,6 +31,9 @@ class Input:
             raise InputError("Oops: can't find tree file")
         except Exception:
             raise InputError("Oops: problem reading tree file")
+        
+        self.tree_path = tree_path # keep this so output file name can be made later
+        self.branches = branches 
 
         try:
             self.align = AlignIO.read(align_path, align_in_format)
@@ -86,12 +89,15 @@ class Input:
     # get methods
     def get_tree(self): return self.tree
     def get_align(self): return self.align
-    def get_tree_in_format(self): return self.tree_in_format
-    def get_align_in_format(self): return self.align_in_format
+    def get_tree_in_format(self): return self.tree_in_format # probably not needed
+    def get_align_in_format(self): return self.align_in_format # probably not needed
     def get_tree_out_format(self): return self.tree_out_format
     
     def get_start_site(self): return self.start_site
     def get_end_site(self): return self.end_site
+    
+    def get_tree_path(self): return self.tree_path
+    def get_branches(self): return self.branches
 
 
 
@@ -99,7 +105,7 @@ def test():
     base_path = "/Users/cmonit1/Desktop/coloured_trees/"
     tree_path = base_path+"4tree.nwk.tre"
     align_path = base_path+"aln.fasta"
-    branches = False
+    #branches = False
     tree_in_format = "newick" 
     align_in_format = "fasta"
     tree_out_format = "figtree"

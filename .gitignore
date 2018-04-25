@@ -1,4 +1,6 @@
 # ignore everything except the named directories/files
+*.pyc
+*/*.pyc
 *.swp
 */*.swp
 #*
