@@ -9,7 +9,7 @@ from Bio.Phylo import Newick, NewickIO, PhyloXML
 from Bio.Phylo.BaseTree import BranchColor
 import copy
 
-import input
+import check_input
 
 AA_STATES = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y", "*", "-", "X"]
 N_STATES = len(AA_STATES)
@@ -48,7 +48,7 @@ def main():
 
     args = parser.parse_args()
     
-    usr_input = Input()
+    #usr_input = Input()
 
 
     try:
