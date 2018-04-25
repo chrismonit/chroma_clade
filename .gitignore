@@ -1,4 +1,6 @@
 # ignore everything except the named directories/files
+*.swp
+*/*.swp
 #*
 #!src/*
 #!lib/**
