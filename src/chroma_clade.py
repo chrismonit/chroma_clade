@@ -29,7 +29,7 @@ Begin Trees;
 %(trees)s 
 End;""" 
 # 'index' starts from 1; 'tree' is the Newick tree string 
-TREE_TEMPLATE = "Tree tree%(index)d=%(tree)s" 
+TREE_TEMPLATE = "Tree tree%(index)d=%(tree)s" # TODO could have rooting information here
 OUT_PREFIX = "col_"
 
 def main():
@@ -68,9 +68,9 @@ def main():
     
     if args.end != None:
         end = args.end - 1 # make zero based, inclusive
-        if end > len(aln) - 1:
+        if end > aln.get_alignment_length() - 1:
             raise ValueError("Input end site (%d) greater than length of alignment" % args.end)
-    else: end = len(aln)
+    else: end = aln.get_alignment_length() - 1
 
     trees = []
     for iSite in range(start, end+1):
