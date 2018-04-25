@@ -9,6 +9,8 @@ from Bio.Phylo import Newick, NewickIO, PhyloXML
 from Bio.Phylo.BaseTree import BranchColor
 import copy
 
+import input
+
 AA_STATES = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y", "*", "-", "X"]
 N_STATES = len(AA_STATES)
 
@@ -45,6 +47,9 @@ def main():
     parser.add_argument( "-end", default=None, type=int, help="If selecting a subrange of sites, specify last site (inclusive; default is last site in the alignment)" )
 
     args = parser.parse_args()
+    
+    usr_input = Input()
+
 
     try:
         tree = Phylo.read(args.tree, args.tf) 
@@ -186,8 +191,6 @@ def nexus_text(obj, tip_annotation_func, **kwargs):
       'trees': '\n'.join(nexus_trees), # trees on separate lines
     }
     return text
-
-
 
 if __name__ == "__main__":
     main()
