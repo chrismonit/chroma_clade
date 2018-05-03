@@ -113,32 +113,22 @@ root.configure(background="gray")
 
 # ================ window layout ===============
 f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, background="darkred")
-f_input = Frame(root, height=HEIGHT*0.4, width=WIDTH*0.5, background="darkblue")
-#f_left_input = Frame(f_input, background="darkorange")
-#f_right_input = Frame(f_input, background="purple")
-f_space = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, background="yellow")
-f_options = Frame(root, height=HEIGHT*0.3, width=WIDTH*1.0, background="darkgreen")
+f_input = Frame(root, height=HEIGHT*0.8, width=WIDTH*0.5, background="darkblue")
 f_messages = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, background="orange")
 
 root.grid_rowconfigure(0, weight=1) 
 root.grid_rowconfigure(1, weight=1) 
 root.grid_rowconfigure(2, weight=1)
-root.grid_rowconfigure(3, weight=1)
-root.grid_rowconfigure(4, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
 # place large frames on root grid
 f_title.grid(column=0, row=0, sticky="nesw")
 f_input.grid(column=0, row=1, sticky="nesw")
-f_space.grid(column=0, row=2, sticky="nesw")
-f_options.grid(column=0, row=3, sticky="nesw")
-f_messages.grid(column=0, row=4, sticky="nesw")
+f_messages.grid(column=0, row=2, sticky="nesw")
 
 propagate = False
 f_title.grid_propagate(propagate)
 f_input.grid_propagate(propagate)
-f_space.grid_propagate(propagate)
-f_options.grid_propagate(propagate)
 f_messages.grid_propagate(propagate)
 
 # ================ title ===============
@@ -151,31 +141,31 @@ l_title.grid(column=0, row=0, sticky="nsew")
 # ================ file input ===============
 # two columns in f_input, for tree and alignment panels
 
-for i in range(5):
+for i in range(13):
     f_input.grid_rowconfigure(i, weight=1)
     for j in range(9):
         f_input.grid_columnconfigure(j, weight=1)
 
 L_COL = 3
-B_COL = L_COL + 1
-F_COL = B_COL + 1
+M_COL = L_COL + 1
+R_COL = M_COL + 1
 
 # CHOOSE TREE
 l_tree = Label(f_input, text="Tree:", background="cyan")
 l_tree.grid(column=L_COL, row=0, sticky="")
 
 b_tree = Button(f_input, text="Choose file", command=gui.set_tree)
-b_tree.grid(column=B_COL, row=0, sticky="")
+b_tree.grid(column=M_COL, row=0, sticky="")
 
 l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), background="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
-l_tree_file.grid(column=F_COL, row=0, sticky="")
+l_tree_file.grid(column=R_COL, row=0, sticky="")
 
 # TREE FORMAT
 l_tree_format = Label(f_input, text="Tree format:", background="cyan")
 l_tree_format.grid(column=L_COL, row=1, sticky="")
 
 o_tree_format = OptionMenu(f_input, gui.get_tree_format(), *gui.tree_choices) 
-o_tree_format.grid(column=B_COL, row=1)
+o_tree_format.grid(column=M_COL, row=1)
 
 # column 2, row 1 is empty
 
@@ -186,53 +176,44 @@ l_align = Label(f_input, text="Alignment:", background="cyan")
 l_align.grid(column=L_COL, row=3, sticky="")
 
 b_align = Button(f_input, text="Choose file", command=gui.set_align)
-b_align.grid(column=B_COL, row=3)
+b_align.grid(column=M_COL, row=3)
 
 # TODO could make text a different colour to make it clearer
 l_align_file = Label(f_input, textvariable=gui.get_align_file(), background="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
-l_align_file.grid(column=F_COL, row=3, sticky="")
+l_align_file.grid(column=R_COL, row=3, sticky="")
 
 l_align_format = Label(f_input, text="Alignment format:", background="cyan")
 l_align_format.grid(column=L_COL, row=4, sticky="")
 
 o_align = OptionMenu(f_input, gui.get_align_format(), *gui.align_choices) 
-o_align.grid(column=B_COL, row=4)
+o_align.grid(column=M_COL, row=4)
 
 # ================ options ===============
-for i in range(6):
-    f_options.grid_rowconfigure(i, weight=1)
-    for j in range(9):
-        f_options.grid_columnconfigure(j, weight=1)
+# rows 5, 6, 7 blank
 
-B_COL = 4
-L_COL = B_COL + 1
-
-#l_blank = Label(f_options, text="", background="pink")
-#l_blank.grid(column=B_COL-1, row=0, sticky="ew")
-
-cb_branches = Checkbutton(f_options, text="Colour branches", background="red", variable=gui.get_colour_branches())
-cb_branches.grid(column=B_COL, row=0, sticky="")
+cb_branches = Checkbutton(f_input, text="Colour branches", background="red", variable=gui.get_colour_branches())
+cb_branches.grid(column=M_COL, row=8, sticky="")
 
 # TODO choose range of sites, check button and text box
 # rows 1 and 2
 
 # output format
-o_out_format = OptionMenu(f_options, gui.get_save_format(), *GuiInput.save_choices) 
-o_out_format.grid(column=B_COL, row=3)
+o_out_format = OptionMenu(f_input, gui.get_save_format(), *GuiInput.save_choices) 
+o_out_format.grid(column=M_COL, row=11)
 
-l_out_format = Label(f_options, text="Output file format", background="cyan")
-l_out_format.grid(column=L_COL, row=3, sticky="")
+l_out_format = Label(f_input, text="Output file format", background="cyan")
+l_out_format.grid(column=R_COL, row=11, sticky="")
 
 # output file
-b_outfile = Button(f_options, text="Save as", command=gui.set_save)
-b_outfile.grid(column=B_COL, row=4, sticky="")
+b_outfile = Button(f_input, text="Save as", command=gui.set_save)
+b_outfile.grid(column=M_COL, row=12, sticky="")
 
-l_outfile = Label(f_options, text="Output file", background="cyan")
-l_outfile.grid(column=L_COL, row=4, sticky="")
+l_outfile = Label(f_input, text="Output file", background="cyan")
+l_outfile.grid(column=R_COL, row=12, sticky="")
 
 # go button
-b_run = Button(f_options, text="Go")
-b_run.grid(column=B_COL, row=5, sticky="")
+b_run = Button(f_input, text="Go")
+b_run.grid(column=M_COL, row=13, sticky="")
 
 # ================ messages ===============
 
