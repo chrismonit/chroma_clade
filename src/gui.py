@@ -61,7 +61,12 @@ class GuiInput():
     def set_save(self):
         filepath = tkFileDialog.asksaveasfilename(initialdir=GuiInput.initial_directory)
         self.save_path.set(filepath)
-        self.save_file.set( os.path.split(filepath)[1] )
+        filename = os.path.split(filepath)[1]
+        if len(filename) <= GuiInput.MAX_FILE_LEN:
+            self.save_file.set( filename )
+        else:
+            self.save_file.set( filename[:GuiInput.MAX_FILE_LEN] + "..." )
+
 
     def get_tree_format(self): return self.tree_format
     def get_align_format(self): return self.align_format
@@ -97,38 +102,34 @@ WIDTH = 600.
 HEIGHT = WIDTH*1.2 
 
 root.geometry("%dx%d"%(round(WIDTH), round(HEIGHT)))
-root.configure(background="gray")
-#root.resizable(width=False, height=False) # are we sure about this?
-# TODO may want to set a minimum size: https://stackoverflow.com/questions/10448882/how-do-i-set-a-minimum-window-size-in-tkinter
+root.configure(bg="gray")
 
 # TODO
 # icon image
 #root.wm_iconbitmap("icon_image_filename.ico")
 
-# background image
-#bg_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/tmp.darwin.gif")
-#image_lbl = Label(root, image=bg_image)
-##image_lbl.pack() # dont mix pack and grid in same window
-
-
 # ================ window layout ===============
-f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, background="darkred")
-f_input = Frame(root, height=HEIGHT*0.8, width=WIDTH*0.5, background="darkblue")
-f_messages = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, background="orange")
+f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="darkred")
+f_input = Frame(root, height=HEIGHT*0.4, width=WIDTH*0.5, bg="white") # nice pale cyan: 
+f_image = Frame(root, height=HEIGHT*0.4, width=WIDTH*0.5, bg="white") # nice pale cyan: #9BFBFB
+f_messages = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="orange")
 
 root.grid_rowconfigure(0, weight=1) 
 root.grid_rowconfigure(1, weight=1) 
 root.grid_rowconfigure(2, weight=1)
+root.grid_rowconfigure(3, weight=1)
 root.grid_columnconfigure(0, weight=1)
 
 # place large frames on root grid
 f_title.grid(column=0, row=0, sticky="nesw")
 f_input.grid(column=0, row=1, sticky="nesw")
-f_messages.grid(column=0, row=2, sticky="nesw")
+f_image.grid(column=0, row=2, sticky="nesw")
+f_messages.grid(column=0, row=3, sticky="nesw")
 
 propagate = False
 f_title.grid_propagate(propagate)
 f_input.grid_propagate(propagate)
+f_image.grid_propagate(propagate)
 f_messages.grid_propagate(propagate)
 
 # ================ title ===============
@@ -151,17 +152,17 @@ M_COL = L_COL + 1
 R_COL = M_COL + 1
 
 # CHOOSE TREE
-l_tree = Label(f_input, text="Tree:", background="cyan")
+l_tree = Label(f_input, text="Tree:", bg="cyan")
 l_tree.grid(column=L_COL, row=0, sticky="")
 
 b_tree = Button(f_input, text="Choose file", command=gui.set_tree)
 b_tree.grid(column=M_COL, row=0, sticky="")
 
-l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), background="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
+l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), fg="red", bg="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
 l_tree_file.grid(column=R_COL, row=0, sticky="")
 
 # TREE FORMAT
-l_tree_format = Label(f_input, text="Tree format:", background="cyan")
+l_tree_format = Label(f_input, text="Tree format:", bg="cyan")
 l_tree_format.grid(column=L_COL, row=1, sticky="")
 
 o_tree_format = OptionMenu(f_input, gui.get_tree_format(), *gui.tree_choices) 
@@ -172,14 +173,14 @@ o_tree_format.grid(column=M_COL, row=1)
 # all row 2 is empty
 
 # CHOOSE ALIGN
-l_align = Label(f_input, text="Alignment:", background="cyan")
+l_align = Label(f_input, text="Alignment:", bg="cyan")
 l_align.grid(column=L_COL, row=3, sticky="")
 
 b_align = Button(f_input, text="Choose file", command=gui.set_align)
 b_align.grid(column=M_COL, row=3)
 
 # TODO could make text a different colour to make it clearer
-l_align_file = Label(f_input, textvariable=gui.get_align_file(), background="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
+l_align_file = Label(f_input, textvariable=gui.get_align_file(), fg="red", bg="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
 l_align_file.grid(column=R_COL, row=3, sticky="")
 
 l_align_format = Label(f_input, text="Alignment format:", background="cyan")
@@ -191,7 +192,7 @@ o_align.grid(column=M_COL, row=4)
 # ================ options ===============
 # rows 5, 6, 7 blank
 
-cb_branches = Checkbutton(f_input, text="Colour branches", background="red", variable=gui.get_colour_branches())
+cb_branches = Checkbutton(f_input, text="Colour branches", bg="red", variable=gui.get_colour_branches())
 cb_branches.grid(column=M_COL, row=8, sticky="")
 
 # TODO choose range of sites, check button and text box
@@ -201,19 +202,21 @@ cb_branches.grid(column=M_COL, row=8, sticky="")
 o_out_format = OptionMenu(f_input, gui.get_save_format(), *GuiInput.save_choices) 
 o_out_format.grid(column=M_COL, row=11)
 
-l_out_format = Label(f_input, text="Output file format", background="cyan")
+l_out_format = Label(f_input, text="Output file format", bg="cyan")
 l_out_format.grid(column=R_COL, row=11, sticky="")
 
 # output file
 b_outfile = Button(f_input, text="Save as", command=gui.set_save)
 b_outfile.grid(column=M_COL, row=12, sticky="")
 
-l_outfile = Label(f_input, text="Output file", background="cyan")
+l_outfile = Label(f_input, textvariable=gui.get_save_file(), fg="red", bg="cyan", width=GuiInput.MAX_FILE_LEN)
 l_outfile.grid(column=R_COL, row=12, sticky="")
 
 # go button
 b_run = Button(f_input, text="Go")
 b_run.grid(column=M_COL, row=13, sticky="")
+
+# ================ image ===============
 
 # ================ messages ===============
 
