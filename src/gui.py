@@ -3,7 +3,8 @@ import tkFileDialog
 import os.path
 
 class GuiInput():
-
+    
+    MAX_FILE_LEN = 20
     tree_choices = ["Newick", "Nexus"]
     align_choices = ["Fasta", "Nexus"]
     save_choices = ["Figtree", "XML"]
@@ -14,7 +15,7 @@ class GuiInput():
         self.colour_branches = BooleanVar()
         self.colour_branches.set(False)
 
-        self.tree_file = StringVar()
+        self.tree_file = StringVar() # for display only
         self.tree_file.set("") # keep label empty at first
         self.tree_path = StringVar()
         self.tree_path.set(GuiInput.default_str)
@@ -28,7 +29,7 @@ class GuiInput():
         self.save_format = StringVar()
         self.save_format.set(GuiInput.save_choices[0])
 
-        self.align_file = StringVar()
+        self.align_file = StringVar() # for display only
         self.align_file.set("") # keep label empty at first
         self.align_path = StringVar()
         self.align_path.set(GuiInput.default_str)
@@ -41,12 +42,21 @@ class GuiInput():
     def set_tree(self):
         filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
         self.tree_path.set(filepath)
-        self.tree_file.set( os.path.split(filepath)[1] )
+        filename = os.path.split(filepath)[1]
+        if len(filename) <= GuiInput.MAX_FILE_LEN:
+            self.tree_file.set( filename )
+        else:
+            self.tree_file.set( filename[:GuiInput.MAX_FILE_LEN] + "..." )
     
     def set_align(self):
         filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
         self.align_path.set(filepath)
-        self.align_file.set( os.path.split(filepath)[1] )
+        filename = os.path.split(filepath)[1]
+        if len(filename) <= GuiInput.MAX_FILE_LEN:
+            self.align_file.set( filename )
+        else:
+            self.align_file.set( filename[:GuiInput.MAX_FILE_LEN] + "..." )
+
 
     def set_save(self):
         filepath = tkFileDialog.asksaveasfilename(initialdir=GuiInput.initial_directory)
@@ -103,9 +113,9 @@ root.configure(background="gray")
 
 # ================ window layout ===============
 f_title = Frame(root, height=HEIGHT*0.2, width=WIDTH*1.0, background="darkred")
-f_inputs = Frame(root, height=HEIGHT*0.4, width=WIDTH*0.5, background="darkblue")
-#f_left_input = Frame(f_inputs, background="darkorange")
-#f_right_input = Frame(f_inputs, background="purple")
+f_input = Frame(root, height=HEIGHT*0.4, width=WIDTH*0.5, background="darkblue")
+#f_left_input = Frame(f_input, background="darkorange")
+#f_right_input = Frame(f_input, background="purple")
 f_options = Frame(root, height=HEIGHT*0.3, width=WIDTH*1.0, background="darkgreen")
 f_messages = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, background="orange")
 
@@ -117,13 +127,13 @@ root.grid_columnconfigure(0, weight=1)
 
 # place large frames on root grid
 f_title.grid(column=0, row=0, sticky="nesw")
-f_inputs.grid(column=0, row=1, sticky="nesw")
+f_input.grid(column=0, row=1, sticky="nesw")
 f_options.grid(column=0, row=2, sticky="nesw")
 f_messages.grid(column=0, row=3, sticky="nesw")
 
 propagate = False
 f_title.grid_propagate(propagate)
-f_inputs.grid_propagate(propagate)
+f_input.grid_propagate(propagate)
 f_options.grid_propagate(propagate)
 f_messages.grid_propagate(propagate)
 
@@ -135,57 +145,54 @@ l_title = Label(f_title, text="ChromaClade", background="red")
 l_title.grid(column=0, row=0, sticky="nsew")
 
 # ================ file input ===============
-# two columns in f_inputs, for tree and alignment panels
-f_inputs.grid_columnconfigure(0, weight=1)
-f_inputs.grid_columnconfigure(1, weight=1)
-f_inputs.grid_rowconfigure(0, weight=1)
+# two columns in f_input, for tree and alignment panels
 
-# ==== left panel: choose tree =====
-f_left_input = Frame(f_inputs, bg="orange", width=WIDTH*0.5, bd=1, relief=RAISED)
-f_left_input.grid(column=0, row=0, sticky="nsew")
+for i in range(5):
+    for j in range(9):
+        f_input.grid_rowconfigure(i, weight=1)
+        f_input.grid_columnconfigure(j, weight=1)
 
-f_left_input.grid_columnconfigure(0, weight=1)
+L_COL = 3
+B_COL = L_COL + 1
+F_COL = B_COL + 1
 
-for i in range(9): # create lots of rows, so we can have some widgets closer together than others
-    f_left_input.grid_rowconfigure(i, weight=1)
+# CHOOSE TREE
+l_tree = Label(f_input, text="Choose tree:", background="cyan")
+l_tree.grid(column=L_COL, row=0, sticky="")
 
-f_left_input.grid_propagate(propagate)
+b_tree = Button(f_input, text="Choose tree", command=gui.set_tree)
+b_tree.grid(column=B_COL, row=0, sticky="")
 
-b_tree = Button(f_left_input, text="Choose tree", command=gui.set_tree)
-b_tree.grid(column=0, row=2)
+l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), background="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
+l_tree_file.grid(column=F_COL, row=0, sticky="")
 
-bl_left_input = Label(f_left_input, textvariable=gui.get_tree_file(), background="cyan") # TODO initial text could be blank, then updated when file is selected
-bl_left_input.grid(column=0, row=3, sticky="")
+# TREE FORMAT
+l_tree_format = Label(f_input, text="Tree format:", background="cyan")
+l_tree_format.grid(column=L_COL, row=1, sticky="")
 
-o_tree = OptionMenu(f_left_input, gui.get_tree_format(), *gui.tree_choices) 
-o_tree.grid(column=0, row=5)
+o_tree_format = OptionMenu(f_input, gui.get_tree_format(), *gui.tree_choices) 
+o_tree_format.grid(column=B_COL, row=1)
 
-ol_left_input = Label(f_left_input, text="Tree format", background="cyan")
-ol_left_input.grid(column=0, row=6, sticky="")
+# column 2, row 1 is empty
 
-# ==== right panel: choose alignment =====
-f_right_input = Frame(f_inputs, bg="pink", width=WIDTH*0.5, bd=1, relief=RAISED)
-f_right_input.grid(column=1, row=0, sticky="nsew")
+# all row 2 is empty
 
-f_right_input.grid_columnconfigure(0, weight=1)
+# CHOOSE ALIGN
+l_align = Label(f_input, text="Choose alignment:", background="cyan")
+l_align.grid(column=L_COL, row=3, sticky="")
 
-for i in range(9): # create lots of rows, so we can have some widgets closer together than others
-    f_right_input.grid_rowconfigure(i, weight=1)
+b_align = Button(f_input, text="Choose alignment", command=gui.set_align)
+b_align.grid(column=B_COL, row=3)
 
-f_right_input.grid_propagate(propagate)
+l_align_file = Label(f_input, textvariable=gui.get_align_file(), background="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
+l_align_file.grid(column=F_COL, row=3, sticky="")
 
-b_align = Button(f_right_input, text="Choose alignment", command=gui.set_align)
-b_align.grid(column=0, row=2)
+l_align_format = Label(f_input, text="Alignment format:", background="cyan")
+l_align_format.grid(column=L_COL, row=4, sticky="")
 
+o_align = OptionMenu(f_input, gui.get_align_format(), *gui.align_choices) 
+o_align.grid(column=B_COL, row=4)
 
-bl_right_input = Label(f_right_input, textvariable=gui.get_align_file(), background="cyan") # TODO initial text could be blank, then updated when file is selected
-bl_right_input.grid(column=0, row=3, sticky="")
-
-o_align = OptionMenu(f_right_input, gui.get_align_format(), *gui.align_choices) 
-o_align.grid(column=0, row=5)
-
-ol_right_input = Label(f_right_input, text="Alignment format", background="cyan")
-ol_right_input.grid(column=0, row=6, sticky="")
 
 # ================ options ===============
 for i in range(3):
