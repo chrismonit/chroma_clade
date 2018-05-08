@@ -32,7 +32,6 @@ Begin Trees;
 End;""" 
 # 'index' starts from 1; 'tree' is the Newick tree string 
 TREE_TEMPLATE = "Tree tree%(index)d=%(tree)s" # TODO could have rooting information here
-OUT_PREFIX = "col_"
 
 # for running as a CLI app
 def main():
@@ -61,6 +60,7 @@ def main():
 
 
 def run(usr):
+    print "start"
     tree, aln = usr.get_tree(), usr.get_align()
 
     taxon_dict = dict([ (aln[i].id, i) for i in range(len(aln)) ]) # maps taxon identifiers to their alignment indices 
@@ -72,13 +72,10 @@ def run(usr):
         annotate_tips_only(tree_copy, aln, taxon_dict, iSite) # add site and state info
         trees.append(tree_copy)
     
-    directory, filename = os.path.split(usr.get_tree_path())
-    outpath = directory + (OUT_PREFIX + filename) 
-    
     if usr.get_tree_out_format() == "xml":
-        output_xml(trees, outpath, usr.get_branches())
+        output_xml(trees, usr.get_output_path(), usr.get_branches())
     else:
-        output_figtree(trees, outpath, usr.get_branches())
+        output_figtree(trees, usr.get_output_path(), usr.get_branches())
 
 def output_xml(coloured_trees, path, colour_branches):
     
@@ -94,6 +91,7 @@ def output_xml(coloured_trees, path, colour_branches):
                 clade.color = None
     Phylo.write(coloured_trees, path, "phyloxml")
 
+    print "end"
 
 
 def output_figtree(coloured_trees, path, colour_branches):

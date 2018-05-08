@@ -1,13 +1,16 @@
 #!/usr/bin/python
 
 from Bio import Phylo, AlignIO
+import os.path
+
+OUT_PREFIX = "col_"
 
 class InputError(ValueError):
     pass
 
 class Input:
     def __init__(self, tree_path, align_path, branches, tree_in_format,
-            align_in_format, tree_out_format=None, start_site=None, end_site=None):
+            align_in_format, output_path=None, tree_out_format=None, start_site=None, end_site=None):
         
         # tree and alignment formats
         tree_in_format, align_in_format = tree_in_format.lower(), align_in_format.lower()
@@ -43,6 +46,17 @@ class Input:
             raise InputError("Oops: can't find alignment file")
         except Exception:
             raise InputError("Oops: problem reading alignment file")
+        
+        # output file path
+        if output_path == None:
+            directory, filename = os.path.split(self.tree_path)
+            self.output_path = directory + "/" + (OUT_PREFIX + filename) 
+        else:
+            directory = os.path.split(output_path)[0]
+            if not os.path.exists(directory):
+                raise InputError("Oops: can't find the given folder for saving output")
+            else:
+                self.output_path = output_path
 
         # tree out format
         if tree_out_format == None:
@@ -91,6 +105,7 @@ class Input:
     def get_align(self): return self.align
     def get_tree_in_format(self): return self.tree_in_format # probably not needed
     def get_align_in_format(self): return self.align_in_format # probably not needed
+    def get_output_path(self): return self.output_path
     def get_tree_out_format(self): return self.tree_out_format
     
     def get_start_site(self): return self.start_site

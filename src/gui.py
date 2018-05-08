@@ -1,6 +1,8 @@
 from Tkinter import *
 import tkFileDialog
 import os.path
+from check_input import Input, InputError
+import chroma_clade
 
 class GuiInput():
     
@@ -38,7 +40,10 @@ class GuiInput():
         self.save_path.set(GuiInput.default_str)
         self.save_file = StringVar()
         self.save_file.set(GuiInput.default_str)
-    
+        
+        self.message = StringVar()
+        self.message.set("")
+
     def set_tree(self):
         filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
         self.tree_path.set(filepath)
@@ -67,6 +72,7 @@ class GuiInput():
         else:
             self.save_file.set( filename[:GuiInput.MAX_FILE_LEN] + "..." )
 
+    def set_message(self, value): self.message.set(value)
 
     def get_tree_format(self): return self.tree_format
     def get_align_format(self): return self.align_format
@@ -82,20 +88,49 @@ class GuiInput():
 
     def get_save_file(self): return self.save_file
     def get_save_path(self): return self.save_path
+    
+    def get_message(self): return self.message
 
     def __str__(self):
         labels = ["tree_path", "tree_file", "align_path", "align_file", "save_path", "save_file",
-                "colour_branches", "tree_format", "align_format", "save_format"
+                "colour_branches", "tree_format", "align_format", "save_format", "message"
                 ]
         values = [self.get_tree_path().get(), self.get_tree_file().get(), self.get_align_path().get(), self.get_align_file().get(), self.get_save_path().get(), self.get_save_file().get(),
-                self.get_colour_branches().get(), self.get_tree_format().get(), self.get_align_format().get(), self.get_save_format().get()
+                self.get_colour_branches().get(), self.get_tree_format().get(), self.get_align_format().get(), self.get_save_format().get(), self.get_message().get()
                 ]
         values = [str(v) for v in values]
         return "\n".join( ["%s:%s" % tup for tup in zip(labels, values)])
 
+    def get_input(self):
+        values = [self.get_tree_path().get(), self.get_align_path().get(), self.get_colour_branches().get(), self.get_tree_format().get(), self.get_align_format().get(), self.get_save_path().get(), self.get_save_format().get(), None, None ]
+        try: 
+            return Input(*values)
+        except InputError as e:
+            self.message.set(str(e))
+            return None
+
 root = Tk()
 
 gui = GuiInput()
+
+def go():
+    user_input = gui.get_input()
+    if user_input == None: # invalid input provided, do not proceed
+        return
+    else:
+        try:
+            chroma_clade.run(user_input)
+            print "DONE"
+        except Exception as e:
+            err_msg = "Oops an error occured, please check input options and try again"
+            gui.set_message(err_msg)
+            # TODO for debug only:
+            print str(e)
+
+
+    # TODO need a generic catch here, in case something else goes wrong
+
+
 root.title("ChromaClade")
 
 WIDTH = 600.
@@ -213,10 +248,17 @@ l_outfile = Label(f_input, textvariable=gui.get_save_file(), fg="red", bg="cyan"
 l_outfile.grid(column=R_COL, row=12, sticky="")
 
 # go button
-b_run = Button(f_input, text="Go")
+b_run = Button(f_input, text="Go", command=go)
 b_run.grid(column=M_COL, row=13, sticky="")
 
 # ================ image ===============
+f_image.grid_rowconfigure(0, weight=1)
+f_image.grid_columnconfigure(0, weight=1)
+#
+## background image
+bg_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/tree.gif")
+l_image = Label(f_image, image=bg_image)
+l_image.grid(column=0, row=0, sticky="nesw")
 
 # ================ messages ===============
 
@@ -224,14 +266,14 @@ f_messages.grid_columnconfigure(0, weight=1)
 for i in range(1):
     f_messages.grid_rowconfigure(i, weight=1)
 
-l_messages = Label(f_messages, text="[message]", background="firebrick")
+l_messages = Label(f_messages, textvariable=gui.get_message(), background="firebrick")
 l_messages.grid(column=0, row=0, sticky="news")
-
 
 
 #event loop
 root.mainloop()
 
 print str(gui)
+
 
 #print tree_var.get(),  align_var.get(),  colour_branches.get(),  out_format_var.get()
