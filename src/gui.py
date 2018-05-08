@@ -115,20 +115,15 @@ gui = GuiInput()
 
 def go():
     user_input = gui.get_input()
-    if user_input == None: # invalid input provided, do not proceed
+    if user_input == None: # invalid input provided, do not proceed. Error message will be updated by GuiInput
         return
     else:
         try:
             chroma_clade.run(user_input)
-            print "DONE"
         except Exception as e:
             err_msg = "Oops an error occured, please check input options and try again"
             gui.set_message(err_msg)
-            # TODO for debug only:
-            print str(e)
-
-
-    # TODO need a generic catch here, in case something else goes wrong
+            #print str(e) # debug only
 
 
 root.title("ChromaClade")

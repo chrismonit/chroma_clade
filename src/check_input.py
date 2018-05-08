@@ -49,7 +49,7 @@ class Input:
         
         # output file path
         if output_path == None:
-            directory, filename = os.path.split(self.tree_path)
+            directory, filename = os.path.split( os.path.abspath(self.tree_path) )
             self.output_path = directory + "/" + (OUT_PREFIX + filename) 
         else:
             directory = os.path.split(output_path)[0]

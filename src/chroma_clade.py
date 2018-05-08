@@ -49,7 +49,7 @@ def main():
     args = parser.parse_args()
     
     try:
-        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, tree_out_format=args.f, start_site=args.start, end_site=args.end)
+        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, output_path=None, tree_out_format=args.f, start_site=args.start, end_site=args.end)
     except InputError as e:
         print str(e)
         print ""
