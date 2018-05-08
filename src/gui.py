@@ -222,10 +222,28 @@ l_align_format.grid(column=L_COL, row=4, sticky="")
 o_align = OptionMenu(f_input, gui.get_align_format(), *gui.align_choices) 
 o_align.grid(column=M_COL, row=4)
 
+# ================ image ===============
+f_image.grid_rowconfigure(0, weight=1)
+f_image.grid_columnconfigure(0, weight=1)
+
+# TODO need proper path
+print os.getcwd()
+plain_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/tree.gif") 
+col_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/col.tree.gif")
+l_image = Label(f_image, image=plain_image)
+l_image.grid(column=0, row=0, sticky="nesw")
+
+
 # ================ options ===============
 # rows 5, 6, 7 blank
 
-cb_branches = Checkbutton(f_input, text="Colour branches", bg="white", variable=gui.get_colour_branches())
+def image_callback():
+	if gui.get_colour_branches().get():
+		l_image.configure(image=col_image)
+	else:
+		l_image.configure(image=plain_image)
+
+cb_branches = Checkbutton(f_input, text="Colour branches", bg="white", command=image_callback, variable=gui.get_colour_branches())
 cb_branches.grid(column=M_COL, row=8, sticky="")
 
 # TODO choose range of sites, check button and text box
@@ -252,14 +270,6 @@ l_outfile.grid(column=R_COL, row=12, sticky="")
 b_run = Button(f_input, text="Go", command=go)
 b_run.grid(column=M_COL, row=13, sticky="")
 
-# ================ image ===============
-f_image.grid_rowconfigure(0, weight=1)
-f_image.grid_columnconfigure(0, weight=1)
-#
-## background image
-bg_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/tree.gif")
-l_image = Label(f_image, image=bg_image)
-l_image.grid(column=0, row=0, sticky="nesw")
 
 # ================ messages ===============
 
