@@ -124,7 +124,7 @@ def go():
             err_msg = "Oops an error occured, please check input options and try again"
             gui.set_message(err_msg)
             #print str(e) # debug only
-
+        gui.set_message("Done!")
 
 root.title("ChromaClade")
 
@@ -166,7 +166,7 @@ f_messages.grid_propagate(propagate)
 f_title.grid_rowconfigure(0, weight=1)
 f_title.grid_columnconfigure(0, weight=1)
 
-l_title = Label(f_title, text="ChromaClade", background="red")
+l_title = Label(f_title, text="ChromaClade", bg="#9BFBFB")
 l_title.grid(column=0, row=0, sticky="nsew")
 
 # ================ file input ===============
@@ -177,22 +177,26 @@ for i in range(13):
     for j in range(9):
         f_input.grid_columnconfigure(j, weight=1)
 
+#L, M, R = left, middle, right
 L_COL = 3
 M_COL = L_COL + 1
 R_COL = M_COL + 1
 
+L_BG = "white" # label background colour
+L_FG = "blue" # label text colour for file choices
+
 # CHOOSE TREE
-l_tree = Label(f_input, text="Tree:", bg="cyan")
+l_tree = Label(f_input, text="Tree:", bg=L_BG)
 l_tree.grid(column=L_COL, row=0, sticky="")
 
 b_tree = Button(f_input, text="Choose file", command=gui.set_tree)
 b_tree.grid(column=M_COL, row=0, sticky="")
 
-l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), fg="red", bg="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
+l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
 l_tree_file.grid(column=R_COL, row=0, sticky="")
 
 # TREE FORMAT
-l_tree_format = Label(f_input, text="Tree format:", bg="cyan")
+l_tree_format = Label(f_input, text="Tree format:", bg=L_BG)
 l_tree_format.grid(column=L_COL, row=1, sticky="")
 
 o_tree_format = OptionMenu(f_input, gui.get_tree_format(), *gui.tree_choices) 
@@ -203,17 +207,16 @@ o_tree_format.grid(column=M_COL, row=1)
 # all row 2 is empty
 
 # CHOOSE ALIGN
-l_align = Label(f_input, text="Alignment:", bg="cyan")
+l_align = Label(f_input, text="Alignment:", bg=L_BG)
 l_align.grid(column=L_COL, row=3, sticky="")
 
 b_align = Button(f_input, text="Choose file", command=gui.set_align)
 b_align.grid(column=M_COL, row=3)
 
-# TODO could make text a different colour to make it clearer
-l_align_file = Label(f_input, textvariable=gui.get_align_file(), fg="red", bg="cyan", width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
+l_align_file = Label(f_input, textvariable=gui.get_align_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
 l_align_file.grid(column=R_COL, row=3, sticky="")
 
-l_align_format = Label(f_input, text="Alignment format:", background="cyan")
+l_align_format = Label(f_input, text="Alignment format:", bg=L_BG)
 l_align_format.grid(column=L_COL, row=4, sticky="")
 
 o_align = OptionMenu(f_input, gui.get_align_format(), *gui.align_choices) 
@@ -222,7 +225,7 @@ o_align.grid(column=M_COL, row=4)
 # ================ options ===============
 # rows 5, 6, 7 blank
 
-cb_branches = Checkbutton(f_input, text="Colour branches", bg="red", variable=gui.get_colour_branches())
+cb_branches = Checkbutton(f_input, text="Colour branches", bg="white", variable=gui.get_colour_branches())
 cb_branches.grid(column=M_COL, row=8, sticky="")
 
 # TODO choose range of sites, check button and text box
@@ -232,14 +235,17 @@ cb_branches.grid(column=M_COL, row=8, sticky="")
 o_out_format = OptionMenu(f_input, gui.get_save_format(), *GuiInput.save_choices) 
 o_out_format.grid(column=M_COL, row=11)
 
-l_out_format = Label(f_input, text="Output file format", bg="cyan")
-l_out_format.grid(column=R_COL, row=11, sticky="")
+l_out_format = Label(f_input, text="Output file format:", bg=L_BG)
+l_out_format.grid(column=L_COL, row=11, sticky="")
 
 # output file
 b_outfile = Button(f_input, text="Save as", command=gui.set_save)
 b_outfile.grid(column=M_COL, row=12, sticky="")
 
-l_outfile = Label(f_input, textvariable=gui.get_save_file(), fg="red", bg="cyan", width=GuiInput.MAX_FILE_LEN)
+l_outfile = Label(f_input, text="Output destination:", bg=L_BG)
+l_outfile.grid(column=L_COL, row=12, sticky="")
+
+l_outfile = Label(f_input, textvariable=gui.get_save_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN)
 l_outfile.grid(column=R_COL, row=12, sticky="")
 
 # go button
@@ -261,14 +267,12 @@ f_messages.grid_columnconfigure(0, weight=1)
 for i in range(1):
     f_messages.grid_rowconfigure(i, weight=1)
 
-l_messages = Label(f_messages, textvariable=gui.get_message(), background="firebrick")
+l_messages = Label(f_messages, font=("Helvetica", 16), textvariable=gui.get_message(), bg="#9BFBFB")
 l_messages.grid(column=0, row=0, sticky="news")
 
 
 #event loop
 root.mainloop()
-
-print str(gui)
 
 
 #print tree_var.get(),  align_var.get(),  colour_branches.get(),  out_format_var.get()
