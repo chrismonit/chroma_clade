@@ -40,16 +40,17 @@ def main():
     parser.add_argument( "tree", type=str)
     parser.add_argument( "alignment", type=str)
     parser.add_argument( "-b", action="store_true", help="Colour branches in addition to tip names")
-    parser.add_argument( "-tf", metavar="<tree_format>", default="newick", help="Tree file format, 'newick' (default), 'nexus' or 'phyloxml'" )
-    parser.add_argument( "-af", metavar="<alignment_format>", default="fasta", help="Alignment file format, 'fasta' (default) or 'nexus'" )
+    parser.add_argument( "-tf", metavar="<tree_format>", default="newick", type=str, help="Tree file format, 'newick' (default), 'nexus' or 'phyloxml'" )
+    parser.add_argument( "-af", metavar="<alignment_format>", default="fasta", type=str, help="Alignment file format, 'fasta' (default) or 'nexus'" )
     parser.add_argument( "-start", metavar="<start_site>", default=None, type=str, help="If selecting a subrange of sites, specify first site (inclusive; default is first site in the alignment)" )
     parser.add_argument( "-end", metavar="<end_site>", default=None, type=str, help="If selecting a subrange of sites, specify last site (inclusive; default is last site in the alignment)" )
-    parser.add_argument( "-f", metavar="<output_format>", default="figtree", type=str, help="Output tree format, either FigTree-compatible Nexus (default) or Phylo-XML" )
+    parser.add_argument( "-o", metavar="<output_path>", default=None, type=str, help="Output file name or path (default is same directory as input tree file with 'col_' prefix added to file name)" )
+    parser.add_argument( "-of", metavar="<output_format>", default="figtree", type=str, help="Output tree format, either FigTree-compatible Nexus (default) or Phylo-XML" )
 
     args = parser.parse_args()
     
     try:
-        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, output_path=None, tree_out_format=args.f, start_site=args.start, end_site=args.end)
+        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, output_path=args.o, tree_out_format=args.of, start_site=args.start, end_site=args.end)
     except InputError as e:
         print str(e)
         print ""
@@ -60,7 +61,6 @@ def main():
 
 
 def run(usr):
-    print "start"
     tree, aln = usr.get_tree(), usr.get_align()
 
     taxon_dict = dict([ (aln[i].id, i) for i in range(len(aln)) ]) # maps taxon identifiers to their alignment indices 
@@ -90,8 +90,6 @@ def output_xml(coloured_trees, path, colour_branches):
             for clade in tree.get_nonterminals() + tree.get_terminals():
                 clade.color = None
     Phylo.write(coloured_trees, path, "phyloxml")
-
-    print "end"
 
 
 def output_figtree(coloured_trees, path, colour_branches):
