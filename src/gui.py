@@ -166,7 +166,10 @@ f_messages.grid_propagate(propagate)
 f_title.grid_rowconfigure(0, weight=1)
 f_title.grid_columnconfigure(0, weight=1)
 
-l_title = Label(f_title, text="ChromaClade", bg="#9BFBFB")
+
+title_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/title.gif") # TODO set path in flexible way
+#l_title = Label(f_title, text="ChromaClade", bg="#9BFBFB")
+l_title = Label(f_title, image=title_image, bg="#9BFBFB")
 l_title.grid(column=0, row=0, sticky="nsew")
 
 # ================ file input ===============
