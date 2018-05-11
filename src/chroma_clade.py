@@ -59,7 +59,7 @@ def main():
     
     run(usr)
 
-
+# TODO may need to check alignment and taxon names match, in case this causes an exception
 def run(usr):
     tree, aln = usr.get_tree(), usr.get_align()
 
@@ -76,6 +76,9 @@ def run(usr):
         output_xml(trees, usr.get_output_path(), usr.get_branches())
     else:
         output_figtree(trees, usr.get_output_path(), usr.get_branches())
+
+
+
 
 def output_xml(coloured_trees, path, colour_branches):
     

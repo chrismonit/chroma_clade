@@ -4,6 +4,9 @@ import os.path
 from check_input import Input, InputError
 import chroma_clade
 
+# colour choices:
+#https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
+
 class GuiInput():
     
     MAX_FILE_LEN = 20
