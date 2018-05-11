@@ -42,15 +42,14 @@ def main():
     parser.add_argument( "-b", action="store_true", help="Colour branches in addition to tip names")
     parser.add_argument( "-tf", metavar="<tree_format>", default="newick", type=str, help="Tree file format, 'newick' (default), 'nexus' or 'phyloxml'" )
     parser.add_argument( "-af", metavar="<alignment_format>", default="fasta", type=str, help="Alignment file format, 'fasta' (default) or 'nexus'" )
-    parser.add_argument( "-start", metavar="<start_site>", default=None, type=str, help="If selecting a subrange of sites, specify first site (inclusive; default is first site in the alignment)" )
-    parser.add_argument( "-end", metavar="<end_site>", default=None, type=str, help="If selecting a subrange of sites, specify last site (inclusive; default is last site in the alignment)" )
+    parser.add_argument( "-s", metavar="<sites>", default=None, type=str, help="Specify subrange of alignment sites to make trees for, e.g. '18', or '2,4-6,10' etc." )
     parser.add_argument( "-o", metavar="<output_path>", default=None, type=str, help="Output file name or path (default is same directory as input tree file with 'col_' prefix added to file name)" )
     parser.add_argument( "-of", metavar="<output_format>", default="figtree", type=str, help="Output tree format, either FigTree-compatible Nexus (default) or Phylo-XML" )
 
     args = parser.parse_args()
     
     try:
-        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, output_path=args.o, tree_out_format=args.of, start_site=args.start, end_site=args.end)
+        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, output_path=args.o, tree_out_format=args.of, sites_string=args.s)
     except InputError as e:
         print str(e)
         print ""
@@ -59,17 +58,18 @@ def main():
     
     run(usr)
 
-# TODO may need to check alignment and taxon names match, in case this causes an exception
+# TODO check alignment and taxon names match, in case this causes an exception
+# TODO could do with generic exception catch for anything unexpected
 def run(usr):
     tree, aln = usr.get_tree(), usr.get_align()
 
     taxon_dict = dict([ (aln[i].id, i) for i in range(len(aln)) ]) # maps taxon identifiers to their alignment indices 
 
     trees = []
-    for iSite in range(usr.get_start_site(), usr.get_end_site()+1):
+    for site in usr.get_sites():
         tree_copy = copy.deepcopy(tree)
-        colour_tree(tree_copy.root, aln, taxon_dict, iSite)
-        annotate_tips_only(tree_copy, aln, taxon_dict, iSite) # add site and state info
+        colour_tree(tree_copy.root, aln, taxon_dict, site)
+        annotate_tips_only(tree_copy, aln, taxon_dict, site) # add site and state info
         trees.append(tree_copy)
     
     if usr.get_tree_out_format() == "xml":
