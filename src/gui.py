@@ -147,11 +147,17 @@ def go():
             #print str(e) # debug only
         gui.set_message("Done!")
 
+# get path for dir containing image files
+# assuming path of this file is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/src/gui.py
+# assuming path of images is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/pic/
+image_dir = os.path.split(os.path.split(__file__)[0])[0] + "/pic/"
+
 root.title("ChromaClade")
 
 WIDTH = 500.
 HEIGHT = WIDTH*1.5 
 
+# TODO set minimum dimensions
 root.geometry("%dx%d"%(round(WIDTH), round(HEIGHT)))
 root.configure(bg="gray")
 
@@ -188,8 +194,7 @@ f_title.grid_rowconfigure(0, weight=1)
 f_title.grid_columnconfigure(0, weight=1)
 
 
-title_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/title.gif") # TODO set path in flexible way
-#l_title = Label(f_title, text="ChromaClade", bg="#9BFBFB")
+title_image = PhotoImage(file=image_dir+"title.gif")
 l_title = Label(f_title, image=title_image, bg="#9BFBFB")
 l_title.grid(column=0, row=0, sticky="nsew")
 
@@ -216,7 +221,7 @@ l_tree.grid(column=L_COL, row=0, sticky="")
 b_tree = Button(f_input, text="Choose file", command=gui.set_tree)
 b_tree.grid(column=M_COL, row=0, sticky="")
 
-l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
+l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN)
 l_tree_file.grid(column=R_COL, row=0, sticky="")
 
 # TREE FORMAT
@@ -236,7 +241,7 @@ l_align.grid(column=L_COL, row=3, sticky="")
 b_align = Button(f_input, text="Choose file", command=gui.set_align)
 b_align.grid(column=M_COL, row=3)
 
-l_align_file = Label(f_input, textvariable=gui.get_align_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN) # TODO initial text could be blank, then updated when file is selected
+l_align_file = Label(f_input, textvariable=gui.get_align_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN)
 l_align_file.grid(column=R_COL, row=3, sticky="")
 
 l_align_format = Label(f_input, text="Alignment format:", bg=L_BG)
@@ -249,9 +254,8 @@ o_align.grid(column=M_COL, row=4)
 f_image.grid_rowconfigure(0, weight=1)
 f_image.grid_columnconfigure(0, weight=1)
 
-# TODO need proper path
-plain_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/tree.gif") 
-col_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/col.tree.gif")
+plain_image = PhotoImage(file=image_dir+"tree.gif") 
+col_image = PhotoImage(file=image_dir+"col.tree.gif")
 l_image = Label(f_image, image=plain_image)
 l_image.grid(column=0, row=0, sticky="nesw")
 
@@ -331,4 +335,3 @@ l_messages.grid(column=0, row=0, sticky="news")
 
 #event loop
 root.mainloop()
-
