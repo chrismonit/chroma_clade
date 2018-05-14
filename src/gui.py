@@ -156,6 +156,8 @@ root.title("ChromaClade")
 
 WIDTH = 500.
 HEIGHT = WIDTH*1.5 
+#root.minsize(int(WIDTH), int(HEIGHT))
+root.resizable(False, False)
 
 # TODO set minimum dimensions
 root.geometry("%dx%d"%(round(WIDTH), round(HEIGHT)))
