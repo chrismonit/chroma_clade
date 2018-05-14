@@ -32,7 +32,7 @@ class Input:
         try:
             self.tree = Phylo.read(tree_path, tree_in_format) 
         except ValueError: # raised if 0 or >1 trees in file
-            raise InputError("Oops: input tree file must contain exactly 1 tree. Is the specified format correct?")
+            raise InputError("Oops: input tree file must contain exactly 1 tree.\n(Is the specified format correct?)")
         except IOError:
             raise InputError("Oops: can't find tree file")
         except Exception:
@@ -44,12 +44,16 @@ class Input:
         try:
             self.align = AlignIO.read(align_path, align_in_format)
         except ValueError: # raised if 0 or >1 alignments in file
-            raise InputError("Oops: input alignment file must contain exactly 1 alignment. Is the specified format correct?")
+            raise InputError("Oops: input alignment file must contain exactly 1 alignment.\n(Is the specified format correct?)")
         except IOError:
             raise InputError("Oops: can't find alignment file")
         except Exception:
             raise InputError("Oops: problem reading alignment file")
         
+        # validate tree/alignment content
+        if set([ clade.name for clade in self.tree.get_terminals()]) != set([ seq.id for seq in self.align ]):
+            raise InputError("Oops: sequence names in tree and alignment don't match")
+
         # output file path
         if output_path == None:
             directory, filename = os.path.split( os.path.abspath(self.tree_path) )

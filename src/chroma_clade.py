@@ -58,11 +58,10 @@ def main():
     
     run(usr)
 
-# TODO check alignment and taxon names match, in case this causes an exception
 # TODO could do with generic exception catch for anything unexpected
 def run(usr):
     tree, aln = usr.get_tree(), usr.get_align()
-
+    
     taxon_dict = dict([ (aln[i].id, i) for i in range(len(aln)) ]) # maps taxon identifiers to their alignment indices 
 
     trees = []
