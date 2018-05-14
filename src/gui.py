@@ -15,13 +15,14 @@ class GuiInput():
     save_choices = ["Figtree", "XML"]
     default_str = ""
     initial_directory = os.path.expanduser("~") # should be platform independent, home directory
+    EXAMPLE_SITES_STR = "e.g. 1-5, 8, 11-13"
 
     def __init__(self):
         self.colour_branches = BooleanVar()
         self.colour_branches.set(False)
 
         self.tree_file = StringVar() # for display only
-        self.tree_file.set("") # keep label empty at first
+        self.tree_file.set("(No file selected)") # keep label empty at first
         self.tree_path = StringVar()
         self.tree_path.set(GuiInput.default_str)
 
@@ -35,7 +36,7 @@ class GuiInput():
         self.save_format.set(GuiInput.save_choices[0])
 
         self.align_file = StringVar() # for display only
-        self.align_file.set("") # keep label empty at first
+        self.align_file.set("(No file selected)") # keep label empty at first
         self.align_path = StringVar()
         self.align_path.set(GuiInput.default_str)
 
@@ -44,6 +45,12 @@ class GuiInput():
         self.save_file = StringVar()
         self.save_file.set(GuiInput.default_str)
         
+        self.all_sites = BooleanVar()
+        self.all_sites.set(True)
+
+        self.site_range_str = StringVar()
+        self.site_range_str.set(GuiInput.EXAMPLE_SITES_STR)
+
         self.message = StringVar()
         self.message.set("")
 
@@ -74,6 +81,9 @@ class GuiInput():
             self.save_file.set( filename )
         else:
             self.save_file.set( filename[:GuiInput.MAX_FILE_LEN] + "..." )
+    
+    def set_all_sites(self, value): self.all_sites.set(value)
+    def set_site_range_str(self, value): self.site_range_str.set(value)
 
     def set_message(self, value): self.message.set(value)
 
@@ -92,23 +102,31 @@ class GuiInput():
     def get_save_file(self): return self.save_file
     def get_save_path(self): return self.save_path
     
+    def get_all_sites(self): return self.all_sites
+    def get_site_range_str(self): return self.site_range_str
+
     def get_message(self): return self.message
 
     def __str__(self):
         labels = ["tree_path", "tree_file", "align_path", "align_file", "save_path", "save_file",
-                "colour_branches", "tree_format", "align_format", "save_format", "message"
+                "colour_branches", "tree_format", "align_format", "save_format", "all_sites", "site_range_str", "message"
                 ]
-        values = [self.get_tree_path().get(), self.get_tree_file().get(), self.get_align_path().get(), self.get_align_file().get(), self.get_save_path().get(), self.get_save_file().get(),
-                self.get_colour_branches().get(), self.get_tree_format().get(), self.get_align_format().get(), self.get_save_format().get(), self.get_message().get()
+        values = [self.get_tree_path().get(), self.get_tree_file().get(), self.get_align_path().get(), 
+                self.get_align_file().get(), self.get_save_path().get(), self.get_save_file().get(),
+                self.get_colour_branches().get(), self.get_tree_format().get(), self.get_align_format().get(), 
+                self.get_save_format().get(), self.get_all_sites().get(), self.get_site_range_str().get(), self.get_message().get()
                 ]
         values = [str(v) for v in values]
         return "\n".join( ["%s:%s" % tup for tup in zip(labels, values)])
 
     def get_input(self):
-        values = [self.get_tree_path().get(), self.get_align_path().get(), self.get_colour_branches().get(), self.get_tree_format().get(), self.get_align_format().get(), self.get_save_path().get(), self.get_save_format().get(), None, None ]
+        sites_str = None if self.get_all_sites().get() else self.get_site_range_str().get() 
+        values = [self.get_tree_path().get(), self.get_align_path().get(), self.get_colour_branches().get(), 
+                self.get_tree_format().get(), self.get_align_format().get(), self.get_save_path().get(), 
+                self.get_save_format().get(), sites_str ]
         try: 
             return Input(*values)
-        except InputError as e:
+        except InputError as e: # TODO need a generic exception catch?
             self.message.set(str(e))
             return None
 
@@ -131,8 +149,8 @@ def go():
 
 root.title("ChromaClade")
 
-WIDTH = 600.
-HEIGHT = WIDTH*1.2 
+WIDTH = 500.
+HEIGHT = WIDTH*1.5 
 
 root.geometry("%dx%d"%(round(WIDTH), round(HEIGHT)))
 root.configure(bg="gray")
@@ -143,8 +161,8 @@ root.configure(bg="gray")
 
 # ================ window layout ===============
 f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="darkred")
-f_input = Frame(root, height=HEIGHT*0.4, width=WIDTH*0.5, bg="white") # nice pale cyan: 
-f_image = Frame(root, height=HEIGHT*0.4, width=WIDTH*0.5, bg="white") # nice pale cyan: #9BFBFB
+f_input = Frame(root, height=HEIGHT*0.45, width=WIDTH*0.5, bg="white") # nice pale cyan: 
+f_image = Frame(root, height=HEIGHT*0.35, width=WIDTH*0.5, bg="white") # nice pale cyan: #9BFBFB
 f_messages = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="orange")
 
 root.grid_rowconfigure(0, weight=1) 
@@ -189,7 +207,7 @@ M_COL = L_COL + 1
 R_COL = M_COL + 1
 
 L_BG = "white" # label background colour
-L_FG = "blue" # label text colour for file choices
+L_FG = "darkgray" # label text colour for file choices
 
 # CHOOSE TREE
 l_tree = Label(f_input, text="Tree:", bg=L_BG)
@@ -208,9 +226,8 @@ l_tree_format.grid(column=L_COL, row=1, sticky="")
 o_tree_format = OptionMenu(f_input, gui.get_tree_format(), *gui.tree_choices) 
 o_tree_format.grid(column=M_COL, row=1)
 
-# column 2, row 1 is empty
-
-# all row 2 is empty
+# BLANK ROW
+Label(f_input, text="").grid(column=M_COL, row=2, sticky="nesw")
 
 # CHOOSE ALIGN
 l_align = Label(f_input, text="Alignment:", bg=L_BG)
@@ -233,7 +250,6 @@ f_image.grid_rowconfigure(0, weight=1)
 f_image.grid_columnconfigure(0, weight=1)
 
 # TODO need proper path
-print os.getcwd()
 plain_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/tree.gif") 
 col_image = PhotoImage(file="/Users/cmonit1/Desktop/coloured_trees/chroma_clade/pic/col.tree.gif")
 l_image = Label(f_image, image=plain_image)
@@ -241,8 +257,11 @@ l_image.grid(column=0, row=0, sticky="nesw")
 
 
 # ================ options ===============
-# rows 5, 6, 7 blank
 
+# BLANK ROW
+Label(f_input, text="").grid(column=M_COL, row=5, sticky="nesw")
+
+# COLOUR BRANCHES
 def image_callback():
 	if gui.get_colour_branches().get():
 		l_image.configure(image=col_image)
@@ -250,10 +269,33 @@ def image_callback():
 		l_image.configure(image=plain_image)
 
 cb_branches = Checkbutton(f_input, text="Colour branches", bg="white", command=image_callback, variable=gui.get_colour_branches())
-cb_branches.grid(column=M_COL, row=8, sticky="")
+cb_branches.grid(column=M_COL, row=6, sticky="w")
 
-# TODO choose range of sites, check button and text box
-# rows 1 and 2
+# BLANK ROW
+Label(f_input, text="").grid(column=M_COL, row=7, sticky="nesw")
+
+# CHOOSE ALIGNMENT SITES
+e_sites = Entry(f_input, textvariable=gui.get_site_range_str(), state="disabled", fg="gray")
+e_sites.grid(column=R_COL, row=9)
+
+def clear_site_example(): # prepare for user entering text
+    gui.set_site_range_str("")
+    e_sites.focus() # take keyboard focus, meaning cursor will blink and text can be entered immediately
+    e_sites.configure(state="normal", fg="black")
+
+def restore_site_example():
+    gui.set_site_range_str(GuiInput.EXAMPLE_SITES_STR)
+    root.focus() # give keyboard focus to root widget, thereby removing focus from entry widget
+    e_sites.configure(state="disabled", fg="gray")
+
+r_all_sites = Radiobutton(f_input, text="All sites", variable=gui.get_all_sites(), value=True, command=restore_site_example)
+r_all_sites.grid(column=M_COL, row=8, sticky="w")
+
+r_range_sites = Radiobutton(f_input, text="Choose sites:", variable=gui.get_all_sites(), value=False, command=clear_site_example)
+r_range_sites.grid(column=M_COL, row=9, sticky="w")
+
+# BLANK ROW
+Label(f_input, text="").grid(column=M_COL, row=10, sticky="nesw")
 
 # output format
 o_out_format = OptionMenu(f_input, gui.get_save_format(), *GuiInput.save_choices) 
@@ -290,5 +332,3 @@ l_messages.grid(column=0, row=0, sticky="news")
 #event loop
 root.mainloop()
 
-
-#print tree_var.get(),  align_var.get(),  colour_branches.get(),  out_format_var.get()
