@@ -135,17 +135,21 @@ root = Tk()
 gui = GuiInput()
 
 def go():
-    user_input = gui.get_input()
-    if user_input == None: # invalid input provided, do not proceed. Error message will be updated by GuiInput
-        return
-    else:
-        try:
-            chroma_clade.run(user_input)
-        except Exception as e:
-            err_msg = "Oops an error occured, please check input options and try again"
-            gui.set_message(err_msg)
-            #print str(e) # debug only
-        gui.set_message("Done!")
+    try:
+        user_input = gui.get_input()
+        if user_input == None: # invalid input provided, do not proceed. Error message will be updated by GuiInput
+            return
+        else:
+            try:
+                chroma_clade.run(user_input)
+            except Exception as e:
+                err_msg = "Oops an error occured, please check input options and try again"
+                gui.set_message(err_msg)
+                #print str(e) # debug only
+            gui.set_message("Done!")
+    except Exception as e:
+        gui.set_message("Oops: an unknown error occured, please check input files and try again.\nIf the problem persists, please contact the author.")
+
 
 # get path for dir containing image files
 # assuming path of this file is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/src/gui.py

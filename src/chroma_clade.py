@@ -33,6 +33,9 @@ End;"""
 # 'index' starts from 1; 'tree' is the Newick tree string 
 TREE_TEMPLATE = "Tree tree%(index)d=%(tree)s" # TODO could have rooting information here
 
+GENERIC_ERR_MSG = """Oops: an unknown error occured, please check input files and try again.
+If the problem persists, please contact the author."""
+
 # for running as a CLI app
 def main():
     import argparse
@@ -55,10 +58,20 @@ def main():
         print ""
         parser.print_help()
         exit()
+    except Exception as e:
+        print GENERIC_ERR_MSG
+        print ""
+        print "Exception: %s" % str(e)
+        exit()
     
-    run(usr)
+    try:
+        run(usr)
+    except Exception as e:
+        print GENERIC_ERR_MSG
+        print ""
+        print "Exception: %s" % str(e)
+        exit()
 
-# TODO could do with generic exception catch for anything unexpected
 def run(usr):
     tree, aln = usr.get_tree(), usr.get_align()
     
