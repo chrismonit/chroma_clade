@@ -153,8 +153,8 @@ def go():
 
 # get path for dir containing image files
 # assuming path of this file is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/src/gui.py
-# assuming path of images is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/pic/
-image_dir = os.path.split(os.path.split(__file__)[0])[0] + "/pic/"
+# assuming path of images is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/src/pic/
+image_dir = os.path.split(__file__)[0] + "/pic/"
 
 root.title("ChromaClade")
 

@@ -1,4 +1,4 @@
-_VERSION="0.1"
+_VERSION="1.0"
 
 from setuptools import setup
 setup(name = 'ChromaClade', 
@@ -12,6 +12,7 @@ setup(name = 'ChromaClade',
     package_dir = {'chroma_clade':'src'},
     packages = ['chroma_clade'],
     #package_data = {'tests': ['freqFiles/*', 'evolFiles/*']},
+    package_data = {'chroma_clade': ['dat/*', 'pic/*']},
     install_requires=['biopython'], # Tkinter?
     #test_suite = "tests"
     long_description=open("README.txt").read()
