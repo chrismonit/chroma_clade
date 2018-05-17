@@ -12,7 +12,7 @@ import copy
 from check_input import *
 
 
-BLANK_BRANCH_COL = '#797D7F' # dark grey
+UNKNOWN_STATE_COL = '#797D7F' # dark grey
 
 COL_ATTRIB = "[&!color=%s]"
 STATE_SUFFIX = "__site_%d__%s"
@@ -137,19 +137,22 @@ def colour_tree(parent, alignment, taxon_dict, site, colours, states):
     """
     if parent.is_terminal():
         state = alignment[ taxon_dict[parent.name] ][site].upper()
-        parent.color = colours[state] # stored as RGB tuple
         parent_vector = [0] * len(states) 
-        parent_vector[ states.index(state) ] = 1
-        return parent_vector
+        try:
+            parent.color = colours[state] # color attribute stored as RGB tuple, even though value is hex representation
+            parent_vector[ states.index(state) ] = 1
+        except KeyError:
+            parent.color = UNKNOWN_STATE_COL
+        return parent_vector # if state is not recognised then parent_vector remains all 0
     else:
         parent_vector = [1] * len(states)
         for child in parent:
-            child_vector = colour_tree(child, alignment, taxon_dict, site, colours, states=states)
+            child_vector = colour_tree(child, alignment, taxon_dict, site, colours, states)
             for i in range(len(states)):
                 parent_vector[i] *= child_vector[i] # elementwise multiplication
         z = sum(parent_vector)
         if z == 0:
-            col = BLANK_BRANCH_COL
+            col = UNKNOWN_STATE_COL
         elif z == 1:
             col = colours[ states[parent_vector.index(1)] ]
         else:
@@ -158,7 +161,11 @@ def colour_tree(parent, alignment, taxon_dict, site, colours, states):
         return parent_vector
 
 def colour_taxon(name, colours, n_chars=1, annotation_string=COL_ATTRIB):
-    return name + annotation_string % colours[name[-n_chars]]
+    try:
+        colour = colours[name[-n_chars]]
+    except KeyError:
+        colour = UNKNOWN_STATE_COL
+    return name + annotation_string % colour
 
 # TODO could include rooted/unrooted tree information, as is now standard in nexus format
 def nexus_text(obj, colour_branches, colours, **kwargs):
