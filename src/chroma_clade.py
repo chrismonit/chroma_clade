@@ -11,8 +11,6 @@ import copy
 
 from check_input import *
 
-AA_STATES = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y", "*", "-", "X"]
-N_STATES = len(AA_STATES)
 
 BLANK_BRANCH_COL = '#797D7F' # dark grey
 
@@ -34,8 +32,7 @@ TREE_TEMPLATE = "Tree tree%(index)d=%(tree)s" # TODO could have rooting informat
 GENERIC_ERR_MSG = """Oops: an unknown error occured, please check input files and try again.
 If the problem persists, please contact the author."""
 
-# for running as a CLI app
-def main():
+def main(): # for running as a CLI app
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument( "tree", type=str, help="File containing the unannotated tree")
@@ -79,7 +76,8 @@ def run(usr):
     trees = []
     for site in usr.get_sites():
         tree_copy = copy.deepcopy(tree)
-        colour_tree(tree_copy.root, aln, taxon_dict, site, usr.get_colours())
+        states = usr.get_colours().keys()
+        colour_tree(tree_copy.root, aln, taxon_dict, site, usr.get_colours(), states)
         annotate_site_state(tree_copy, aln, taxon_dict, site) # add site and state info
         trees.append(tree_copy)
     
@@ -123,13 +121,13 @@ def output_figtree(coloured_trees, path, colour_branches, colours):
     # the Bio code automatically adds inverted commas to colour attribute lables, which prevents figtree reading them as annotations
 
 
-def annotate_site_state(tree, alignment, taxon_dict, site, states=AA_STATES):
+def annotate_site_state(tree, alignment, taxon_dict, site):
     """ Apply labels to tips showing site and state information (not colour)"""
     for tip in tree.get_terminals():
         state = alignment[ taxon_dict[tip.name] ][site].upper()
         tip.name += (STATE_SUFFIX % (site+1, state))
 
-def colour_tree(parent, alignment, taxon_dict, site, colours, states=AA_STATES):
+def colour_tree(parent, alignment, taxon_dict, site, colours, states):
     """ Apply colour labels to all tips and to branches, based on parsimony inference of
         ancestral characters, using a simplified form of Felsenstein's pruning algorithm.
         For an internal node, 'conditional probability' for a given state is 1
@@ -140,20 +138,20 @@ def colour_tree(parent, alignment, taxon_dict, site, colours, states=AA_STATES):
     if parent.is_terminal():
         state = alignment[ taxon_dict[parent.name] ][site].upper()
         parent.color = colours[state] # stored as RGB tuple
-        parent_vector = [0] * N_STATES 
-        parent_vector[ AA_STATES.index(state) ] = 1
+        parent_vector = [0] * len(states) 
+        parent_vector[ states.index(state) ] = 1
         return parent_vector
     else:
-        parent_vector = [1] * N_STATES
+        parent_vector = [1] * len(states)
         for child in parent:
             child_vector = colour_tree(child, alignment, taxon_dict, site, colours, states=states)
-            for i in range(N_STATES):
+            for i in range(len(states)):
                 parent_vector[i] *= child_vector[i] # elementwise multiplication
         z = sum(parent_vector)
         if z == 0:
             col = BLANK_BRANCH_COL
         elif z == 1:
-            col = colours[ AA_STATES[parent_vector.index(1)] ]
+            col = colours[ states[parent_vector.index(1)] ]
         else:
             raise ValueError("Incorrect parent vector!")
         parent.color = col # stored as RGB tuple
