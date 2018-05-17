@@ -14,9 +14,7 @@ from check_input import *
 AA_STATES = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y", "*", "-", "X"]
 N_STATES = len(AA_STATES)
 
-# TODO check these colours carefully
 BLANK_BRANCH_COL = '#797D7F' # dark grey
-#COLOURS = { 'A':'#FF0000', 'C':'#009933', 'D':'#990000', 'E':'#FF0066', 'F':'#6666FF', 'G':'#00CC33', 'H':'#FFCC00', 'I':'#660066', 'K':'#CC3300', 'L':'#00CCFF', 'M':'#FF9900', 'N':'#FF9966', 'P':'#CC0099', 'Q':'#FF00CC', 'R':'#992600', 'S':'#336600', 'T':'#FF6699', 'V':'#FF66FF', 'W':'#0000FF', 'Y':'#0099FF', '*':BLANK_BRANCH_COL, '-':BLANK_BRANCH_COL, 'X':BLANK_BRANCH_COL }
 
 COL_ATTRIB = "[&!color=%s]"
 STATE_SUFFIX = "__site_%d__%s"
@@ -82,7 +80,7 @@ def run(usr):
     for site in usr.get_sites():
         tree_copy = copy.deepcopy(tree)
         colour_tree(tree_copy.root, aln, taxon_dict, site, usr.get_colours())
-        annotate_tips_only(tree_copy, aln, taxon_dict, site) # add site and state info
+        annotate_site_state(tree_copy, aln, taxon_dict, site) # add site and state info
         trees.append(tree_copy)
     
     if usr.get_tree_out_format() == "xml":
@@ -125,7 +123,7 @@ def output_figtree(coloured_trees, path, colour_branches, colours):
     # the Bio code automatically adds inverted commas to colour attribute lables, which prevents figtree reading them as annotations
 
 
-def annotate_tips_only(tree, alignment, taxon_dict, site, states=AA_STATES):
+def annotate_site_state(tree, alignment, taxon_dict, site, states=AA_STATES):
     """ Apply labels to tips showing site and state information (not colour)"""
     for tip in tree.get_terminals():
         state = alignment[ taxon_dict[tip.name] ][site].upper()
