@@ -123,7 +123,7 @@ class GuiInput():
         sites_str = None if self.get_all_sites().get() else self.get_site_range_str().get() 
         values = [self.get_tree_path().get(), self.get_align_path().get(), self.get_colour_branches().get(), 
                 self.get_tree_format().get(), self.get_align_format().get(), self.get_save_path().get(), 
-                self.get_save_format().get(), sites_str ]
+                self.get_save_format().get(), sites_str, None] # TODO make colour file not None
         try: 
             return Input(*values)
         except InputError as e: # TODO need a generic exception catch?

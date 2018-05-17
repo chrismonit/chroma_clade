@@ -6,6 +6,9 @@ import os.path
 OUT_PREFIX = "col_"
 SITES_DELIM = ","
 RANGE_DELIM = "-"
+COLOUR_DELIM = ","
+COL_DIR = "dat/"
+DEFAULT_COL_FILE = "default_colour.csv"
 
 class InputError(ValueError):
     pass
@@ -13,7 +16,7 @@ class InputError(ValueError):
 class Input:
     def __init__(self, tree_path, align_path, branches, tree_in_format,
             align_in_format, output_path=None, tree_out_format=None, 
-            sites_string=""):
+            sites_string="", colour_file=None):
         
         # tree and alignment formats
         tree_in_format, align_in_format = tree_in_format.lower(), align_in_format.lower()
@@ -76,7 +79,7 @@ class Input:
                 self.tree_out_format = tree_out_format
         
         # parse site ranges
-        # NB we don't sort of remove duplicate site numbers, so user can control order and frequency
+        # NB we don't sort or remove duplicate site numbers, so user can control order and frequency
         try:
             if not sites_string or sites_string.isspace(): # if string is not empty or is all white space 
                 self.sites = range(self.align.get_alignment_length())
@@ -92,6 +95,20 @@ class Input:
             raise e
         except Exception as e:
             raise InputError("Oops: don't understand the specified alignment sites")
+        
+        # parse colour codes
+        if colour_file == None:
+            # assuming path of this file is /<dir_1>/.../<dir_N>/chroma_clade/src/check_input.py
+            colour_file = os.path.split(__file__)[0] + "/" + COL_DIR + DEFAULT_COL_FILE
+        
+        try:
+            f = open(colour_file)
+            self.colours = dict([ tuple(l.strip().split(COLOUR_DELIM)) for l in f.readlines() if not l.isspace() ])
+            f.close()
+        except IOError as e:
+            raise InputError("Oops: can't find file containing colour codes")
+        except Exception as e:
+            raise InputError("Oops: problem reading file containing colour codes")
 
     
     def _parse_sites(self, sites_string, delim):
@@ -124,6 +141,7 @@ class Input:
     def get_branches(self): return self.branches
     
     def get_sites(self): return self.sites
+    def get_colours(self): return self.colours
 
 def test():
     base_path = "/Users/cmonit1/Desktop/coloured_trees/"
@@ -136,22 +154,17 @@ def test():
     tree_out_format = "figtree"
     start_site = None
     end_site = 4
-
-    import sys
-    sites_string = sys.argv[1] 
-    #sites_string = "1,2,3-4"
+    sites_string = "1-4"
+    colour_file = "/Users/cmonit1/Desktop/coloured_trees/chroma_clade/src/dat/default_colour.csv"
     
-    print "input:", repr(sites_string)
-
     try:
         usr_input = Input(tree_path, align_path, branches, tree_in_format, 
-                align_in_format, outpath, tree_out_format, sites_string
+                align_in_format, outpath, tree_out_format, sites_string, colour_file
                 )
     except InputError as e:
         print str(e)
         exit()
     
-    print "result", usr_input.get_sites()
 
 def main():
     test()
