@@ -158,6 +158,11 @@ image_dir = os.path.split(__file__)[0] + "/pic/"
 
 root.title("ChromaClade")
 
+f = open("/Users/cmonit1/Desktop/c/chroma_clade/WRITE_OUT.txt", "a+")
+f.write(str(len(f.readlines()))+"\n")
+f.close()
+
+
 WIDTH = 500.
 HEIGHT = WIDTH*1.5 
 #root.minsize(int(WIDTH), int(HEIGHT))
@@ -200,7 +205,7 @@ f_title.grid_columnconfigure(0, weight=1)
 
 
 title_image = PhotoImage(file=image_dir+"title.gif")
-l_title = Label(f_title, image=title_image, bg="#9BFBFB")
+l_title = Label(f_title, image=title_image, bg="cyan") # #9BFBFB
 l_title.grid(column=0, row=0, sticky="nsew")
 
 # ================ file input ===============
@@ -334,9 +339,10 @@ f_messages.grid_columnconfigure(0, weight=1)
 for i in range(1):
     f_messages.grid_rowconfigure(i, weight=1)
 
-l_messages = Label(f_messages, font=("Helvetica", 16), textvariable=gui.get_message(), bg="#9BFBFB")
+l_messages = Label(f_messages, font=("Helvetica", 16), textvariable=gui.get_message(), bg="cyan") # #9BFBFB
 l_messages.grid(column=0, row=0, sticky="news")
 
 
+print "run main loop:"
 #event loop
 root.mainloop()
