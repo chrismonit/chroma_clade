@@ -48,7 +48,8 @@ def main(): # for running as a CLI app
     args = parser.parse_args()
     
     try:
-        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, output_path=args.o, tree_out_format=args.of, sites_string=args.s, colour_file=args.c)
+        colour_file_path = args.c if args.c != None else os.path.join(os.path.split(__file__)[0], Input.DEFAULT_COL_FILE)
+        usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, colour_file_path, output_path=args.o, tree_out_format=args.of, sites_string=args.s)
     except InputError as e:
         parser.print_help()
         print ""

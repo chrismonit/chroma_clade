@@ -53,6 +53,11 @@ class GuiInput():
 
         self.message = StringVar()
         self.message.set("")
+        
+        # py2app saves data files in "<project>.app/Contents/Resources/", which is also where app's main file resides
+        # therefore we can use the path to this file to get the path to the data files
+        # this will work also for CLI version, since the data files reside in same dir as source code
+        self.colour_file_path = os.path.join(os.path.split(__file__)[0], Input.DEFAULT_COL_FILE)
 
     def set_tree(self):
         filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
@@ -87,6 +92,8 @@ class GuiInput():
 
     def set_message(self, value): self.message.set(value)
 
+    def set_colour_file_path(self, value): raise NotImplementedError("Haven't implemented optional colours!")
+
     def get_tree_format(self): return self.tree_format
     def get_align_format(self): return self.align_format
     def get_save_format(self): return self.save_format
@@ -107,14 +114,18 @@ class GuiInput():
 
     def get_message(self): return self.message
 
+    def get_colour_file_path(self): return self.colour_file_path
+
     def __str__(self):
         labels = ["tree_path", "tree_file", "align_path", "align_file", "save_path", "save_file",
-                "colour_branches", "tree_format", "align_format", "save_format", "all_sites", "site_range_str", "message"
+                "colour_branches", "tree_format", "align_format", "save_format", "all_sites", 
+                "site_range_str", "message", "colour_file_path"
                 ]
         values = [self.get_tree_path().get(), self.get_tree_file().get(), self.get_align_path().get(), 
                 self.get_align_file().get(), self.get_save_path().get(), self.get_save_file().get(),
                 self.get_colour_branches().get(), self.get_tree_format().get(), self.get_align_format().get(), 
-                self.get_save_format().get(), self.get_all_sites().get(), self.get_site_range_str().get(), self.get_message().get()
+                self.get_save_format().get(), self.get_all_sites().get(), self.get_site_range_str().get(), 
+                self.get_message().get(), self.get_colour_file_path()
                 ]
         values = [str(v) for v in values]
         return "\n".join( ["%s:%s" % tup for tup in zip(labels, values)])
@@ -122,11 +133,11 @@ class GuiInput():
     def get_input(self):
         sites_str = None if self.get_all_sites().get() else self.get_site_range_str().get() 
         values = [self.get_tree_path().get(), self.get_align_path().get(), self.get_colour_branches().get(), 
-                self.get_tree_format().get(), self.get_align_format().get(), self.get_save_path().get(), 
-                self.get_save_format().get(), sites_str, None] # TODO make colour file not None
+                self.get_tree_format().get(), self.get_align_format().get(), self.get_colour_file_path(),
+                self.get_save_path().get(), self.get_save_format().get(), sites_str]
         try: 
             return Input(*values)
-        except InputError as e: # TODO need a generic exception catch?
+        except InputError as e:
             self.message.set(str(e))
             return None
 
@@ -151,18 +162,10 @@ def go():
         gui.set_message("Oops: an unknown error occured, please check input files and try again.\nIf the problem persists, please contact the author.")
 
 
-# get path for dir containing image files
-# assuming path of this file is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/src/gui.py
-# assuming path of images is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/src/pic/
-image_dir = os.path.split(__file__)[0] + "/pic/"
-#image_dir = os.path.split(__file__)[0] + "/" #+ "/pic/"
+# assuming that the data/image files are in the same directory as this script
+image_dir = os.path.split(__file__)[0]
 
 root.title("ChromaClade")
-
-f = open("/Users/cmonit1/Desktop/c/chroma_clade/WRITE_OUT.txt", "a+")
-f.write(str(len(f.readlines()))+"\n")
-f.close()
-
 
 WIDTH = 500.
 HEIGHT = WIDTH*1.5 
@@ -205,9 +208,9 @@ f_title.grid_rowconfigure(0, weight=1)
 f_title.grid_columnconfigure(0, weight=1)
 
 
-#title_image = PhotoImage(file=image_dir+"title.gif")
-#l_title = Label(f_title, image=title_image, bg="cyan") # #9BFBFB
-l_title = Label(f_title, text="title", bg="cyan") # #9BFBFB
+title_image = PhotoImage(file=os.path.join(image_dir, "title.gif"))
+l_title = Label(f_title, image=title_image, bg="cyan") # #9BFBFB
+#l_title = Label(f_title, text="title", bg="cyan") # #9BFBFB
 l_title.grid(column=0, row=0, sticky="nsew")
 
 # ================ file input ===============
@@ -266,8 +269,8 @@ o_align.grid(column=M_COL, row=4)
 f_image.grid_rowconfigure(0, weight=1)
 f_image.grid_columnconfigure(0, weight=1)
 
-plain_image = PhotoImage(file=image_dir+"tree.gif") 
-col_image = PhotoImage(file=image_dir+"col.tree.gif")
+plain_image = PhotoImage(file=os.path.join(image_dir, "tree.gif"))
+col_image = PhotoImage(file=os.path.join(image_dir, "col.tree.gif"))
 l_image = Label(f_image, image=plain_image)
 l_image.grid(column=0, row=0, sticky="nesw")
 

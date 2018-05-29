@@ -9,7 +9,7 @@ from setuptools import setup
 
 APP = ['src/gui.py']
 DATA_FILES = []
-OPTIONS = {'resources': 'src/dat/default_colour.csv,src/pic/tree.gif,src/pic/col.tree.gif'}
+OPTIONS = {'resources': 'src/default_colour.csv,src/title.gif,src/tree.gif,src/col.tree.gif'}
 
 setup(
     app=APP,

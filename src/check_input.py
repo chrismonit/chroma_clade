@@ -7,16 +7,17 @@ OUT_PREFIX = "col_"
 SITES_DELIM = ","
 RANGE_DELIM = "-"
 COLOUR_DELIM = ","
-COL_DIR = "dat/"
-DEFAULT_COL_FILE = "default_colour.csv"
 
 class InputError(ValueError):
     pass
 
 class Input:
+
+    DEFAULT_COL_FILE = "default_colour.csv"
+
     def __init__(self, tree_path, align_path, branches, tree_in_format,
-            align_in_format, output_path=None, tree_out_format=None, 
-            sites_string="", colour_file=None):
+            align_in_format, colour_file_path, output_path=None, tree_out_format=None, 
+            sites_string=""):
         
         # tree and alignment formats
         tree_in_format, align_in_format = tree_in_format.lower(), align_in_format.lower()
@@ -97,12 +98,8 @@ class Input:
             raise InputError("Oops: don't understand the specified alignment sites")
         
         # parse colour codes
-        if colour_file == None:
-            # assuming path of this file is /<dir_1>/.../<dir_N>/chroma_clade/src/check_input.py
-            colour_file = os.path.split(__file__)[0] + "/" + COL_DIR + DEFAULT_COL_FILE
-        
         try:
-            f = open(colour_file)
+            f = open(colour_file_path)
             self.colours = dict([ tuple(l.strip().split(COLOUR_DELIM)) for l in f.readlines() if not l.isspace() ])
             f.close()
         except IOError as e:
