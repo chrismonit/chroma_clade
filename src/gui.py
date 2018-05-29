@@ -155,6 +155,7 @@ def go():
 # assuming path of this file is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/src/gui.py
 # assuming path of images is /<dir_1>/<dir_2>/.../<dir_N>/chroma_clade/src/pic/
 image_dir = os.path.split(__file__)[0] + "/pic/"
+#image_dir = os.path.split(__file__)[0] + "/" #+ "/pic/"
 
 root.title("ChromaClade")
 
@@ -204,8 +205,9 @@ f_title.grid_rowconfigure(0, weight=1)
 f_title.grid_columnconfigure(0, weight=1)
 
 
-title_image = PhotoImage(file=image_dir+"title.gif")
-l_title = Label(f_title, image=title_image, bg="cyan") # #9BFBFB
+#title_image = PhotoImage(file=image_dir+"title.gif")
+#l_title = Label(f_title, image=title_image, bg="cyan") # #9BFBFB
+l_title = Label(f_title, text="title", bg="cyan") # #9BFBFB
 l_title.grid(column=0, row=0, sticky="nsew")
 
 # ================ file input ===============
