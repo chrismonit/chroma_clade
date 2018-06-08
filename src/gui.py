@@ -52,6 +52,7 @@ class GuiInput():
         self.site_range_str.set(GuiInput.EXAMPLE_SITES_STR)
 
         self.message = StringVar()
+# get path for dir containing image files
         self.message.set("")
         
         # py2app saves data files in "<project>.app/Contents/Resources/", which is also where app's main file resides
