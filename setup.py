@@ -23,7 +23,8 @@ setup(
 
     windows=['gui.py'],
     console=['chroma_clade.py'],
-
+    
+    name = "Chroma Clade",
     description = "A GUI and CLI app for producing phylogenetic tree files coloured by observed molecular sequence states",
     author = 'Christopher Monit', 
     author_email = 'c.monit.12@ucl.ac.uk', 

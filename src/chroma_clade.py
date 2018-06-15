@@ -8,6 +8,8 @@ from Bio.Nexus import Nexus
 from Bio.Phylo import Newick, NewickIO, PhyloXML
 from Bio.Phylo.BaseTree import BranchColor
 import copy
+import re
+
 
 from check_input import *
 
@@ -173,6 +175,8 @@ def nexus_text(obj, colour_branches, colours, **kwargs):
     """ Take tree-like object(s) and create nexus-format representation.
         Allows for colouring tip names.
         Modified from http://biopython.org/DIST/docs/api/Bio.Phylo.NexusIO-pysrc.html
+        NB here we compensate for an apparent bug in the Biopython implementation, 
+        whereby an additional colon is wrongly added to confidence values in the output tree strings.
     """
     try:
         trees = list(obj) # assume iterable
@@ -191,7 +195,7 @@ def nexus_text(obj, colour_branches, colours, **kwargs):
       'labels': ' '.join(tax_labels), # taxlabels all on one line 
       'trees': '\n'.join(nexus_trees), # trees on separate lines
     }
-    return text
+    return re.sub(r':([0-9]{1,3}\.[0-9]{1,3}):', r'\1:', text) # Corrects for biopython bug. eg ":50.00:" -> "50.00:"
 
 if __name__ == "__main__":
     main()
