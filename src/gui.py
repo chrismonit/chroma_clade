@@ -1,11 +1,28 @@
 from Tkinter import *
 import tkFileDialog
+import os
 import os.path
 from check_input import Input, InputError
 import chroma_clade
 
 # colour choices:
 #https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
+
+# py2app saves data files in "<project>.app/Contents/Resources/", which is also where app's main file resides
+# therefore we can use the path to this file to get the path to the data files
+# this will work also for CLI version, since the data files reside in same dir as source code.
+# By contast, PyInstaller creates a temp folder and stores path in _MEIPASS when using --onefile on windows
+
+def get_resource(filename): # https://stackoverflow.com/questions/7674790/bundling-data-files-with-pyinstaller-onefile
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        #base_path = os.path.abspath(".")
+		base_path = os.path.split(__file__)[0] # assuming resources are in same directory as this file
+
+    return os.path.join(base_path, filename)
+
 
 class GuiInput():
     
@@ -55,10 +72,8 @@ class GuiInput():
 # get path for dir containing image files
         self.message.set("")
         
-        # py2app saves data files in "<project>.app/Contents/Resources/", which is also where app's main file resides
-        # therefore we can use the path to this file to get the path to the data files
-        # this will work also for CLI version, since the data files reside in same dir as source code
-        self.colour_file_path = os.path.join(os.path.split(__file__)[0], Input.DEFAULT_COL_FILE)
+        
+        self.colour_file_path = get_resource(Input.DEFAULT_COL_FILE)
 
     def set_tree(self):
         filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
@@ -163,8 +178,7 @@ def go():
         gui.set_message("Oops: an unknown error occured, please check input files and try again.\nIf the problem persists, please contact the author.")
 
 
-# assuming that the data/image files are in the same directory as this script
-image_dir = os.path.split(__file__)[0]
+
 
 root.title("ChromaClade")
 
@@ -176,9 +190,11 @@ root.resizable(False, False)
 root.geometry("%dx%d"%(round(WIDTH), round(HEIGHT)))
 root.configure(bg="gray")
 
-# TODO
-# icon image
-#root.wm_iconbitmap("icon_image_filename.ico")
+if os.name == "nt": # if windows
+	try:
+		root.wm_iconbitmap(get_resource("tree_256.ico"))
+	except Exception as e:
+			pass
 
 # ================ window layout ===============
 f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="darkred")
@@ -209,7 +225,7 @@ f_title.grid_rowconfigure(0, weight=1)
 f_title.grid_columnconfigure(0, weight=1)
 
 
-title_image = PhotoImage(file=os.path.join(image_dir, "title.gif"))
+title_image = PhotoImage(file=get_resource("title.gif"))
 l_title = Label(f_title, image=title_image, bg="cyan") # #9BFBFB
 #l_title = Label(f_title, text="title", bg="cyan") # #9BFBFB
 l_title.grid(column=0, row=0, sticky="nsew")
@@ -270,8 +286,8 @@ o_align.grid(column=M_COL, row=4)
 f_image.grid_rowconfigure(0, weight=1)
 f_image.grid_columnconfigure(0, weight=1)
 
-plain_image = PhotoImage(file=os.path.join(image_dir, "tree.gif"))
-col_image = PhotoImage(file=os.path.join(image_dir, "col.tree.gif"))
+plain_image = PhotoImage(file=get_resource("tree.gif"))
+col_image = PhotoImage(file=get_resource("col.tree.gif"))
 l_image = Label(f_image, image=plain_image)
 l_image.grid(column=0, row=0, sticky="nesw")
 
