@@ -1,8 +1,12 @@
 # ignore everything except the named directories/files
+.DS_store
 *.pyc
 */*.pyc
 *.swp
 */*.swp
+build/**
+dist/**
+tcl_stuff/**
 #*
 #!src/*
 #!lib/**
