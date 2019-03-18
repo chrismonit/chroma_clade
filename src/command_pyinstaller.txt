@@ -1,0 +1,2 @@
+pyinstaller --icon tree_256.ico --add-data tree_256.ico;. --add-data title.gif;. --add-data tree.gif;. --add-data col.tree.gif;. --add-data default_colour.csv;. --name chroma_clade --onefile --noconsole gui.py
+
