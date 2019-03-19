@@ -55,6 +55,15 @@ Click **Save as** to choose where to save the output.
 
 Branches can also be coloured by amino acids observed in descendent taxa, by clicking the **Colour branches** checkbox. Annotated trees can be made for a subset of sites by clicking the **Choose sites** checkbox and entering the site ranges to include, just as you would specify pages of a document to print.
 
+### Examples
+
+An example dataset is given in `examples/`. These are sequences of the PB2 protein found in influenza A viruses infecting humans and birds. Below is a colour-annotated tree produced by ChromaClade and visualised in FigTree.
+
+<p align="center">
+<img src="docs/pb2_271.jpg" alt="PB2_site_271" width="300"/>
+</p>
+
+
 ## Command Line Interface
 
 ChromaClade also has a CLI (i.e. terminal-based interface) which should run on any system where [Python 2.7](https://www.python.org/downloads/) and [Biopython](https://pypi.org/project/biopython/) are installed.
