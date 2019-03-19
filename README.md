@@ -6,12 +6,12 @@
 
 ChromaClade is a desktop application for producing  colour-annotated phylogenies that show amino acids found in each taxon and at each site in protein.
 
-This project has been developed and distributed by Christopher Monit.
+This repository houses ChromaClade executables, documentation, example input/output and its source code. ChromaClade as been developed and distributed by Christopher Monit.
 
 If you use ChromaClade please cite
 > Monit, C., Goldstein, R. A. and Towers, G. J., (submitted) ChromaClade: Combined visualisation of phylogenetic and sequence data 
 
-This repository houses ChromaClade executables, documentation, example input/output and its source code.
+
 
 ## Installation
 Pre-compiled apps are available for the following systems.
@@ -23,7 +23,10 @@ Pre-compiled apps are available for the following systems.
 ## Instructions
 ### Graphical interface
 
-![ChromaClade interface](docs/gui.jpg)
+<p align="center">
+<img src="docs/gui.jpg" alt="GUI" width="200"/>
+</p>
+
 
 ### Input
 Use the buttons to select the files containing your tree and your corresponding alignment. 
@@ -34,17 +37,46 @@ The alignment would ordinarily be amino acid sequences (e.g. translated from the
 
 ### Output
 
-The output is a set of trees saved to a single file, where taxon names have been annotated with the site number for each annotated tree and the amino acid found in that taxon's sequence. E.g. if methionine is found at position 1 in the human sequence, then 
-> human
+The output is a set of trees saved to a single file, where taxon names have been annotated and coloured according to the amino acid found in that taxon's sequence. E.g. if methionine is found at position 1 in the human sequence, then 
+
+<font color="black">human</font>
 
 becomes
->human__site_1__M
 
-Residue-specific colouring will also be added so that taxon names are coloured by the amino acid observed at each site.
+<font color="#FF9900">human__site_1__M</font>
 
 Use the dropdown to select the file formats for the output file, either a Nexus format file specifically compatible with the [FigTree](http://tree.bio.ed.ac.uk/software/figtree/) tree viewer, or the PhyloXML format compatible with other viewers such as [Archaeopteryx](https://sites.google.com/site/cmzmasek/home/software/archaeopteryx).
 
 Click **Save as** to choose where to save the output.
+
+### Colours
+
+Unfortunately it is impossible to select 20 starkly different colours, so the contrast will vary between combinations of residues. The colours are defines as follows:
+
+<font color="#FF0000">A</font>
+<font color="#009933">C</font>
+<font color="#FF0066">E</font>
+<font color="#990000">D</font>
+<font color="#00CC33">G</font>
+<font color="#6666FF">F</font>
+<font color="#660066">I</font>
+<font color="#FFCC00">H</font>
+<font color="#CC3300">K</font>
+<font color="#FF9900">M</font>
+<font color="#00CCFF">L</font>
+<font color="#FF9966">N</font>
+<font color="#FF00CC">Q</font>
+<font color="#CC0099">P</font>
+<font color="#336600">S</font>
+<font color="#992600">R</font>
+<font color="#FF6699">T</font>
+<font color="#0000FF">W</font>
+<font color="#FF66FF">V</font>
+<font color="#0099FF">Y</font>
+<font color="#797D7F">X</font>
+<font color="#797D7F">\*</font>
+<font color="#797D7F">-</font>
+
 
 ### Options
 
