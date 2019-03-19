@@ -15,9 +15,9 @@ If you use ChromaClade please cite
 ## Installation
 Pre-compiled apps are available for the following systems.
 
-**Windows:** found in 'apps/windows/chroma_clade.exe' from the links above.
+**Windows:** found in `apps/windows/chroma_clade.exe` from the links above.
 
-**Mac OSX:** found in 'apps/macosx/chroma_clade.app' from the links above.
+**Mac OSX:** found in `apps/macosx/chroma_clade.app` from the links above.
 
 ## Instructions
 ### Graphical interface
@@ -60,6 +60,7 @@ Branches can also be coloured by amino acids observed in descendent taxa, by cli
 ChromaClade also has a CLI (i.e. terminal-based interface) which should run on any system where [Python 2.7](https://www.python.org/downloads/) and [Biopython](https://pypi.org/project/biopython/) are installed.
 
 Basic usage:
+
 `$ cd chroma_clade/src`
 
 `$ python2 chroma_clade.py <newick_tree_file> <fasta_alignment>`
