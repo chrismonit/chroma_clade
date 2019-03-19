@@ -39,11 +39,15 @@ The alignment would ordinarily be amino acid sequences (e.g. translated from the
 
 The output is a set of trees saved to a single file, where taxon names have been annotated and coloured according to the amino acid found in that taxon's sequence. E.g. if methionine is found at position 1 in the human sequence, then 
 
+<p>
 <font color="black">human</font>
+</p>
 
 becomes
 
+<p>
 <font color="#FF9900">human__site_1__M</font>
+</p>
 
 Use the dropdown to select the file formats for the output file, either a Nexus format file specifically compatible with the [FigTree](http://tree.bio.ed.ac.uk/software/figtree/) tree viewer, or the PhyloXML format compatible with other viewers such as [Archaeopteryx](https://sites.google.com/site/cmzmasek/home/software/archaeopteryx).
 
@@ -53,6 +57,7 @@ Click **Save as** to choose where to save the output.
 
 Unfortunately it is impossible to select 20 starkly different colours, so the contrast will vary between combinations of residues. The colours are defines as follows:
 
+<p>
 <font color="#FF0000">A</font>
 <font color="#009933">C</font>
 <font color="#FF0066">E</font>
@@ -76,6 +81,11 @@ Unfortunately it is impossible to select 20 starkly different colours, so the co
 <font color="#797D7F">X</font>
 <font color="#797D7F">\*</font>
 <font color="#797D7F">-</font>
+</p>
+
+
+
+
 
 
 ### Options
