@@ -13,7 +13,7 @@ If you use ChromaClade please cite
 
 
 ## Installation
-Pre-compiled apps are available for the following systems.
+Pre-compiled apps are available for the following systems:
 
 **Windows:** found in `apps/windows/chroma_clade.exe` from the links above.
 
