@@ -1,6 +1,8 @@
 # ChromaClade
 
-<img src="docs/logo.jpg" alt="ChromaClade" width="200" align="center"/>
+<p align="center">
+<img src="docs/logo.jpg" alt="ChromaClade" width="200"/>
+</p>
 
 ChromaClade is a desktop application for producing  colour-annotated phylogenies that show amino acids found in each taxon and at each site in protein.
 
