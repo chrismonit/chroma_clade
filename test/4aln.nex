@@ -1,0 +1,18 @@
+#NEXUS
+[saved by seaview on Wed Mar 20 14:53:22 2019]
+BEGIN DATA;
+  DIMENSIONS NTAX=4 NCHAR=4;
+  FORMAT DATATYPE=PROTEIN
+  GAP=-
+  ;
+MATRIX
+[1] a
+!RND
+[2] b
+ARND
+[3] c
+CRNF
+[4] d
+CRN%
+;
+END;

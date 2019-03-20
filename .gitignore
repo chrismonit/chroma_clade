@@ -5,3 +5,4 @@
 tcl_stuff/**
 **/*~
 apps/windows/build/**
+test/**
