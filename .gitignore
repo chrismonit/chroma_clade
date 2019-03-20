@@ -1,15 +1,7 @@
 # ignore everything except the named directories/files
-.DS_store
-*.pyc
-*/*.pyc
-*.swp
-*/*.swp
-build/**
-dist/**
+**/.DS_Store
+**/*.pyc
+**/*.swp
 tcl_stuff/**
-#*
-#!src/*
-#!lib/**
-#!LICENSE
-#!README
-#!example/**
+**/*~
+apps/windows/build/**
