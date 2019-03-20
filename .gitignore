@@ -1,8 +1,6 @@
-# ignore everything except the named directories/files
 **/.DS_Store
 **/*.pyc
 **/*.swp
 tcl_stuff/**
 **/*~
 apps/windows/build/**
-test/**
