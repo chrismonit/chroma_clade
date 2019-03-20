@@ -1,22 +1,18 @@
 #NEXUS
-[TITLE: Written by EMBOSS 20/03/19]
-
-begin data;
-dimensions ntax=4 nchar=4;
-format datatype=DNA missing=N gap=-;
-
-matrix
-a
-RND
-b
+[saved by seaview on Wed Mar 20 16:17:14 2019]
+BEGIN DATA;
+  DIMENSIONS NTAX=4 NCHAR=4;
+  FORMAT DATATYPE=PROTEIN
+  GAP=-
+  ;
+MATRIX
+[1] a
 ARND
-c
+[2] b
+ARND
+[3] c
 CRNF
-d
-CRN
+[4] d
+CRN-
 ;
-
-end;
-begin assumptions;
-options deftype=unord;
-end;
+END;
