@@ -11,7 +11,9 @@ APP = ['src/gui.py']
 DATA_FILES = [] # this may be useful if using py2exe
 PY2APP_OPTIONS = {'resources': 
                     'src/default_colour.csv,src/title.gif,src/tree.gif,src/col.tree.gif',
-                    'iconfile': 'src/tree.icns'
+                    'iconfile': 'src/tree.icns',
+                    'bdist_base': 'apps/mac/build',
+                    'dist_dir': 'apps/mac'
                     }
 PY2EXE_OPTIONS = {"packages": ["biopython"]}
 

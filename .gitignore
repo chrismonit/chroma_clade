@@ -4,4 +4,5 @@
 tcl_stuff/**
 **/*~
 apps/windows/build/**
+apps/mac/build/**
 test/*out*
