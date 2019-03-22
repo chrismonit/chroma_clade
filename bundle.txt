@@ -1,0 +1,28 @@
+This is a note mostly for my own reference, as a reminder of how to compile the app to create Windows and Mac OSX executables. 
+
+cmonit March 2019.
+
+----------
+MAC (must be on Mac system with py2app installed)
+
+$ cd chroma_clade/
+$ python2 setup.py py2app
+
+This saves the resulting app bundle in the location specified in setup.py.
+
+NB had problems when both scipy and matplotlib are installed in python2 when executing the above, because py2app automatically includes these and bloats the output bundle. Easily avoided by uninstalling these first:
+
+$ pip2 uninstall scipy
+
+However, in future better to use virtualenv or similar.
+NB wise to change the version info in setup.py if appropriate.
+
+----------
+WINDOWS (must be on windows system with pyinstaller installed)
+
+> cd chroma_clade\src
+
+Run the command given in chroma_clade/src/win_pyinstaller.txt.
+Output .exe is saved in apps/windows.
+
+
