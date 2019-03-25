@@ -1,2 +1,2 @@
 #NB this command must be run in chroma_clade/src directory
-pyinstaller --icon tree_256.ico --add-data tree_256.ico;. --add-data title.gif;. --add-data tree.gif;. --add-data col.tree.gif;. --add-data default_colour.csv;. --distpath ..\apps\windows --workpath ..\apps\windows\build --name chroma_clade --onefile --noconsole gui.py
+pyinstaller --icon tree_256.ico --add-data tree_256.ico;. --add-data title.png;. --add-data tree.png;. --add-data col.tree.png;. --add-data default_colour.csv;. --distpath ..\apps\windows --workpath ..\apps\windows\build --name chroma_clade --onefile --noconsole gui.py

@@ -10,7 +10,7 @@ _VERSION="1.0"
 APP = ['src/gui.py']
 DATA_FILES = [] # this may be useful if using py2exe
 PY2APP_OPTIONS = {'resources': 
-                    'src/default_colour.csv,src/title.gif,src/tree.gif,src/col.tree.gif',
+                    'src/default_colour.csv,src/title.png,src/tree.png,src/col.tree.png',
                     'iconfile': 'src/tree.icns',
                     'bdist_base': 'apps/mac/build',
                     'dist_dir': 'apps/mac'
