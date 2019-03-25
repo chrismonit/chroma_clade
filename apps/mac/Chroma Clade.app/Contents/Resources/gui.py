@@ -181,8 +181,9 @@ def go():
 
 
 root.title("ChromaClade")
+title_image = PhotoImage(file=get_resource("title.png"))
 
-WIDTH = 500.
+WIDTH = title_image.width()
 HEIGHT = WIDTH*1.5 
 #root.minsize(int(WIDTH), int(HEIGHT))
 root.resizable(False, False)
@@ -198,8 +199,8 @@ if os.name == "nt": # if windows
 
 # ================ window layout ===============
 f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="darkred")
-f_input = Frame(root, height=HEIGHT*0.45, width=WIDTH*0.5, bg="white") # nice pale cyan: 
-f_image = Frame(root, height=HEIGHT*0.35, width=WIDTH*0.5, bg="white") # nice pale cyan: #9BFBFB
+f_input = Frame(root, height=HEIGHT*0.50, width=WIDTH*0.5, bg="white") # nice pale cyan: 
+f_image = Frame(root, height=HEIGHT*0.30, width=WIDTH*0.5, bg="white") # nice pale cyan: #9BFBFB
 f_messages = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="orange")
 
 root.grid_rowconfigure(0, weight=1) 
@@ -225,7 +226,6 @@ f_title.grid_rowconfigure(0, weight=1)
 f_title.grid_columnconfigure(0, weight=1)
 
 
-title_image = PhotoImage(file=get_resource("title.gif"))
 l_title = Label(f_title, image=title_image, bg="cyan") # #9BFBFB
 #l_title = Label(f_title, text="title", bg="cyan") # #9BFBFB
 l_title.grid(column=0, row=0, sticky="nsew")
@@ -257,7 +257,7 @@ l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), fg=L_FG, bg=L_BG,
 l_tree_file.grid(column=R_COL, row=0, sticky="")
 
 # TREE FORMAT
-l_tree_format = Label(f_input, text="Tree format:", bg=L_BG)
+l_tree_format = Label(f_input, text="Format:", bg=L_BG)
 l_tree_format.grid(column=L_COL, row=1, sticky="")
 
 o_tree_format = OptionMenu(f_input, gui.get_tree_format(), *gui.tree_choices) 
@@ -276,7 +276,7 @@ b_align.grid(column=M_COL, row=3)
 l_align_file = Label(f_input, textvariable=gui.get_align_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN)
 l_align_file.grid(column=R_COL, row=3, sticky="")
 
-l_align_format = Label(f_input, text="Alignment format:", bg=L_BG)
+l_align_format = Label(f_input, text="Format:", bg=L_BG)
 l_align_format.grid(column=L_COL, row=4, sticky="")
 
 o_align = OptionMenu(f_input, gui.get_align_format(), *gui.align_choices) 
@@ -286,8 +286,8 @@ o_align.grid(column=M_COL, row=4)
 f_image.grid_rowconfigure(0, weight=1)
 f_image.grid_columnconfigure(0, weight=1)
 
-plain_image = PhotoImage(file=get_resource("tree.gif"))
-col_image = PhotoImage(file=get_resource("col.tree.gif"))
+plain_image = PhotoImage(file=get_resource("tree.png"))
+col_image = PhotoImage(file=get_resource("col.tree.png"))
 l_image = Label(f_image, image=plain_image)
 l_image.grid(column=0, row=0, sticky="nesw")
 
@@ -337,14 +337,14 @@ Label(f_input, text="").grid(column=M_COL, row=10, sticky="nesw")
 o_out_format = OptionMenu(f_input, gui.get_save_format(), *GuiInput.save_choices) 
 o_out_format.grid(column=M_COL, row=11)
 
-l_out_format = Label(f_input, text="Output file format:", bg=L_BG)
+l_out_format = Label(f_input, text="Output format:", bg=L_BG)
 l_out_format.grid(column=L_COL, row=11, sticky="")
 
 # output file
 b_outfile = Button(f_input, text="Save as", command=gui.set_save)
 b_outfile.grid(column=M_COL, row=12, sticky="")
 
-l_outfile = Label(f_input, text="Output destination:", bg=L_BG)
+l_outfile = Label(f_input, text="Destination:", bg=L_BG)
 l_outfile.grid(column=L_COL, row=12, sticky="")
 
 l_outfile = Label(f_input, textvariable=gui.get_save_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN)
@@ -365,6 +365,5 @@ l_messages = Label(f_messages, font=("Helvetica", 16), textvariable=gui.get_mess
 l_messages.grid(column=0, row=0, sticky="news")
 
 
-print "run main loop:"
 #event loop
 root.mainloop()
