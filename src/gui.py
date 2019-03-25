@@ -181,7 +181,7 @@ def go():
 
 
 root.title("ChromaClade")
-title_image = PhotoImage(file=get_resource("crop.26title.png"))
+title_image = PhotoImage(file=get_resource("title.png"))
 
 WIDTH = title_image.width()
 HEIGHT = WIDTH*1.5 
