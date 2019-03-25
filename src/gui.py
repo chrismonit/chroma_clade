@@ -186,7 +186,7 @@ title_image = PhotoImage(file=get_resource("crop.26title.png"))
 WIDTH = title_image.width()
 HEIGHT = WIDTH*1.5 
 #root.minsize(int(WIDTH), int(HEIGHT))
-root.resizable(True, True)
+root.resizable(False, False)
 
 root.geometry("%dx%d"%(round(WIDTH), round(HEIGHT)))
 root.configure(bg="gray")
