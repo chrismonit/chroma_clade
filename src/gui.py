@@ -266,7 +266,7 @@ o_tree_format = OptionMenu(f_input, gui.get_tree_format(), *gui.tree_choices)
 o_tree_format.grid(column=M_COL, row=1)
 
 # BLANK ROW
-Label(f_input, text="").grid(column=M_COL, row=2, sticky="nesw")
+Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=2, sticky="nesw")
 
 # CHOOSE ALIGN
 l_align = Label(f_input, text="Alignment:", bg=L_BG)
@@ -290,7 +290,7 @@ f_image.grid_columnconfigure(0, weight=1)
 
 plain_image = ImageTk.PhotoImage(Image.open(get_resource("tree.png")))
 col_image = ImageTk.PhotoImage(Image.open(get_resource("col.tree.png")))
-l_image = Label(f_image, image=plain_image)
+l_image = Label(f_image, image=plain_image, bg=L_BG)
 l_image.image = plain_image # PIL docs say to keep a reference
 l_image.grid(column=0, row=0, sticky="nesw")
 
@@ -298,7 +298,7 @@ l_image.grid(column=0, row=0, sticky="nesw")
 # ================ options ===============
 
 # BLANK ROW
-Label(f_input, text="").grid(column=M_COL, row=5, sticky="nesw")
+Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=5, sticky="nesw")
 
 # COLOUR BRANCHES
 def image_callback():
@@ -307,11 +307,11 @@ def image_callback():
 	else:
 		l_image.configure(image=plain_image)
 
-cb_branches = Checkbutton(f_input, text="Colour branches", bg="white", command=image_callback, variable=gui.get_colour_branches())
+cb_branches = Checkbutton(f_input, text="Colour branches", bg=L_BG, command=image_callback, variable=gui.get_colour_branches())
 cb_branches.grid(column=M_COL, row=6, sticky="w")
 
 # BLANK ROW
-Label(f_input, text="").grid(column=M_COL, row=7, sticky="nesw")
+Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=7, sticky="nesw")
 
 # CHOOSE ALIGNMENT SITES
 e_sites = Entry(f_input, textvariable=gui.get_site_range_str(), state="disabled", fg="gray")
@@ -327,14 +327,14 @@ def restore_site_example():
     root.focus() # give keyboard focus to root widget, thereby removing focus from entry widget
     e_sites.configure(state="disabled", fg="gray")
 
-r_all_sites = Radiobutton(f_input, text="All sites", variable=gui.get_all_sites(), value=True, command=restore_site_example)
+r_all_sites = Radiobutton(f_input, text="All sites", bg=L_BG, variable=gui.get_all_sites(), value=True, command=restore_site_example)
 r_all_sites.grid(column=M_COL, row=8, sticky="w")
 
-r_range_sites = Radiobutton(f_input, text="Choose sites:", variable=gui.get_all_sites(), value=False, command=clear_site_example)
+r_range_sites = Radiobutton(f_input, text="Choose sites:", bg=L_BG, variable=gui.get_all_sites(), value=False, command=clear_site_example)
 r_range_sites.grid(column=M_COL, row=9, sticky="w")
 
 # BLANK ROW
-Label(f_input, text="").grid(column=M_COL, row=10, sticky="nesw")
+Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=10, sticky="nesw")
 
 # output format
 o_out_format = OptionMenu(f_input, gui.get_save_format(), *GuiInput.save_choices) 
