@@ -31,6 +31,6 @@ setup(
     author = 'Christopher Monit', 
     author_email = 'c.monit.12@ucl.ac.uk', 
     url = 'https://github.com/chrismonit/chroma_clade',
-    install_requires=['biopython']
+    install_requires=['biopython', 'Pillow']
 
 )
