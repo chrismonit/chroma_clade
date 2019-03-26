@@ -2,6 +2,8 @@ This is a note mostly for my own reference, as a reminder of how to compile the 
 
 cmonit March 2019.
 
+NB the app makes use of Biopython and Pillow (aka PIL) libraries; these will need to be installed for bundling to work on either system
+
 ----------
 MAC (must be on Mac system with py2app installed)
 
