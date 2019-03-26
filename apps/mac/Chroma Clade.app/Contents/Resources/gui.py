@@ -288,9 +288,10 @@ o_align.grid(column=M_COL, row=4)
 f_image.grid_rowconfigure(0, weight=1)
 f_image.grid_columnconfigure(0, weight=1)
 
-plain_image = PhotoImage(file=get_resource("tree.png"))
-col_image = PhotoImage(file=get_resource("col.tree.png"))
+plain_image = ImageTk.PhotoImage(Image.open(get_resource("tree.png")))
+col_image = ImageTk.PhotoImage(Image.open(get_resource("col.tree.png")))
 l_image = Label(f_image, image=plain_image)
+l_image.image = plain_image # PIL docs say to keep a reference
 l_image.grid(column=0, row=0, sticky="nesw")
 
 
