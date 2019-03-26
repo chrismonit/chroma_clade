@@ -4,6 +4,7 @@ import os
 import os.path
 from check_input import Input, InputError
 import chroma_clade
+from PIL import Image, ImageTk
 
 # colour choices:
 #https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/
@@ -181,7 +182,7 @@ def go():
 
 
 root.title("ChromaClade")
-title_image = PhotoImage(file=get_resource("title.png"))
+title_image = ImageTk.PhotoImage(Image.open(get_resource("title.png")))
 
 WIDTH = title_image.width()
 HEIGHT = WIDTH*1.5 
@@ -227,6 +228,7 @@ f_title.grid_columnconfigure(0, weight=1)
 
 
 l_title = Label(f_title, image=title_image, bg="cyan") # #9BFBFB
+l_title.image = title_image # PIL docs say to keep a reference of image
 #l_title = Label(f_title, text="title", bg="cyan") # #9BFBFB
 l_title.grid(column=0, row=0, sticky="nsew")
 
