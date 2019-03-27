@@ -70,9 +70,7 @@ class GuiInput():
         self.site_range_str.set(GuiInput.EXAMPLE_SITES_STR)
 
         self.message = StringVar()
-# get path for dir containing image files
         self.message.set("")
-        
         
         self.colour_file_path = get_resource(Input.DEFAULT_COL_FILE)
 
@@ -84,6 +82,7 @@ class GuiInput():
             self.tree_file.set( filename )
         else:
             self.tree_file.set( filename[:GuiInput.MAX_FILE_LEN] + "..." )
+        self.set_message("")
     
     def set_align(self):
         filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
@@ -93,7 +92,7 @@ class GuiInput():
             self.align_file.set( filename )
         else:
             self.align_file.set( filename[:GuiInput.MAX_FILE_LEN] + "..." )
-
+        self.set_message("")
 
     def set_save(self):
         filepath = tkFileDialog.asksaveasfilename(initialdir=GuiInput.initial_directory)
@@ -103,13 +102,21 @@ class GuiInput():
             self.save_file.set( filename )
         else:
             self.save_file.set( filename[:GuiInput.MAX_FILE_LEN] + "..." )
+        self.set_message("")
     
-    def set_all_sites(self, value): self.all_sites.set(value)
-    def set_site_range_str(self, value): self.site_range_str.set(value)
+    def set_all_sites(self, value): 
+        self.all_sites.set(value)
+        self.set_message("")
 
-    def set_message(self, value): self.message.set(value)
+    def set_site_range_str(self, value):
+        self.site_range_str.set(value)
+        self.set_message("")
 
-    def set_colour_file_path(self, value): raise NotImplementedError("Haven't implemented optional colours!")
+    def set_message(self, value): 
+        self.message.set(value)
+
+    def set_colour_file_path(self, value): 
+        raise NotImplementedError("Haven't implemented optional colours!")
 
     def get_tree_format(self): return self.tree_format
     def get_align_format(self): return self.align_format
