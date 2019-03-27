@@ -36,7 +36,7 @@ class Input:
         try:
             self.tree = Phylo.read(tree_path, tree_in_format) 
         except ValueError: # raised if 0 or >1 trees in file
-            raise InputError("Oops: input tree file must contain exactly 1 tree.\n(Is the specified format correct?)")
+            raise InputError("Oops: problem reading tree file.\n(Is the format correct?)")
         except IOError:
             raise InputError("Oops: can't find tree file")
         except Exception:
@@ -48,7 +48,7 @@ class Input:
         try:
             self.align = AlignIO.read(align_path, align_in_format)
         except ValueError: # raised if 0 or >1 alignments in file
-            raise InputError("Oops: input alignment file must contain exactly 1 alignment.\n(Is the specified format correct?)")
+            raise InputError("Oops: problem reading alignment file.\n(Is the format correct?)")
         except IOError:
             raise InputError("Oops: can't find alignment file")
         except Exception:
@@ -56,7 +56,7 @@ class Input:
         
         # validate tree/alignment content
         if set([ clade.name for clade in self.tree.get_terminals()]) != set([ seq.id for seq in self.align ]):
-            raise InputError("Oops: sequence names in tree and alignment don't match")
+            raise InputError("Oops: names in tree and alignment don't match")
 
         # output file path
         if output_path == None:
@@ -65,7 +65,7 @@ class Input:
         else:
             directory = os.path.split( os.path.abspath(output_path) )[0]
             if not os.path.exists(directory):
-                raise InputError("Oops: can't find the given folder for saving output")
+                raise InputError("Oops: can't find named folder for saving output")
             else:
                 self.output_path = output_path
 
@@ -90,12 +90,12 @@ class Input:
                 input_sites = map(lambda x: x-1, self._parse_sites(sites_string, SITES_DELIM) ) # -1 to make zero based 
                 for input_site in input_sites:
                     if not (0 <= input_site < self.align.get_alignment_length()):
-                        raise InputError("Oops: specified site number(s) outside alignment length")
+                        raise InputError("Oops: site number(s) outside alignment length")
                 self.sites = input_sites
         except InputError as e:
             raise e
         except Exception as e:
-            raise InputError("Oops: don't understand the specified alignment sites")
+            raise InputError("Oops: don't understand given alignment sites")
         
         # parse colour codes
         try:
