@@ -252,7 +252,7 @@ L_FG = "darkgray" # label text colour for file choices
 l_tree = Label(f_input, text="Tree:", bg=L_BG)
 l_tree.grid(column=L_COL, row=0, sticky="")
 
-b_tree = Button(f_input, text="Choose file", command=gui.set_tree)
+b_tree = Button(f_input, text="Choose file", bg=L_BG, command=gui.set_tree)
 b_tree.grid(column=M_COL, row=0, sticky="")
 
 l_tree_file = Label(f_input, textvariable=gui.get_tree_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN)
@@ -263,16 +263,17 @@ l_tree_format = Label(f_input, text="Format:", bg=L_BG)
 l_tree_format.grid(column=L_COL, row=1, sticky="")
 
 o_tree_format = OptionMenu(f_input, gui.get_tree_format(), *gui.tree_choices) 
+o_tree_format.config(bg=L_BG)
 o_tree_format.grid(column=M_COL, row=1)
 
 # BLANK ROW
-Label(f_input, text="").grid(column=M_COL, row=2, sticky="nesw")
+Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=2, sticky="nesw")
 
 # CHOOSE ALIGN
 l_align = Label(f_input, text="Alignment:", bg=L_BG)
 l_align.grid(column=L_COL, row=3, sticky="")
 
-b_align = Button(f_input, text="Choose file", command=gui.set_align)
+b_align = Button(f_input, text="Choose file", bg=L_BG, command=gui.set_align)
 b_align.grid(column=M_COL, row=3)
 
 l_align_file = Label(f_input, textvariable=gui.get_align_file(), fg=L_FG, bg=L_BG, width=GuiInput.MAX_FILE_LEN)
@@ -282,6 +283,7 @@ l_align_format = Label(f_input, text="Format:", bg=L_BG)
 l_align_format.grid(column=L_COL, row=4, sticky="")
 
 o_align = OptionMenu(f_input, gui.get_align_format(), *gui.align_choices) 
+o_align.config(bg=L_BG)
 o_align.grid(column=M_COL, row=4)
 
 # ================ image ===============
@@ -290,7 +292,7 @@ f_image.grid_columnconfigure(0, weight=1)
 
 plain_image = ImageTk.PhotoImage(Image.open(get_resource("tree.png")))
 col_image = ImageTk.PhotoImage(Image.open(get_resource("col.tree.png")))
-l_image = Label(f_image, image=plain_image)
+l_image = Label(f_image, image=plain_image, bg=L_BG)
 l_image.image = plain_image # PIL docs say to keep a reference
 l_image.grid(column=0, row=0, sticky="nesw")
 
@@ -298,7 +300,7 @@ l_image.grid(column=0, row=0, sticky="nesw")
 # ================ options ===============
 
 # BLANK ROW
-Label(f_input, text="").grid(column=M_COL, row=5, sticky="nesw")
+Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=5, sticky="nesw")
 
 # COLOUR BRANCHES
 def image_callback():
@@ -307,11 +309,11 @@ def image_callback():
 	else:
 		l_image.configure(image=plain_image)
 
-cb_branches = Checkbutton(f_input, text="Colour branches", bg="white", command=image_callback, variable=gui.get_colour_branches())
+cb_branches = Checkbutton(f_input, text="Colour branches", bg=L_BG, command=image_callback, variable=gui.get_colour_branches())
 cb_branches.grid(column=M_COL, row=6, sticky="w")
 
 # BLANK ROW
-Label(f_input, text="").grid(column=M_COL, row=7, sticky="nesw")
+Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=7, sticky="nesw")
 
 # CHOOSE ALIGNMENT SITES
 e_sites = Entry(f_input, textvariable=gui.get_site_range_str(), state="disabled", fg="gray")
@@ -327,24 +329,25 @@ def restore_site_example():
     root.focus() # give keyboard focus to root widget, thereby removing focus from entry widget
     e_sites.configure(state="disabled", fg="gray")
 
-r_all_sites = Radiobutton(f_input, text="All sites", variable=gui.get_all_sites(), value=True, command=restore_site_example)
+r_all_sites = Radiobutton(f_input, text="All sites", bg=L_BG, variable=gui.get_all_sites(), value=True, command=restore_site_example)
 r_all_sites.grid(column=M_COL, row=8, sticky="w")
 
-r_range_sites = Radiobutton(f_input, text="Choose sites:", variable=gui.get_all_sites(), value=False, command=clear_site_example)
+r_range_sites = Radiobutton(f_input, text="Choose sites:", bg=L_BG, variable=gui.get_all_sites(), value=False, command=clear_site_example)
 r_range_sites.grid(column=M_COL, row=9, sticky="w")
 
 # BLANK ROW
-Label(f_input, text="").grid(column=M_COL, row=10, sticky="nesw")
+Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=10, sticky="nesw")
 
 # output format
 o_out_format = OptionMenu(f_input, gui.get_save_format(), *GuiInput.save_choices) 
+o_out_format.config(bg=L_BG)
 o_out_format.grid(column=M_COL, row=11)
 
 l_out_format = Label(f_input, text="Output format:", bg=L_BG)
 l_out_format.grid(column=L_COL, row=11, sticky="")
 
 # output file
-b_outfile = Button(f_input, text="Save as", command=gui.set_save)
+b_outfile = Button(f_input, text="Save as", bg=L_BG, command=gui.set_save)
 b_outfile.grid(column=M_COL, row=12, sticky="")
 
 l_outfile = Label(f_input, text="Destination:", bg=L_BG)
@@ -354,7 +357,7 @@ l_outfile = Label(f_input, textvariable=gui.get_save_file(), fg=L_FG, bg=L_BG, w
 l_outfile.grid(column=R_COL, row=12, sticky="")
 
 # go button
-b_run = Button(f_input, text="Go", command=go)
+b_run = Button(f_input, text="Go", bg=L_BG, command=go)
 b_run.grid(column=M_COL, row=13, sticky="")
 
 
