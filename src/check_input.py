@@ -60,10 +60,10 @@ class Input:
 
         # output file path
         if output_path == None:
-            directory, filename = os.path.split( os.path.abspath(self.tree_path) )
-            self.output_path = directory + "/" + (OUT_PREFIX + filename) 
+            filename = os.path.basename(self.tree_path)
+            self.output_path = os.path.join(os.getcwd(), (OUT_PREFIX + filename)) 
         else:
-            directory = os.path.split( os.path.abspath(output_path) )[0]
+            directory = os.path.dirname( os.path.abspath(output_path) )
             if not os.path.exists(directory):
                 raise InputError("Oops: can't find named output folder")
             else:

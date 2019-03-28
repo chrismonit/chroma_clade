@@ -31,8 +31,7 @@ End;"""
 # 'index' starts from 1; 'tree' is the Newick tree string 
 TREE_TEMPLATE = "Tree tree%(index)d=%(tree)s" # TODO could have rooting information here
 
-GENERIC_ERR_MSG = """Oops: an unknown error occured, please check input files and try again.
-If the problem persists, please contact the author."""
+GENERIC_ERR_MSG = """Oops: an error occured, please check input settings and try again. Message:"""
 
 def main(): # for running as a CLI app
     import argparse
@@ -43,7 +42,7 @@ def main(): # for running as a CLI app
     parser.add_argument( "-af", metavar="<alignment_format>", default="fasta", type=str, help="Alignment file format, 'fasta' (default) or 'nexus'" )
     parser.add_argument( "-b", action="store_true", help="Colour branches in addition to tip names")
     parser.add_argument( "-s", metavar="<sites>", default=None, type=str, help="Specify subrange of alignment sites to make trees for, e.g. '18', or '2,4-6,10' etc." )
-    parser.add_argument( "-o", metavar="<output_path>", default=None, type=str, help="Output file name or path (default is same directory as input tree file with 'col_' prefix added to file name)" )
+    parser.add_argument( "-o", metavar="<output_path>", default=None, type=str, help="Output file name or path (default is 'col_' prefix added to file name, saved in working directory)" )
     parser.add_argument( "-of", metavar="<output_format>", default="figtree", type=str, help="Output tree format, either FigTree-compatible Nexus (default) or Phylo-XML" )
     parser.add_argument( "-c", metavar="<colour_file>", default=None, type=str, help="A plain text file specifying sequence states and their associated colours, expressed in RGB hexidecimal code (https://htmlcolorcodes.com). One state/colour pair per line, separated by a comma" )
 
