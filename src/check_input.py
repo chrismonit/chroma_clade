@@ -65,7 +65,7 @@ class Input:
         else:
             directory = os.path.split( os.path.abspath(output_path) )[0]
             if not os.path.exists(directory):
-                raise InputError("Oops: can't find named folder for saving output")
+                raise InputError("Oops: can't find named output folder")
             else:
                 self.output_path = output_path
 
@@ -103,9 +103,9 @@ class Input:
             self.colours = dict([ tuple(l.strip().split(COLOUR_DELIM)) for l in f.readlines() if not l.isspace() ])
             f.close()
         except IOError as e:
-            raise InputError("Oops: can't find file containing colour codes")
+            raise InputError("Oops: can't find colour codes file")
         except Exception as e:
-            raise InputError("Oops: problem reading file containing colour codes")
+            raise InputError("Oops: problem reading colour codes file")
 
     
     def _parse_sites(self, sites_string, delim):
