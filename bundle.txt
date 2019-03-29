@@ -19,6 +19,8 @@ $ pip2 uninstall scipy
 However, in future better to use virtualenv or similar.
 NB wise to change the version info in setup.py if appropriate.
 
+I've found that it may be easier to distribute Mac app bundles if they are first compressed to give a single file, for example as .tgz. For this reason the repo does not track uncompressed .app
+
 ----------
 WINDOWS (must be on windows system with pyinstaller installed)
 
