@@ -9,15 +9,17 @@ ChromaClade is a desktop application for producing  colour-annotated phylogeneti
 This repository houses ChromaClade executables, documentation, example input/output and its source code. ChromaClade as been developed and distributed by Christopher Monit.
 
 If you use ChromaClade please cite
-> Monit, C., Goldstein, R. A. and Towers, G. J., (submitted) ChromaClade: Combined visualisation of phylogenetic and sequence data 
+> Monit, C., Goldstein, R. A. and Towers, G. J. (submitted) ChromaClade: Combined visualisation of phylogenetic and sequence data 
 
 
 ## Installation
 Pre-compiled apps are available for the following systems:
 
-**Windows:** found in `apps/windows/chroma_clade.exe` from the links above.
+**Windows:** download `apps/windows/chroma_clade.exe` from the links above.
 
-**Mac OSX:** found in `apps/macosx/chroma_clade.app` from the links above.
+**Mac OS X:** download `apps/mac/chroma_clade.app.tgz` from the links above.
+
+For Mac OS X, the app will be downloaded in a compressed file format. Once it has downloaded just double click the file to access the app itself.
 
 ## Instructions
 ### Graphical interface
