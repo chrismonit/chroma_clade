@@ -4,7 +4,7 @@
 <img src="docs/logo.jpg" alt="ChromaClade" width="200"/>
 </p>
 
-ChromaClade is a desktop application for producing  colour-annotated phylogenetic trees that show amino acids found in each taxon and at each site in protein.
+ChromaClade is a desktop application that annotates taxon names in a phylogenetic tree with amino acids found at individual sites in the corresponding sequence alignment. Residue-specific colour codes enable easy inspection by eye and the resulting trees can be viewed in any of several popular tree-viewing programs.
 
 This repository houses ChromaClade executables, documentation, example input/output and its source code. ChromaClade as been developed and distributed by Christopher Monit.
 
