@@ -13,11 +13,11 @@ If you use ChromaClade please cite
 
 
 ## Installation
-Pre-compiled apps are available for the following systems:
+Pre-compiled apps are available in the releases section above, for the following systems:
 
-**Windows:** download `apps/windows/chroma_clade.exe` from the links above.
+**Windows:** download `chroma_clade.exe`
 
-**Mac OS X:** download `apps/mac/chroma_clade.app.tgz` from the links above.
+**Mac OS X:** download `Chroma.Clade.zip`
 
 For Mac OS X, the app will be downloaded in a compressed file format. Once it has downloaded just double click the file to access the app itself.
 
