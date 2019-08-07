@@ -1,9 +1,9 @@
-from tkinter import *
-import tkinter.filedialog
+from Tkinter import *
+import tkFileDialog
 import os
 import os.path
-from .check_input import Input, InputError
-from . import chroma_clade
+from check_input import Input, InputError
+import chroma_clade
 from PIL import Image, ImageTk
 
 # colour choices:
@@ -20,7 +20,7 @@ def get_resource(filename): # https://stackoverflow.com/questions/7674790/bundli
         base_path = sys._MEIPASS
     except Exception:
         #base_path = os.path.abspath(".")
-        base_path = os.path.split(__file__)[0] # assuming resources are in same directory as this file
+		base_path = os.path.split(__file__)[0] # assuming resources are in same directory as this file
 
     return os.path.join(base_path, filename)
 
@@ -75,7 +75,7 @@ class GuiInput():
         self.colour_file_path = get_resource(Input.DEFAULT_COL_FILE)
 
     def set_tree(self):
-        filepath = tkinter.filedialog.askopenfilename(initialdir=GuiInput.initial_directory)
+        filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
         self.tree_path.set(filepath)
         filename = os.path.split(filepath)[1]
         if len(filename) <= GuiInput.MAX_FILE_LEN:
@@ -85,7 +85,7 @@ class GuiInput():
         self.set_message("")
     
     def set_align(self):
-        filepath = tkinter.filedialog.askopenfilename(initialdir=GuiInput.initial_directory)
+        filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
         self.align_path.set(filepath)
         filename = os.path.split(filepath)[1]
         if len(filename) <= GuiInput.MAX_FILE_LEN:
@@ -95,7 +95,7 @@ class GuiInput():
         self.set_message("")
 
     def set_save(self):
-        filepath = tkinter.filedialog.asksaveasfilename(initialdir=GuiInput.initial_directory)
+        filepath = tkFileDialog.asksaveasfilename(initialdir=GuiInput.initial_directory)
         self.save_path.set(filepath)
         filename = os.path.split(filepath)[1]
         if len(filename) <= GuiInput.MAX_FILE_LEN:
@@ -200,10 +200,10 @@ root.geometry("%dx%d"%(round(WIDTH), round(HEIGHT)))
 root.configure(bg="gray")
 
 if os.name == "nt": # if windows
-    try:
-        root.wm_iconbitmap(get_resource("tree_256.ico"))
-    except Exception as e:
-            pass
+	try:
+		root.wm_iconbitmap(get_resource("tree_256.ico"))
+	except Exception as e:
+			pass
 
 # ================ window layout ===============
 f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="darkred")
@@ -311,10 +311,10 @@ Label(f_input, text="", bg=L_BG).grid(column=M_COL, row=5, sticky="nesw")
 
 # COLOUR BRANCHES
 def image_callback():
-    if gui.get_colour_branches().get():
-        l_image.configure(image=col_image)
-    else:
-        l_image.configure(image=plain_image)
+	if gui.get_colour_branches().get():
+		l_image.configure(image=col_image)
+	else:
+		l_image.configure(image=plain_image)
 
 cb_branches = Checkbutton(f_input, text="Colour branches", bg=L_BG, command=image_callback, variable=gui.get_colour_branches())
 cb_branches.grid(column=M_COL, row=6, sticky="w")

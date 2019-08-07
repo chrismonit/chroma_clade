@@ -11,7 +11,7 @@ import copy
 import re
 
 
-from .check_input import *
+from check_input import *
 
 
 UNKNOWN_STATE_COL = '#797D7F' # dark grey
@@ -53,21 +53,21 @@ def main(): # for running as a CLI app
         usr = Input(args.tree, args.alignment, args.b, args.tf, args.af, colour_file_path, output_path=args.o, tree_out_format=args.of, sites_string=args.s)
     except InputError as e:
         parser.print_help()
-        print("")
-        print(str(e))
+        print ""
+        print str(e)
         exit()
     except Exception as e:
-        print(GENERIC_ERR_MSG)
-        print("")
-        print("Exception: %s" % str(e))
+        print GENERIC_ERR_MSG
+        print ""
+        print "Exception: %s" % str(e)
         exit()
     
     try:
         run(usr)
     except Exception as e:
-        print(GENERIC_ERR_MSG)
-        print("")
-        print("Exception: %s" % str(e))
+        print GENERIC_ERR_MSG
+        print ""
+        print "Exception: %s" % str(e)
         exit()
 
 def run(usr):
@@ -78,7 +78,7 @@ def run(usr):
     trees = []
     for site in usr.get_sites():
         tree_copy = copy.deepcopy(tree)
-        states = list(usr.get_colours().keys())
+        states = usr.get_colours().keys()
         colour_tree(tree_copy.root, aln, taxon_dict, site, usr.get_colours(), states)
         annotate_site_state(tree_copy, aln, taxon_dict, site) # add site and state info
         trees.append(tree_copy)

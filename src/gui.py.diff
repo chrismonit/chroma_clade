@@ -1,0 +1,43 @@
+--- gui.py	(original)
++++ gui.py	(refactored)
+@@ -1,9 +1,9 @@
+-from Tkinter import *
+-import tkFileDialog
++from tkinter import *
++import tkinter.filedialog
+ import os
+ import os.path
+-from check_input import Input, InputError
+-import chroma_clade
++from .check_input import Input, InputError
++from . import chroma_clade
+ from PIL import Image, ImageTk
+ 
+ # colour choices:
+@@ -75,7 +75,7 @@
+         self.colour_file_path = get_resource(Input.DEFAULT_COL_FILE)
+ 
+     def set_tree(self):
+-        filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
++        filepath = tkinter.filedialog.askopenfilename(initialdir=GuiInput.initial_directory)
+         self.tree_path.set(filepath)
+         filename = os.path.split(filepath)[1]
+         if len(filename) <= GuiInput.MAX_FILE_LEN:
+@@ -85,7 +85,7 @@
+         self.set_message("")
+     
+     def set_align(self):
+-        filepath = tkFileDialog.askopenfilename(initialdir=GuiInput.initial_directory)
++        filepath = tkinter.filedialog.askopenfilename(initialdir=GuiInput.initial_directory)
+         self.align_path.set(filepath)
+         filename = os.path.split(filepath)[1]
+         if len(filename) <= GuiInput.MAX_FILE_LEN:
+@@ -95,7 +95,7 @@
+         self.set_message("")
+ 
+     def set_save(self):
+-        filepath = tkFileDialog.asksaveasfilename(initialdir=GuiInput.initial_directory)
++        filepath = tkinter.filedialog.asksaveasfilename(initialdir=GuiInput.initial_directory)
+         self.save_path.set(filepath)
+         filename = os.path.split(filepath)[1]
+         if len(filename) <= GuiInput.MAX_FILE_LEN:

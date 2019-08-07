@@ -1,0 +1,50 @@
+--- check_input.py	(original)
++++ check_input.py	(refactored)
+@@ -22,7 +22,7 @@
+         # tree and alignment formats
+         tree_in_format, align_in_format = tree_in_format.lower(), align_in_format.lower()
+ 
+-        if not tree_in_format in Phylo._io.supported_formats.keys():
++        if not tree_in_format in list(Phylo._io.supported_formats.keys()):
+             raise InputError("Oops: named tree format not recognised")
+         else:
+             self.tree_in_format = tree_in_format
+@@ -83,11 +83,11 @@
+         # NB we don't sort or remove duplicate site numbers, so user can control order and frequency
+         try:
+             if not sites_string or sites_string.isspace(): # if string is not empty or is all white space 
+-                self.sites = range(self.align.get_alignment_length())
++                self.sites = list(range(self.align.get_alignment_length()))
+             elif not any(char.isdigit() for char in sites_string):
+                 raise InputError("Oops: no digits given for site numbers")
+             else:
+-                input_sites = map(lambda x: x-1, self._parse_sites(sites_string, SITES_DELIM) ) # -1 to make zero based 
++                input_sites = [x-1 for x in self._parse_sites(sites_string, SITES_DELIM)] # -1 to make zero based 
+                 for input_site in input_sites:
+                     if not (0 <= input_site < self.align.get_alignment_length()):
+                         raise InputError("Oops: site number(s) outside alignment length")
+@@ -111,13 +111,13 @@
+     def _parse_sites(self, sites_string, delim):
+         sections = ("".join(sites_string.split())).split(delim) # remove all white space and then split on delim
+         sites = []
+-        for section in filter(None, sections): # iterate over non-empty strings
++        for section in [_f for _f in sections if _f]: # iterate over non-empty strings
+             if RANGE_DELIM in section:
+                 a, b = section.split(RANGE_DELIM )
+                 a, b = int(a), int(b)
+                 if a > b:
+                     raise ValueError("Invalid range argument: '%s' (%d > %d)" % (section, a, b))
+-                sites.extend(range(a, b + 1))
++                sites.extend(list(range(a, b + 1)))
+             else:
+                 a = int(section)
+                 sites.append(a)
+@@ -159,7 +159,7 @@
+                 align_in_format, outpath, tree_out_format, sites_string, colour_file
+                 )
+     except InputError as e:
+-        print str(e)
++        print(str(e))
+         exit()
+     
+ 
