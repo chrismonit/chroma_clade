@@ -1,0 +1,1 @@
+pyinstaller --icon tree.icns --add-data title.png:. --add-data tree.png:. --add-data col.tree.png:. --add-data default_colour.csv:. --distpath ../apps/mac_pyinstaller --workpath ../apps/mac_pyinstaller/build --name chroma_clade_pyinst --onefile gui.py
