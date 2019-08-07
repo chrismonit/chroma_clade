@@ -11,7 +11,7 @@ import copy
 import re
 
 
-from .check_input import *
+from check_input import *
 
 
 UNKNOWN_STATE_COL = '#797D7F' # dark grey

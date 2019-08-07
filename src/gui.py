@@ -2,8 +2,8 @@ from tkinter import *
 import tkinter.filedialog
 import os
 import os.path
-from .check_input import Input, InputError
-from . import chroma_clade
+from check_input import Input, InputError
+import chroma_clade
 from PIL import Image, ImageTk
 
 # colour choices:
