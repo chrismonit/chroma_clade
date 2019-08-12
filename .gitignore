@@ -1,9 +1,10 @@
 **/.DS_Store
 **/*.pyc
 **/*.swp
-tcl_stuff/**
 **/*~
 apps/windows/build/**
 apps/mac/build/**
+apps/mac_pyinstaller/build/**
+apps/mac_pyinstaller/chroma_clade_pyinst
 apps/mac/Chroma\ Clade.app/**
 test/*out*
