@@ -12,7 +12,7 @@ If you use ChromaClade please cite
 > Monit, C., Goldstein, R. A. and Towers, G. J. (submitted) ChromaClade: Combined visualisation of phylogenetic and sequence data 
 
 
-### Examples
+## Examples
 
 An example dataset is given in `examples/`. These are sequences of the PB2 protein found in influenza A viruses infecting humans and birds. Below is a colour-annotated tree produced by ChromaClade and visualised in [FigTree](http://tree.bio.ed.ac.uk/software/figtree/), showing residues observed at site 271, namely threonine (blue), alanine (red) and isoleucine (purple).
 
