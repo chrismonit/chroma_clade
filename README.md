@@ -14,7 +14,7 @@ If you use ChromaClade please cite
 
 ### Examples
 
-An example dataset is given in `examples/`. These are sequences of the PB2 protein found in influenza A viruses infecting humans and birds. Below is a colour-annotated tree produced by ChromaClade and visualised in FigTree, showing residues observed at site 271, namely threonine (blue), alanine (red) and isoleucine (purple).
+An example dataset is given in `examples/`. These are sequences of the PB2 protein found in influenza A viruses infecting humans and birds. Below is a colour-annotated tree produced by ChromaClade and visualised in [FigTree](http://tree.bio.ed.ac.uk/software/figtree/), showing residues observed at site 271, namely threonine (blue), alanine (red) and isoleucine (purple).
 
 <p align="center">
 <img src="docs/pb2_271.jpg" alt="PB2_site_271" width="300"/>
