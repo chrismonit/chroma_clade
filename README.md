@@ -15,14 +15,14 @@ If you use ChromaClade please cite
 ## Installation
 Pre-compiled apps are available in the releases section above, for Windows and macOS:
 
-**Windows:** download `chroma_clade.exe`
+**Windows:** download `chroma_clade.exe`.
 
-**macOS:** download `Chroma.Clade.zip`
-
-For macOS, the app will be downloaded in a compressed file format. Once it has downloaded just double click the file to access the app itself.
+**macOS:** download `Chroma.Clade.zip`. For macOS, the app will be downloaded in a compressed file format. Once it has downloaded just double click the file to access the app itself.
 
 **Linux/Unix:** While no packaged application is currently available, the graphical interface can be run via the terminal, provided [Python 3](https://www.python.org/downloads/) and Python modules [Biopython](https://pypi.org/project/biopython/)  and [PIL](https://pypi.org/project/Pillow/) are installed (`$ pip3 install biopython Pillow`). Download/clone this repository and then specify an alias command, for example:
+
 `alias chroma_clade="python3 /path/to/chroma_clade/src/gui.py &"`
+
 in the `~/.bashrc` file, or equivalent. See also the command line interface, below.
 
 ## Instructions
