@@ -13,13 +13,17 @@ If you use ChromaClade please cite
 
 
 ## Installation
-Pre-compiled apps are available in the releases section above, for the following systems:
+Pre-compiled apps are available in the releases section above, for Windows and macOS:
 
 **Windows:** download `chroma_clade.exe`
 
-**Mac OS X:** download `Chroma.Clade.zip`
+**macOS:** download `Chroma.Clade.zip`
 
-For Mac OS X, the app will be downloaded in a compressed file format. Once it has downloaded just double click the file to access the app itself.
+For macOS, the app will be downloaded in a compressed file format. Once it has downloaded just double click the file to access the app itself.
+
+**Linux:** While no packaged application is currently available, the graphical interface can be run via the terminal, provided [Python 3](https://www.python.org/downloads/) and Python modules [Biopython](https://pypi.org/project/biopython/)  and [PIL](https://pypi.org/project/Pillow/) are installed (`$ pip3 install biopython Pillow`). Download/clone this repository and then specify an alias command, for example:
+`alias chroma_clade="python3 /path/to/chroma_clade/src/gui.py &"`
+in the `~/.bashrc` file, or equivalent. See also the command line interface, below.
 
 ## Instructions
 ### Graphical interface
@@ -68,17 +72,17 @@ An example dataset is given in `examples/`. These are sequences of the PB2 prote
 
 ## Command Line Interface
 
-ChromaClade also has a CLI (i.e. terminal-based interface) which should run on any system where [Python 2.7](https://www.python.org/downloads/) and [Biopython](https://pypi.org/project/biopython/) are installed.
+ChromaClade also has a CLI (i.e. terminal-based interface) which should run on any system where [Python 3](https://www.python.org/downloads/) and [Biopython](https://pypi.org/project/biopython/) are installed.
 
 Basic usage:
 
 `$ cd chroma_clade/src`
 
-`$ python2 chroma_clade.py <newick_tree_file> <fasta_alignment>`
+`$ python3 chroma_clade.py <newick_tree_file> <fasta_alignment>`
 
 For more information and options, run 
 
-`$ python2 chroma_clade.py -h`
+`$ python3 chroma_clade.py -h`
 
 ## License 
 
