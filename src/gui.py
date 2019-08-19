@@ -206,10 +206,10 @@ if os.name == "nt": # if windows
             pass
 
 # ================ window layout ===============
-f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="darkred")
+f_title = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="cyan")
 f_input = Frame(root, height=HEIGHT*0.50, width=WIDTH*0.5, bg="white") # nice pale cyan: 
 f_image = Frame(root, height=HEIGHT*0.30, width=WIDTH*0.5, bg="white") # nice pale cyan: #9BFBFB
-f_messages = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="orange")
+f_messages = Frame(root, height=HEIGHT*0.1, width=WIDTH*1.0, bg="cyan")
 
 root.grid_rowconfigure(0, weight=1) 
 root.grid_rowconfigure(1, weight=1) 
