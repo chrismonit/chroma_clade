@@ -28,11 +28,7 @@ Pre-compiled apps are available in the releases section above, for Windows and m
 
 **macOS:** download `Chroma.Clade.zip`. The app will be downloaded in a compressed file format; once it has downloaded just double click the file to access the app itself.
 
-**Linux/Unix:** While no packaged application is currently available, the graphical interface can be run via the terminal, provided [Python 3](https://www.python.org/downloads/) and the Python modules [Biopython](https://pypi.org/project/biopython/)  and [PIL](https://pypi.org/project/Pillow/) are installed (`$ pip3 install biopython Pillow`). Download/clone this repository from the links above and then specify an alias command, for example:
-
-`alias chroma_clade="python3 /path/to/chroma_clade/src/gui.py &"`
-
-in the `~/.bashrc` file, or equivalent. See also the command line interface, below.
+**Linux/Unix:** While no packaged application is currently available for Linux, the graphical interface can be run provided [Python 3](https://www.python.org/downloads/) is installed, the Python modules [Biopython](https://pypi.org/project/biopython/) and [PIL](https://pypi.org/project/Pillow/) are installed (`$ pip3 install biopython Pillow`) and that this git repository is downloaded to your machine. For any Linux distribution, the terminal command `$ python3 /path/to/chroma_clade/src/gui.py &` will launch the app. For GNOME desktop systems (e.g. Ubuntu) a desktop shortcut template is saved in `apps/gnome/ChromaClade.desktop`; open this in a text editor and change the file paths to locations of your Python3 installation and the `chroma_clade` repository, then move the file to your desktop and assign it exectuable permissions. See also the command line interface, below.
 
 ## Instructions
 ### Graphical interface
