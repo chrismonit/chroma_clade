@@ -1,25 +1,27 @@
-This is a note mostly for my own reference, as a reminder of how to compile the app to create Windows and Mac OSX executables. 
+This is a note mostly for my own reference, as a reminder of how 
+to compile the app to create Windows and macOS executables. 
 
 cmonit March 2019.
+Updated August 2019.
 
-NB the app makes use of Biopython and Pillow (aka PIL) libraries; these will need to be installed for bundling to work on either system
+NB the app makes use of Biopython and Pillow (aka PIL) libraries; 
+these will need to be installed for bundling to work on either system.
+
+Pyinstaller is used to build executables on both systems. Pyinstaller 
+creates *.spec files with the same name as the app. Apparently *.spec 
+files must be saved in the src/ directory; therefore to avoid conflict,
+note that the macOS version is named ChromaClade.app while the windows
+version is chroma_clade.exe.
 
 ----------
-MAC (must be on Mac system with py2app installed)
+MAC (must be on Mac system with pyinstaller installed)
 
 $ cd chroma_clade/
-$ python2 setup.py py2app
+$ ./mac_pyinstaller.sh
 
-This saves the resulting app bundle in the location specified in setup.py.
+This saves the resulting app bundle in apps/mac/.
 
-NB had problems when both scipy and matplotlib are installed in python2 when executing the above, because py2app automatically includes these and bloats the output bundle. Easily avoided by uninstalling these first:
-
-$ pip2 uninstall scipy
-
-However, in future better to use virtualenv or similar.
-NB wise to change the version info in setup.py if appropriate.
-
-I've found that it may be easier to distribute Mac app bundles if they are first compressed to give a single file, for example as .tgz. For this reason the repo does not track uncompressed .app
+Note that this script copies a tcl/tk file needed in the bundle.
 
 ----------
 WINDOWS (must be on windows system with pyinstaller installed)
@@ -28,5 +30,4 @@ WINDOWS (must be on windows system with pyinstaller installed)
 
 Run the command given in chroma_clade/src/win_pyinstaller.txt.
 Output .exe is saved in apps/windows.
-
 
