@@ -3,5 +3,7 @@
 **/*.swp
 **/*~
 apps/windows/build/**
+apps/windows/*.zip
 apps/mac/build/**
+apps/mac/*.zip
 test/*out*
