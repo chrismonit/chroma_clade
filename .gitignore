@@ -7,5 +7,5 @@ apps/windows/*.zip
 apps/mac/build/**
 apps/mac/*.zip
 test/*out*
-venv/**
-.idea/**
+src/venv/**
+src/.idea/**
