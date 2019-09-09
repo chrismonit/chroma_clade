@@ -7,3 +7,4 @@ apps/windows/*.zip
 apps/mac/build/**
 apps/mac/*.zip
 test/*out*
+venv/**
