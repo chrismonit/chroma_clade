@@ -3,12 +3,26 @@ app = Flask(__name__)
 
 import check_input
 
+
+#  tree_path, align_path, branches, tree_in_format,
+#             align_in_format, colour_file_path, output_path=None, tree_out_format=None,
+#             sites_string=""
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    global shopping_list
     if request.method == 'POST':
-        shopping_list.append(request.form['item'])
-    return render_template('index.html', items=shopping_list)
+        tree = request.form['tree_file']
+        alignment = request.form['alignment_file']
+        branches = request.form["branches"]
+        align_in_format = request.form["alignment_format"]
+        tree_in_format = request.form["tree_format"]
+
+        tree_out_format = request.form["output_format"]
+        choose_sites = request.form["choose_sites"]
+        sites_range = request.form["sites_range"]
+    # return render_template('index.html', items=shopping_list)
+    return render_template('index.html')
 
 
 if __name__=='__main__':
