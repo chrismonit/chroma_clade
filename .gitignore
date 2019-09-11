@@ -9,3 +9,4 @@ apps/mac/*.zip
 test/*out*
 src/venv/**
 src/.idea/**
+src/uploads/**
