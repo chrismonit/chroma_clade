@@ -48,7 +48,7 @@ def save_file(input_file, file_extensions):
 def index():
     if request.method == 'POST':
 
-        # TODO may want to have seperate destinations for alignments, trees and coloured trees for clarity
+        # TODO may want to have seperate server destinations for alignments, trees and coloured trees for clarity
         tree_file = request.files["tree_file"]
         tree_path = save_file(tree_file, app.config["TREE_FILE_EXTENSIONS"])
         alignment_file = request.files["alignment_file"]
@@ -70,22 +70,25 @@ def index():
                               colour_file_path=colour_file, output_path=out_path, tree_out_format=tree_out_format,
                               sites_string=sites_string)
         except InputError as e:
-            pass  # TODO
+            pass
+            # TODO. want to return this same page, with error message and same form data
+            # TODO could use flash??
         chroma_clade.run(usr_input)
         os.remove(tree_path)
         os.remove(alignment_path)
-        print(out_name)
+
         return render_template("result.html", out_name=out_name)
         # return send_from_directory(app.config["UPLOAD_FOLDER"], out_name, as_attachment=True)
 
-    # return render_template('index.html', items=shopping_list)
     return render_template('index.html')
 
 
 @app.route('/result/<filename>')
 def download(filename):
     out_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    # make the output file download and remove it from server; https://stackoverflow.com/questions/40853201/remove-file-after-flask-serves-it
+    # make the output file download and remove it from server;
+    # https://stackoverflow.com/questions/40853201/remove-file-after-flask-serves-it
+
     def generate():
         with open(out_path) as f:
             yield from f
@@ -95,6 +98,7 @@ def download(filename):
     r = current_app.response_class(generate(), mimetype='text/csv')
     r.headers.set('Content-Disposition', 'attachment', filename=filename)
     return r
+
 
 # TODO must clear files at some point
 if __name__ == '__main__':
