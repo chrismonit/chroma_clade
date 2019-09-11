@@ -12,9 +12,9 @@
 
 
 
-<form post="post" action="/todo" enctype="multipar/form-data">
+<form method="post" action="/" enctype="multipart/form-data">
     <p>
-      <input type="checkbox" name="branches" value="True"> Colour branches 
+      <input type="checkbox" name="branches" value="True"> Colour branches
     </p>
     <p>
        <label for="tree_file">Tree file:</label>
@@ -39,8 +39,8 @@
            <option value="xml">XML</option>
        </select>
     <p>
-       <input type="radio" name="choose_sites" value="all" checked> All sites<br>
-       <input type="radio" name="choose_sites" value="choose"> Choose sites:<br>
+       <input type="radio" name="choose_sites" value="" checked> All sites<br>
+       <input type="radio" name="choose_sites" value="SITE_RANGE"> Choose sites:<br>
        <input type="text" name="sites_range" value="e.g. 1-5, 9, 11-13">
     </p>
     </p>
