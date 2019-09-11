@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, current_app
 from werkzeug.utils import secure_filename
 import os
 from check_input import Input, InputError
@@ -44,39 +44,26 @@ def save_file(input_file, file_extensions):
     return saved_path  # return path so it can be accessed later
 
 
-# TODO could have separate function for after job has finished?
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
 
         # TODO may want to have seperate destinations for alignments, trees and coloured trees for clarity
-
         tree_file = request.files["tree_file"]
         tree_path = save_file(tree_file, app.config["TREE_FILE_EXTENSIONS"])
         alignment_file = request.files["alignment_file"]
         alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FILE_EXTENSIONS"])
-
 
         branches = (request.form.get("branches") is not None)
         align_in_format = request.form["alignment_format"]
         tree_in_format = request.form["tree_format"]
         tree_out_format = request.form["output_format"]
         sites_string = request.form["sites_range"] if request.form["choose_sites"] else ""
-
-        # print("tree", tree)
-        # print("alignment", alignment)
-        print("branches", branches)
-        print("align_in_format", align_in_format)
-        print("tree_in_format", tree_in_format)
-        print("tree_out_format", tree_out_format)
-        print("sites_range", sites_string)
-
         colour_file = os.path.join(os.path.dirname(__file__), Input.DEFAULT_COL_FILE)
 
         out_dir, out_name = os.path.split(tree_path)
         out_name = OUTPUT_FILE_PREIX + out_name
         out_path = os.path.join(os.path.join(out_dir, out_name))
-        print(tree_path)
 
         try:
             usr_input = Input(tree_path, alignment_path, branches, tree_in_format, align_in_format,
@@ -85,12 +72,29 @@ def index():
         except InputError as e:
             pass  # TODO
         chroma_clade.run(usr_input)
-        return send_from_directory(app.config["UPLOAD_FOLDER"], out_name, as_attachment=True)
+        os.remove(tree_path)
+        os.remove(alignment_path)
+        print(out_name)
+        return render_template("result.html", out_name=out_name)
+        # return send_from_directory(app.config["UPLOAD_FOLDER"], out_name, as_attachment=True)
 
-        # TODO remove files from storage
-        # TODO clear form
     # return render_template('index.html', items=shopping_list)
-    return render_template('index.html')  # TODO update page content to show job has finished
+    return render_template('index.html')
+
+
+@app.route('/result/<filename>')
+def download(filename):
+    out_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    # make the output file download and remove it from server; https://stackoverflow.com/questions/40853201/remove-file-after-flask-serves-it
+    def generate():
+        with open(out_path) as f:
+            yield from f
+
+        os.remove(out_path)
+
+    r = current_app.response_class(generate(), mimetype='text/csv')
+    r.headers.set('Content-Disposition', 'attachment', filename=filename)
+    return r
 
 # TODO must clear files at some point
 if __name__ == '__main__':

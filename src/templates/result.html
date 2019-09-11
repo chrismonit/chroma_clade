@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<p>
+    <img src="{{url_for('static', filename='title.png')}}" alt="ChromaClade">
+</p>
+<p>
+    <img src="{{url_for('static', filename='tree.png')}}" alt="Coloured tree">
+</p>
+
+<a href="{{ url_for('download', filename=out_name) }}">Download</a>
+
+</body>
+</html>
