@@ -41,14 +41,25 @@
     <p>
        <input type="radio" name="choose_sites" value="" checked> All sites<br>
        <input type="radio" name="choose_sites" value="SITE_RANGE"> Choose sites:<br>
-       <input type="text" name="sites_range" value="e.g. 1-5, 9, 11-13">
+       <input type="text" name="sites_range" value="e.g. 1-5, 9, 11-13"> <!--  -->
     </p>
     </p>
 
   <br><br>
   <input type="submit">
-
 </form>
+
+<br>
+<div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+                <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+</div>
+
 
 </body>
 </html>

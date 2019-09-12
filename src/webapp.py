@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, current_app
+from flask import Flask, render_template, request, send_from_directory, current_app, redirect, flash
 from werkzeug.utils import secure_filename
 import os
 from check_input import Input, InputError
@@ -70,9 +70,15 @@ def index():
                               colour_file_path=colour_file, output_path=out_path, tree_out_format=tree_out_format,
                               sites_string=sites_string)
         except InputError as e:
-            pass
+            print(e)
+            #flash(str(e), category="warning")
+            #return render_template("index.html", form=request.form)
+            return render_template("index.html")
+
+            #return redirect(request.url, 400)  #this doesn't really work as hoped
             # TODO. want to return this same page, with error message and same form data
             # TODO could use flash??
+
         chroma_clade.run(usr_input)
         os.remove(tree_path)
         os.remove(alignment_path)
@@ -80,7 +86,7 @@ def index():
         return render_template("result.html", out_name=out_name)
         # return send_from_directory(app.config["UPLOAD_FOLDER"], out_name, as_attachment=True)
 
-    return render_template('index.html')
+    return render_template('index.html')  #, form={"sites_range": "default"})
 
 
 @app.route('/result/<filename>')
