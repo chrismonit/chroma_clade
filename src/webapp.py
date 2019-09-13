@@ -6,8 +6,8 @@ import random
 import chroma_clade
 
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "storage")
-ALIGNMENT_FILE_EXTENSIONS = {"txt", "nex", "fasta", "fas", "fa"}
-TREE_FILE_EXTENSIONS = {"txt", "tre", "tree", "xml", "nex", "nexus", "new", "newick"}
+ALIGNMENT_FILE_EXTENSIONS = ("txt", "nex", "fasta", "fas", "fa")
+TREE_FILE_EXTENSIONS = ("txt", "tre", "tree", "xml", "nex", "nexus", "new", "newick")
 MAX_FILE_SIZE_MB = 50
 OUTPUT_FILE_PREIX = "col."
 
@@ -29,12 +29,11 @@ def save_file(input_file, file_extensions):
         raise ValueError("No filename given")
     if len(input_file.filename) > app.config["MAX_FILENAME_LENGTH"]:
         raise ValueError(f"Length of filename ({input_file.filename}) above max ({app.config['MAX_FILENAME_LENGTH']})")
-    if not ('.' in input_file.filename and \
+    if not ('.' in input_file.filename and
             input_file.filename.rsplit('.', 1)[1].lower() in file_extensions):
         raise ValueError("Filename does not have acceptable file extension")
-
     saved_name = secure_filename(input_file.filename)  # ensure filename is not dangerous
-    if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], saved_name)):  # if a file with this name already exists in tmp storage
+    if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], saved_name)):  # a file of this name already in storage
         saved_name = "-".join([str(random.randint(0, 10000)), saved_name])  # make name unique # TODO use UUID instead?
         if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], saved_name)):  # check it actually is unique
             raise ValueError(
@@ -44,9 +43,8 @@ def save_file(input_file, file_extensions):
     return saved_path  # return path so it can be accessed later
 
 
-#  TODO include file names?
+#  TODO include file names to send back to user?
 class FormData:
-
     TREE_IN_FORMATS = ("newick", "nexus")
     ALIGNMENT_IN_FORMATS = ("fasta", "nexus")  # TODO move elsewhere? Could allow larger range anyway
     TREE_OUT_FORMATS = ("figtree", "xml")
@@ -54,6 +52,7 @@ class FormData:
     def __init__(self, branches=False, tree_in_format="newick", alignment_in_format="fasta", tree_out_format="figtree",
                  all_sites=True, sites_string="e.g. 1-5, 9, 11-13"):
 
+        # NB this is not for validating user input, just ensuring values provided are acceptable
         if tree_in_format not in FormData.TREE_IN_FORMATS:
             raise ValueError("Tree format not acceptable")
         if alignment_in_format not in FormData.ALIGNMENT_IN_FORMATS:
@@ -87,37 +86,53 @@ class FormData:
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-
-        # TODO may want to have separate server destinations for alignments, trees and coloured trees for clarity
-        tree_file = request.files["tree_file"]
-        tree_path = save_file(tree_file, app.config["TREE_FILE_EXTENSIONS"])
-        alignment_file = request.files["alignment_file"]
-        alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FILE_EXTENSIONS"])
-
-        branches = (request.form.get("branches") is not None)
-        align_in_format = request.form["alignment_format"]
-        tree_in_format = request.form["tree_format"]
-        tree_out_format = request.form["output_format"]
-        sites_string = request.form["sites_range"] if request.form["choose_sites"] else ""
-        colour_file = os.path.join(os.path.dirname(__file__), Input.DEFAULT_COL_FILE)
-
-        out_dir, out_name = os.path.split(tree_path)
-        out_name = OUTPUT_FILE_PREIX + out_name
-        out_path = os.path.join(os.path.join(out_dir, out_name))
-
         try:
+            branches = (request.form.get("branches") is not None)
+            align_in_format = request.form["alignment_format"]
+            tree_in_format = request.form["tree_format"]
+            tree_out_format = request.form["output_format"]
+            sites_string = request.form["sites_range"] if request.form["choose_sites"] else ""
+
+            # TODO may want to have separate server destinations for alignments, trees and coloured trees for clarity
+            # TODO especially since some file extensions are common to both, eg nexus
+            try:
+                tree_file = request.files["tree_file"]
+                tree_path = save_file(tree_file, app.config["TREE_FILE_EXTENSIONS"])
+            except ValueError:
+                ext_list = f"{', '.join(ext for ext in TREE_FILE_EXTENSIONS[:-1])} or {TREE_FILE_EXTENSIONS[-1]}"
+                raise InputError(f"Oops: Please ensure tree file name ends with {ext_list}")
+
+            try:
+                alignment_file = request.files["alignment_file"]
+                alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FILE_EXTENSIONS"])
+            except ValueError:
+                ext_list = f"{', '.join(ext for ext in ALIGNMENT_FILE_EXTENSIONS[:-1])} or {ALIGNMENT_FILE_EXTENSIONS[-1]}"
+                raise InputError(f"Oops: Please ensure alignment file name ends with {ext_list}")
+
+            colour_file = os.path.join(os.path.dirname(__file__), Input.DEFAULT_COL_FILE)
+
+            out_dir, out_name = os.path.split(tree_path)
+            out_name = OUTPUT_FILE_PREIX + out_name
+            out_path = os.path.join(os.path.join(out_dir, out_name))
+
             usr_input = Input(tree_path, alignment_path, branches, tree_in_format, align_in_format,
                               colour_file_path=colour_file, output_path=out_path, tree_out_format=tree_out_format,
                               sites_string=sites_string)
         except InputError as e:
             print(e)
-            #  flash(str(e), category="warning")
+            # TODO need to show error message to user
             # TODO want to keep reference to uploaded files too if upload successful and they are validated
+            # flash(str(e), category="warning")
             submitted_data = FormData(
                 branches=branches, alignment_in_format=align_in_format, tree_in_format=tree_in_format,
                 tree_out_format=tree_out_format, sites_string=sites_string,
                 all_sites=bool(request.form["choose_sites"]))
             return render_template("index.html", form=submitted_data.get())
+        except Exception as e:
+            print(e)  # could save message to a log file for bug checking in future?
+            # TODO generic error message
+            return render_template('index.html', form=FormData().get())  # TODO inefficient if making new instance every time
+
 
         chroma_clade.run(usr_input)
         os.remove(tree_path)
@@ -125,7 +140,6 @@ def index():
 
         return render_template("result.html", out_name=out_name)
         # return send_from_directory(app.config["UPLOAD_FOLDER"], out_name, as_attachment=True)
-    print("here")
     return render_template('index.html', form=FormData().get())  # TODO inefficient if making new instance every time
 
 
