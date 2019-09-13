@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, current_app, redirect, flash
+from flask import Flask, render_template, request, send_from_directory, current_app, redirect, flash, session
 from werkzeug.utils import secure_filename
 import os
 from check_input import Input, InputError
@@ -22,6 +22,8 @@ app.config["TREE_FILE_EXTENSIONS"] = TREE_FILE_EXTENSIONS
 app.config["MAX_FILENAME_LENGTH"] = 200  # apparently 255 chars is a common upper limit
 
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE_MB * 1024 * 1024
+app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"  # TODO change!!!
+# TODO we may need a privacy policy if using cookies
 
 
 def save_file(input_file, file_extensions):
@@ -46,6 +48,7 @@ def save_file(input_file, file_extensions):
 
 
 #  TODO include file names to send back to user?
+# TODO should this stuff go in session object?
 class FormData:
     TREE_IN_FORMATS = ("newick", "nexus")
     ALIGNMENT_IN_FORMATS = ("fasta", "nexus")  # TODO move elsewhere? Could allow larger range anyway
@@ -85,9 +88,6 @@ class FormData:
         return self.data[key]
 
 
-
-
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -96,9 +96,7 @@ def index():
             align_in_format = request.form["alignment_format"]
             tree_in_format = request.form["tree_format"]
             tree_out_format = request.form["output_format"]
-            print(request.form["choose_sites"] == ALL_SITES_ID)
             sites_string = request.form["sites_range"] if not request.form["choose_sites"] == ALL_SITES_ID else ""
-            print(f"sites_string={sites_string}")
 
             # TODO may want to have separate server destinations for alignments, trees and coloured trees for clarity
             # TODO especially since some file extensions are common to both, eg nexus
@@ -125,13 +123,10 @@ def index():
             usr_input = Input(tree_path, alignment_path, branches, tree_in_format, align_in_format,
                               colour_file_path=colour_file, output_path=out_path, tree_out_format=tree_out_format,
                               sites_string=sites_string)
-            print(usr_input.get_sites())
         except InputError as e:
             print(e)
-            # TODO need to show error message to user
             # TODO want to keep reference to uploaded files too if upload successful and they are validated
-            # flash(str(e), category="warning")
-            print(request.form["choose_sites"])
+            flash(str(e), category="warning")
             submitted_data = FormData(
                 branches=branches, alignment_in_format=align_in_format, tree_in_format=tree_in_format,
                 tree_out_format=tree_out_format, sites_string=sites_string,
@@ -139,9 +134,8 @@ def index():
             return render_template("index.html", form=submitted_data.get())
         except Exception as e:
             print(e)  # could save message to a log file for bug checking in future?
-            # TODO generic error message
+            flash("Oops: Something went wrong, please check the options and try again", "warning")
             return render_template('index.html', form=FormData().get(), all_sites_id=ALL_SITES_ID)  # TODO inefficient if making new instance every time
-
 
         chroma_clade.run(usr_input)
         os.remove(tree_path)
