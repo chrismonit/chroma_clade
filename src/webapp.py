@@ -53,9 +53,9 @@ class FormData:
     TREE_IN_FORMATS = ("newick", "nexus")
     ALIGNMENT_IN_FORMATS = ("fasta", "nexus")  # TODO move elsewhere? Could allow larger range anyway
     TREE_OUT_FORMATS = ("figtree", "xml")
-
+    EXAMPLE_SITES_STRING = "e.g. 1-5, 9, 11-13"
     def __init__(self, branches=False, tree_in_format="newick", alignment_in_format="fasta", tree_out_format="figtree",
-                 all_sites=True, sites_string="e.g. 1-5, 9, 11-13"):
+                 all_sites=True, sites_string=EXAMPLE_SITES_STRING):
 
         # NB this is not for validating user input, just ensuring values provided are acceptable
         if tree_in_format not in FormData.TREE_IN_FORMATS:
@@ -96,7 +96,7 @@ def index():
             align_in_format = request.form["alignment_format"]
             tree_in_format = request.form["tree_format"]
             tree_out_format = request.form["output_format"]
-            sites_string = request.form["sites_range"] if not request.form["choose_sites"] == ALL_SITES_ID else ""
+            input_sites_string = request.form["sites_range"] if not request.form["choose_sites"] == ALL_SITES_ID else ""
 
             # TODO may want to have separate server destinations for alignments, trees and coloured trees for clarity
             # TODO especially since some file extensions are common to both, eg nexus
@@ -122,14 +122,15 @@ def index():
 
             usr_input = Input(tree_path, alignment_path, branches, tree_in_format, align_in_format,
                               colour_file_path=colour_file, output_path=out_path, tree_out_format=tree_out_format,
-                              sites_string=sites_string)
+                              sites_string=input_sites_string)
         except InputError as e:
             print(e)
             # TODO want to keep reference to uploaded files too if upload successful and they are validated
             flash(str(e), category="warning")
             submitted_data = FormData(
                 branches=branches, alignment_in_format=align_in_format, tree_in_format=tree_in_format,
-                tree_out_format=tree_out_format, sites_string=sites_string,
+                tree_out_format=tree_out_format,
+                sites_string=(FormData.EXAMPLE_SITES_STRING if request.form["choose_sites"] == ALL_SITES_ID else request.form["sites_range"]),
                 all_sites=(request.form["choose_sites"] == ALL_SITES_ID))
             return render_template("index.html", form=submitted_data.get())
         except Exception as e:
@@ -137,6 +138,7 @@ def index():
             flash("Oops: Something went wrong, please check the options and try again", "warning")
             return render_template('index.html', form=FormData().get(), all_sites_id=ALL_SITES_ID)  # TODO inefficient if making new instance every time
 
+        # TODO if exceptioin is raised above then files won't be deleted!!
         chroma_clade.run(usr_input)
         os.remove(tree_path)
         os.remove(alignment_path)
