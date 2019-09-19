@@ -104,7 +104,6 @@ def index():
             tree_out_format = request.form["output_format"]
             input_sites_string = request.form["sites_range"] if not request.form["choose_sites"] == ALL_SITES_ID else ""
 
-            # TODO especially since some file extensions are common to both, eg nexus
             def format_file_error_message(file_type, max_len, file_extensions):
                 ext_list = f"{', '.join('.'+ext for ext in file_extensions[:-1])} or .{file_extensions[-1]}"
                 return f"Oops: Please ensure {file_type} file name is less than {max_len} characters and ends with {ext_list}"
@@ -141,10 +140,12 @@ def index():
         except Exception as e:
             print(e)  # could save message to a log file for bug checking in future?
             flash("Oops: Something went wrong, please check the options and try again", "warning")
+            if os.path.exists(tree_path):  # remove any uploaded files to avoid cluttering
+                os.remove(tree_path)
+            if os.path.exists(alignment_path):
+                os.remove(alignment_path)
             return render_template('index.html', form=FormData().get(), all_sites_id=ALL_SITES_ID)  # TODO inefficient if making new instance every time
 
-        # TODO if exceptioin is raised above then files won't be deleted!!
-        # TODO probably want to delete any and all remaining files once the session has ended
         chroma_clade.run(usr_input)
         os.remove(tree_path)
         os.remove(alignment_path)
@@ -155,20 +156,24 @@ def index():
 
 @app.route('/result/<filename>')
 def download(filename):
+
     out_path = os.path.join(app.config["OUTPUT_FOLDER"], filename)
     # make the output file download and remove it from server;
     # https://stackoverflow.com/questions/40853201/remove-file-after-flask-serves-it
-    # TODO if file not found (eg because file has already been downloaded), return download page with error message
 
+    # TODO this implementation does not work. Need to find a way to handle FileNotFoundError if
+    # TODO users has already downloaded the file
+    # TODO may be best to achieve this by changing the interface once download is clicked, ie with javascript
     def generate():
         with open(out_path) as f:
             yield from f
-
         os.remove(out_path)
 
     r = current_app.response_class(generate(), mimetype='text/csv')
     r.headers.set('Content-Disposition', 'attachment', filename=filename)
     return r
+
+
 
 
 # TODO must clear any remaining files at some point
