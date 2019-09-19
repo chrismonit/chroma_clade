@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, send_from_directory, current_app, redirect, flash, session
 from werkzeug.utils import secure_filename
 import os
-from check_input import Input, InputError
 import random
+import uuid
+from check_input import Input, InputError
 import chroma_clade
 
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "write")
@@ -15,6 +16,7 @@ MAX_FILE_SIZE_MB = 50
 OUTPUT_FILE_PREIX = "col."
 # identifier for option to make coloured trees for all sites. Declared here to avoid hard coding in html:
 ALL_SITES_ID = "ALL_SITES"
+UNIQUE_ID_LENGTH = 36  # == len(str(uuid.uuid4()))
 
 app = Flask(__name__)
 
@@ -25,14 +27,14 @@ app.config["ALIGNMENT_FOLDER"] = os.path.join(UPLOAD_FOLDER, ALIGNMENT_FOLDER)
 app.config["OUTPUT_FOLDER"] = os.path.join(UPLOAD_FOLDER, OUTPUT_FOLDER)
 app.config["TREE_FILE_EXTENSIONS"] = TREE_FILE_EXTENSIONS
 app.config["ALIGNMENT_FILE_EXTENSIONS"] = ALIGNMENT_FILE_EXTENSIONS
-app.config["MAX_FILENAME_LENGTH"] = 200  # apparently 255 chars is a common upper limit
+app.config["MAX_FILENAME_LENGTH"] = 255 - UNIQUE_ID_LENGTH  # apparently 255 chars is a common upper limit
 
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE_MB * 1024 * 1024
 app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"  # TODO change!!!
 # TODO we may need a privacy policy if using cookies
 
 
-def save_file(input_file, destination, file_extensions):
+def save_file(input_file, destination, identifier, file_extensions, identifier_delimiter="."):
     if not input_file:
         raise ValueError("No file given")
     if not input_file.filename:
@@ -43,11 +45,9 @@ def save_file(input_file, destination, file_extensions):
             input_file.filename.rsplit('.', 1)[1].lower() in file_extensions):
         raise ValueError("Filename does not have acceptable file extension")
     saved_name = secure_filename(input_file.filename)  # ensure filename is not dangerous
-    if os.path.exists(os.path.join(destination, saved_name)):  # a file of this name already in storage
-        saved_name = "-".join([str(random.randint(0, 10000)), saved_name])  # make name unique # TODO use UUID instead?
-        if os.path.exists(os.path.join(destination, saved_name)):  # check it actually is unique
-            raise ValueError(
-                "Same filename found on system")  # very unlikely to happen by chance, possible security issue
+    saved_name = f"{identifier}{identifier_delimiter}{saved_name}"
+    if os.path.exists(os.path.join(destination, saved_name)):  # check it is unique
+        raise ValueError("Same filename found on system")  # we're using UUID identifiers, so this shouldn't happen
     saved_path = os.path.join(destination, saved_name)
     input_file.save(saved_path)
     return saved_path  # return path so it can be accessed later
@@ -57,7 +57,7 @@ def save_file(input_file, destination, file_extensions):
 # TODO should this stuff go in session object?
 class FormData:
     TREE_IN_FORMATS = ("newick", "nexus")
-    ALIGNMENT_IN_FORMATS = ("fasta", "nexus")  # TODO move elsewhere? Could allow larger range anyway
+    ALIGNMENT_IN_FORMATS = ("fasta", "nexus")
     TREE_OUT_FORMATS = ("figtree", "xml")
     EXAMPLE_SITES_STRING = "e.g. 1-5, 9, 11-13"
     def __init__(self, branches=False, tree_in_format="newick", alignment_in_format="fasta", tree_out_format="figtree",
@@ -98,6 +98,7 @@ class FormData:
 def index():
     if request.method == 'POST':
         try:
+            id = uuid.uuid4()
             branches = (request.form.get("branches") is not None)
             align_in_format = request.form["alignment_format"]
             tree_in_format = request.form["tree_format"]
@@ -109,12 +110,12 @@ def index():
                 return f"Oops: Please ensure {file_type} file name is less than {max_len} characters and ends with {ext_list}"
             try:
                 tree_file = request.files["tree_file"]
-                tree_path = save_file(tree_file, app.config["TREE_FOLDER"], app.config["TREE_FILE_EXTENSIONS"])
+                tree_path = save_file(tree_file, app.config["TREE_FOLDER"], id, app.config["TREE_FILE_EXTENSIONS"])
             except ValueError:
                 raise InputError(format_file_error_message("tree", app.config["MAX_FILENAME_LENGTH"], TREE_FILE_EXTENSIONS))
             try:
                 alignment_file = request.files["alignment_file"]
-                alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FOLDER"], app.config["ALIGNMENT_FILE_EXTENSIONS"])
+                alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FOLDER"], id, app.config["ALIGNMENT_FILE_EXTENSIONS"])
             except ValueError:
                 raise InputError(format_file_error_message("alignment", app.config["MAX_FILENAME_LENGTH"], ALIGNMENT_FILE_EXTENSIONS))
 
@@ -174,8 +175,5 @@ def download(filename):
     return r
 
 
-
-
-# TODO must clear any remaining files at some point
 if __name__ == '__main__':
     app.run(debug=True)
