@@ -9,3 +9,13 @@ apps/mac/*.zip
 test/*out*
 src/venv/**
 src/.idea/**
+
+src/write/align/*
+!src/write/align/README
+
+src/write/tree/*
+!src/write/tree/README
+
+src/write/output/*
+!src/write/output/README
+
