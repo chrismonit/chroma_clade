@@ -5,7 +5,10 @@ from check_input import Input, InputError
 import random
 import chroma_clade
 
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "storage")
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "write")
+TREE_FOLDER = "tree"
+ALIGNMENT_FOLDER = "align"
+OUTPUT_FOLDER = "output"
 ALIGNMENT_FILE_EXTENSIONS = ("txt", "nexus", "nex", "fasta", "fas", "fa")
 TREE_FILE_EXTENSIONS = ("txt", "tre", "tree", "xml", "nex", "nexus", "new", "nwk", "newick")
 MAX_FILE_SIZE_MB = 50
@@ -16,9 +19,12 @@ ALL_SITES_ID = "ALL_SITES"
 app = Flask(__name__)
 
 # TODO could be in config file
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["ALIGNMENT_FILE_EXTENSIONS"] = ALIGNMENT_FILE_EXTENSIONS
+# app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+app.config["TREE_FOLDER"] = os.path.join(UPLOAD_FOLDER, TREE_FOLDER)
+app.config["ALIGNMENT_FOLDER"] = os.path.join(UPLOAD_FOLDER, ALIGNMENT_FOLDER)
+app.config["OUTPUT_FOLDER"] = os.path.join(UPLOAD_FOLDER, OUTPUT_FOLDER)
 app.config["TREE_FILE_EXTENSIONS"] = TREE_FILE_EXTENSIONS
+app.config["ALIGNMENT_FILE_EXTENSIONS"] = ALIGNMENT_FILE_EXTENSIONS
 app.config["MAX_FILENAME_LENGTH"] = 200  # apparently 255 chars is a common upper limit
 
 app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE_MB * 1024 * 1024
@@ -26,7 +32,7 @@ app.config["SECRET_KEY"] = "OCML3BRawWEUeaxcuKHLpw"  # TODO change!!!
 # TODO we may need a privacy policy if using cookies
 
 
-def save_file(input_file, file_extensions):
+def save_file(input_file, destination, file_extensions):
     if not input_file:
         raise ValueError("No file given")
     if not input_file.filename:
@@ -37,12 +43,12 @@ def save_file(input_file, file_extensions):
             input_file.filename.rsplit('.', 1)[1].lower() in file_extensions):
         raise ValueError("Filename does not have acceptable file extension")
     saved_name = secure_filename(input_file.filename)  # ensure filename is not dangerous
-    if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], saved_name)):  # a file of this name already in storage
+    if os.path.exists(os.path.join(destination, saved_name)):  # a file of this name already in storage
         saved_name = "-".join([str(random.randint(0, 10000)), saved_name])  # make name unique # TODO use UUID instead?
-        if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], saved_name)):  # check it actually is unique
+        if os.path.exists(os.path.join(destination, saved_name)):  # check it actually is unique
             raise ValueError(
                 "Same filename found on system")  # very unlikely to happen by chance, possible security issue
-    saved_path = os.path.join(app.config['UPLOAD_FOLDER'], saved_name)
+    saved_path = os.path.join(destination, saved_name)
     input_file.save(saved_path)
     return saved_path  # return path so it can be accessed later
 
@@ -98,27 +104,26 @@ def index():
             tree_out_format = request.form["output_format"]
             input_sites_string = request.form["sites_range"] if not request.form["choose_sites"] == ALL_SITES_ID else ""
 
-            # TODO may want to have separate server destinations for alignments, trees and coloured trees for clarity
             # TODO especially since some file extensions are common to both, eg nexus
             def format_file_error_message(file_type, max_len, file_extensions):
                 ext_list = f"{', '.join('.'+ext for ext in file_extensions[:-1])} or .{file_extensions[-1]}"
                 return f"Oops: Please ensure {file_type} file name is less than {max_len} characters and ends with {ext_list}"
             try:
                 tree_file = request.files["tree_file"]
-                tree_path = save_file(tree_file, app.config["TREE_FILE_EXTENSIONS"])
+                tree_path = save_file(tree_file, app.config["TREE_FOLDER"], app.config["TREE_FILE_EXTENSIONS"])
             except ValueError:
                 raise InputError(format_file_error_message("tree", app.config["MAX_FILENAME_LENGTH"], TREE_FILE_EXTENSIONS))
             try:
                 alignment_file = request.files["alignment_file"]
-                alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FILE_EXTENSIONS"])
+                alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FOLDER"], app.config["ALIGNMENT_FILE_EXTENSIONS"])
             except ValueError:
                 raise InputError(format_file_error_message("alignment", app.config["MAX_FILENAME_LENGTH"], ALIGNMENT_FILE_EXTENSIONS))
 
             colour_file = os.path.join(os.path.dirname(__file__), Input.DEFAULT_COL_FILE)
 
-            out_dir, out_name = os.path.split(tree_path)
+            out_name = os.path.basename(tree_path)
             out_name = OUTPUT_FILE_PREIX + out_name
-            out_path = os.path.join(os.path.join(out_dir, out_name))
+            out_path = os.path.join(os.path.join(app.config["OUTPUT_FOLDER"], out_name))
 
             usr_input = Input(tree_path, alignment_path, branches, tree_in_format, align_in_format,
                               colour_file_path=colour_file, output_path=out_path, tree_out_format=tree_out_format,
@@ -139,20 +144,21 @@ def index():
             return render_template('index.html', form=FormData().get(), all_sites_id=ALL_SITES_ID)  # TODO inefficient if making new instance every time
 
         # TODO if exceptioin is raised above then files won't be deleted!!
+        # TODO probably want to delete any and all remaining files once the session has ended
         chroma_clade.run(usr_input)
         os.remove(tree_path)
         os.remove(alignment_path)
 
         return render_template("result.html", out_name=out_name)
-        # return send_from_directory(app.config["UPLOAD_FOLDER"], out_name, as_attachment=True)
     return render_template('index.html', form=FormData().get(), all_sites_id=ALL_SITES_ID)  # TODO inefficient if making new instance every time
 
 
 @app.route('/result/<filename>')
 def download(filename):
-    out_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    out_path = os.path.join(app.config["OUTPUT_FOLDER"], filename)
     # make the output file download and remove it from server;
     # https://stackoverflow.com/questions/40853201/remove-file-after-flask-serves-it
+    # TODO if file not found (eg because file has already been downloaded), return download page with error message
 
     def generate():
         with open(out_path) as f:
@@ -165,8 +171,6 @@ def download(filename):
     return r
 
 
-
-
-# TODO must clear files at some point
+# TODO must clear any remaining files at some point
 if __name__ == '__main__':
     app.run(debug=True)
