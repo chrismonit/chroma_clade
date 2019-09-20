@@ -94,11 +94,16 @@ class FormData:
         return self.data[key]
 
 
+#  TODO apparent bug whereby on invalid form submission, options are returned to populate the form,
+#  TODO but if user then corrects the problem and resubmits, the input is not accepted and the previous
+#  TODO invalid options are returned
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         try:
-            id = uuid.uuid4()
+            identifier = uuid.uuid4()
+            print(identifier)
+            print(request.form)
             branches = (request.form.get("branches") is not None)
             align_in_format = request.form["alignment_format"]
             tree_in_format = request.form["tree_format"]
@@ -110,12 +115,12 @@ def index():
                 return f"Oops: Please ensure {file_type} file name is less than {max_len} characters and ends with {ext_list}"
             try:
                 tree_file = request.files["tree_file"]
-                tree_path = save_file(tree_file, app.config["TREE_FOLDER"], id, app.config["TREE_FILE_EXTENSIONS"])
+                tree_path = save_file(tree_file, app.config["TREE_FOLDER"], identifier, app.config["TREE_FILE_EXTENSIONS"])
             except ValueError:
                 raise InputError(format_file_error_message("tree", app.config["MAX_FILENAME_LENGTH"], TREE_FILE_EXTENSIONS))
             try:
                 alignment_file = request.files["alignment_file"]
-                alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FOLDER"], id, app.config["ALIGNMENT_FILE_EXTENSIONS"])
+                alignment_path = save_file(alignment_file, app.config["ALIGNMENT_FOLDER"], identifier, app.config["ALIGNMENT_FILE_EXTENSIONS"])
             except ValueError:
                 raise InputError(format_file_error_message("alignment", app.config["MAX_FILENAME_LENGTH"], ALIGNMENT_FILE_EXTENSIONS))
 
