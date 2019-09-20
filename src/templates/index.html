@@ -1,65 +1,167 @@
 <!DOCTYPE html>
 <html>
-<body>
+<title>ChromaClade webapp</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{{url_for('static', filename='w3.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='montserrat.css')}}">
+<!--<link rel="stylesheet" href="{{url_for('static', filename='font-awesome.min.css')}}">-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--TODO can't get local download of fa css to work yet - may need to download more of their files? if it matters-->
+<style>
+    body, h1,h2,h3,h4,h5,h6 {font-family: "Montserrat", sans-serif}
+    .w3-row-padding img {margin-bottom: 12px}
+    /* Set the width of the sidebar to 120px */
+    .w3-sidebar {width: 120px;background: #222;}
+    /* Add a left margin to the "page content" that matches the width of the sidebar (120px) */
+    #main {margin-left: 120px}
+    /* Remove margins from "page content" on small screens */
+    @media only screen and (max-width: 600px) {
+        #main {margin-left: 0}
+    }
 
+   .grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  background-color: #2196F3;
+  padding: 10px;
+}
+.grid-item {
+  background-color: red;
+  border: 1px solid blue;
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+</style>
 
-<p>
-    <img src="{{url_for('static', filename='title.png')}}" alt="ChromaClade">
-</p>
-<p>
-    <img src="{{url_for('static', filename='tree.png')}}" alt="Coloured tree">
-</p>
+<body class="w3-black">
 
+<!-- Icon Bar (Sidebar - hidden on small screens) -->
+<nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center">
+  <!-- Avatar image in top left corner -->
+  <img src="{{url_for('static', filename='tree.png')}}" style="width:100%" class="w3-white">
+  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-home w3-xxlarge"></i>
+    <p>ChromaClade</p>
+  </a>
+  <a href="#examples" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-eye w3-xxlarge"></i>
+    <p>EXAMPLES</p>
+  </a>
+  <a href="#about" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-user w3-xxlarge"></i>
+    <p>ABOUT</p>
+  </a>
+</nav>
 
-
-<form method="post" action="/" enctype="multipart/form-data">
-    <p>
-        <input type="checkbox" name="branches" value="True" {{form['branches']}}> Colour branches </input>
-    </p>
-    <p>
-       <label for="tree_file">Tree file:</label>
-       <input type="file" id="tree_file" name="tree_file" value="VALUE!">
-       <select name="tree_format">
-           <option value="newick" {{form['tree_in_format_newick']}}>Newick</option>
-           <option value="nexus" {{form['tree_in_format_nexus']}}>Nexus</option>
-       </select>
-    </p>
-    <p>
-       <label for="alignment_file">Alignment file:</label>
-       <input type="file" id="alignment_file" name="alignment_file">
-       <select name="alignment_format">
-           <option value="fasta" {{form['alignment_format_fasta']}}>Fasta</option>
-           <option value="nexus" {{form['alignment_format_nexus']}}>Nexus</option>
-       </select>
-    </p>
-    <p>
-       <label for="output_format">Output file format:</label>
-       <select name="output_format">
-           <option value="figtree" {{form['tree_out_format_figtree']}}>Figtree</option>
-           <option value="xml" {{form['tree_out_format_xml']}}>XML</option>
-       </select>
-    <p>
-       <input type="radio" name="choose_sites" value="{{all_sites_id}}" {{form['choose_sites_all']}}>All sites<br>
-       <input type="radio" name="choose_sites" value="SITE_RANGE" {{form['choose_sites_range']}}>Choose sites:<br>
-       <input type="text" name="sites_range" value="{{form['sites_string']}}"> <!--  -->
-    </p>
-    </p>
-
-  <br><br>
-  <input type="submit">
-</form>
-
-<br>
-<div>
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-                <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+<!-- Navbar on small screens (Hidden on medium and large screens) -->
+<div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
+  <div class="w3-bar w3-white w3-opacity w3-hover-opacity-off w3-center w3-small">
+    <a href="#" class="w3-bar-item w3-button" style="width:25% !important">ChromaClade</a>
+    <a href="#examples" class="w3-bar-item w3-button" style="width:25% !important">Examples</a>
+    <a href="#about" class="w3-bar-item w3-button" style="width:25% !important">About</a>
+  </div>
 </div>
 
+<!-- Page Content -->
+<div class="w3-padding-large" id="main">
+  <!-- Header/Home -->
+  <header class="w3-container w3-padding-32 w3-center w3-white" id="home">
+    <h1 class="w3-jumbo"> ChromaClade </h1>
+    <p>Combined visualisation of phylogenetic and sequence data</p>
+    <img src="{{url_for('static', filename='tree.png')}}" alt="coloured tree" class="w3-image w3-opacity-min" width="100" height="100">
+  </header>
+
+<!-- App interface -->
+<div class="w3-padding-64 w3-center w3-blue">
+    <form method="post" action="/" enctype="multipart/form-data">
+
+
+    <div class="grid-container">
+        <div class="grid-item">1</div>
+        <div class="grid-item">2</div>
+
+    </div>
+
+
+
+<!--        choose files-->
+        <div class="grid-container">
+            <div class="grid-item w3-grid-container">
+                <div class="grid-item">
+                   <label for="tree_file">Tree file:</label>
+                   <input type="file" id="tree_file" name="tree_file" value="VALUE!">
+                </div>
+                <div class="grid-item">
+                   <select name="tree_format">
+                       <option value="newick" {{form['tree_in_format_newick']}}>Newick</option>
+                       <option value="nexus" {{form['tree_in_format_nexus']}}>Nexus</option>
+                   </select>
+                </div>
+            </div>
+
+            <div class="grid-item w3-grid-container">
+                <div class="grid-item">
+                   <label for="alignment_file">Alignment file:</label>
+                   <input type="file" id="alignment_file" name="alignment_file">
+                </div>
+                <div class="grid-item">
+                   <select name="alignment_format">
+                       <option value="fasta" {{form['alignment_format_fasta']}}>Fasta</option>
+                       <option value="nexus" {{form['alignment_format_nexus']}}>Nexus</option>
+                   </select>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="w3-display-container">
+
+            <div class="w3-check w3-display-topmiddle">
+                <input type="checkbox" name="branches" value="True" {{form['branches']}}> Colour branches </input>
+            </div>
+        <br>
+        <br>
+        <br>
+            <div class="w3-center w3-display-middle">
+               <label for="output_format">Output file format:</label>
+               <select name="output_format">
+                   <option value="figtree" {{form['tree_out_format_figtree']}}>Figtree</option>
+                   <option value="xml" {{form['tree_out_format_xml']}}>XML</option>
+               </select>
+            </div>
+        <br>
+        <br>
+        <br>
+            <div class="w3-radio w3-center w3-display-bottommiddle">
+               <input type="radio" name="choose_sites" value="{{all_sites_id}}" {{form['choose_sites_all']}}>All sites<br>
+               <input type="radio" name="choose_sites" value="SITE_RANGE" {{form['choose_sites_range']}}>Choose sites:<br>
+               <input type="text" name="sites_range" value="{{form['sites_string']}}"> <!--  -->
+            </div>
+
+        </div>
+
+        <di>
+            <input type="submit">
+        </di>
+
+
+    </form>
+
+    <br>
+    <div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                    <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </div>
+
+</div>
 
 </body>
 </html>
