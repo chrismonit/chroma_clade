@@ -1,0 +1,47 @@
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    padding: 5px 5px;
+    cursor: pointer;
+    background-color: DodgerBlue;
+    color: white;
+    width: 100%;
+}
+
+
+.upload-row {
+    width: 80%;
+    height: 200px;
+    margin: auto;
+}
+
+.upload-file {
+    color: blue;
+    height: 66%;
+    font-weight: bold;
+    border-style: solid;
+    border-color: blue;
+}
+
+.upload-file-tree {
+    background-image: url("tree.png");
+}
+
+.upload-file-alignment {
+    background-image: url("alignment.jpg");
+}
+
+.upload-image {
+    max-width:100%;
+    max-height:100%;
+    min-width: 100px;
+    min-height: 100px;
+}
+
+.upload-file-type {
+    height: 33%;
+    vertical-align: bottom;
+    background-color: gray;
+    border-style: solid;
+    border-color: black;
+}
