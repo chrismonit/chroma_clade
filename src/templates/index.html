@@ -75,13 +75,13 @@
 
 
 <!-- App interface -->
-<div class="" style="margin-left: 33%;">
+<div class="" style="margin-left: 20%; min-width:600px; background-color: white;">
     <form method="post" action="/" enctype="multipart/form-data">
 
         <!-- file uploads -->
         <div class="w3-row w3-container" style="">
             <!-- Upload tree -->
-            <div class="w3-col s3 w3-purple w3-center" style="min-width: 100px"> <!-- using this number of pixels here means number of pixels either side of 'choose file' box is equal when browser is at smallest screen size -->
+            <div class="w3-col s3 w3-purple w3-center" style="min-width: 250px"> <!-- using this number of pixels here means number of pixels either side of 'choose file' box is equal when browser is at smallest screen size -->
                 <p>Tree</p>
                 <img src="{{url_for('static', filename='tree.png')}}" alt="Tree" class="upload-image">
                 <input class="custom-file-upload" type="file" id="tree-file"></input>
@@ -93,7 +93,7 @@
             </div>
 
             <!-- Upload alignment -->
-            <div class="w3-col s3 w3-blue w3-center" style="min-width: 100px">
+            <div class="w3-col s3 w3-blue w3-center" style="min-width: 250px">
                 <p>Alignment</p>
                 <img src="{{url_for('static', filename='tree.png')}}" alt="Alignment" class="upload-image">
                 <input class="custom-file-upload" type="file" id="alignment-file"></input>
@@ -107,7 +107,7 @@
 
         <!-- Colour branches checkbox -->
         <div class="w3-row w3-container w3-padding" style="">
-            <div class="w3-col s6 w3-indigo w3-center" style="min-width: 200px">
+            <div class="w3-col s6 w3-indigo w3-center" style="min-width: 500px">
                 <!-- TODO format checkbox nicely -->
                 <input type="checkbox" name="branches" value="True" {{form['branches']}}> Colour branches </input>
             </div>
@@ -115,7 +115,7 @@
 
         <!-- Output file format -->
         <div class="w3-row w3-container w3-padding" style="">
-            <div class="w3-col s6 w3-indigo w3-center" style="min-width: 200px">
+            <div class="w3-col s6 w3-indigo w3-center" style="min-width: 500px">
                <div>
                    <label for="output_format">Output file format:</label>
                </div>
@@ -128,7 +128,7 @@
 
                 <!-- Choose sites -->
         <div class="w3-row w3-container w3-padding" style="">
-            <div class="w3-col s6 w3-indigo w3-center" style="min-width: 200px">
+            <div class="w3-col s6 w3-indigo w3-center" style="min-width: 500px">
                <input type="radio" name="choose_sites" value="{{all_sites_id}}" {{form['choose_sites_all']}}>All sites<br>
                <input type="radio" name="choose_sites" value="SITE_RANGE" {{form['choose_sites_range']}}>Choose sites:<br>
                <input type="text" name="sites_range" value="{{form['sites_string']}}" style="max-width: 100%"> <!-- TODO move this to css file -->
@@ -136,7 +136,7 @@
         </div>
 
         <div class="w3-row w3-container w3-padding" style="">
-            <div class="w3-col s6 w3-indigo w3-center" style="min-width: 200px">
+            <div class="w3-col s6 w3-indigo w3-center" style="min-width: 500px">
                <input type="submit">
             </div>
         </div>
