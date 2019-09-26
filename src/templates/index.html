@@ -99,8 +99,8 @@
                 <p>Tree</p>
                 <img src="{{url_for('static', filename='tree.png')}}" alt="Tree" class="upload-image">
                 <input class="file-upload-button" type="file" id="tree-file">
-                <div class="upload-file-format">Format:</div>
-                <select name="tree_format">
+                <label for="tree_format" class="upload-file-format"><span>Format:          </span></label>
+                <select name="tree_format" id="tree_format">
                     <option value="newick" {{form['tree_in_format_newick']}}>Newick</option>
                     <option value="nexus" {{form['tree_in_format_nexus']}}>Nexus</option>
                 </select>
@@ -111,8 +111,9 @@
                 <p>Alignment</p>
                 <img src="{{url_for('static', filename='tree.png')}}" alt="Alignment" class="upload-image">
                 <input class="file-upload-button" type="file" id="alignment-file">
-                <div class="upload-file-format">Format:</div>
-                <select name="alignment_format">
+<!--                <div class="upload-file-format">Format:</div>-->
+                <label for="alignment_format" class="upload-file-format"><span>Format:     </span></label>
+                <select name="alignment_format" id="alignment_format">
                     <option value="fasta" {{form['alignment_format_fasta']}}>Fasta</option>
                     <option value="nexus" {form['alignment_format_nexus']}}>Nexus</option>
                 </select>
@@ -145,7 +146,7 @@
             <div class="w3-col s6 w3-center choose-sites">
                <input type="radio" name="choose_sites" value="{{all_sites_id}}" {{form['choose_sites_all']}}>All sites<br>
                <input type="radio" name="choose_sites" value="SITE_RANGE" {{form['choose_sites_range']}}>Choose sites:<br>
-               <input type="text"  name="sites_range" value="{{form['sites_string']}}">
+               <input type="text"  name="sites_range" value="{{form['sites_string']}}"> <!-- TODO change to use placeholder attribute -->
             </div>
         </div>
 
