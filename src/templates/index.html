@@ -98,7 +98,7 @@
             <div class="w3-col s3 w3-center upload-image-panel"> <!-- using this number of pixels here means number of pixels either side of 'choose file' box is equal when browser is at smallest screen size -->
                 <p>Tree</p>
                 <img src="{{url_for('static', filename='tree.png')}}" alt="Tree" class="upload-image">
-                <input class="file-upload-button" type="file" id="tree-file">
+                <input class="file-upload-button" type="file" id="tree-file" name="tree_file">
                 <label for="tree_format" class="upload-file-format"><span>Format:          </span></label>
                 <select name="tree_format" id="tree_format">
                     <option value="newick" {{form['tree_in_format_newick']}}>Newick</option>
@@ -110,7 +110,7 @@
             <div class="w3-col s3 w3-center upload-image-panel">
                 <p>Alignment</p>
                 <img src="{{url_for('static', filename='tree.png')}}" alt="Alignment" class="upload-image">
-                <input class="file-upload-button" type="file" id="alignment-file">
+                <input class="file-upload-button" type="file" id="alignment-file" name="alignment_file">
 <!--                <div class="upload-file-format">Format:</div>-->
                 <label for="alignment_format" class="upload-file-format"><span>Format:     </span></label>
                 <select name="alignment_format" id="alignment_format">
@@ -160,6 +160,11 @@
 </div>
 
 
+<div id="about">
+    <p></p>
+
+
+</div>
 
 <div>
 {% with messages = get_flashed_messages(with_categories=true) %}
