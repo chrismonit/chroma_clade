@@ -1,18 +1,30 @@
 .app-interface {
-    margin-left: 20%;
-    min-width:600px;
-    background-color: white;
+    margin: auto;
+    width: 532px;
+    height: 550px;
+    color: silver;
+    background-color: #282828;
+
+    border-radius: 25px;
 }
 
+.upload-image-panel {
+    min-width: 250px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: silver;
+    border-radius: 25px;
+}
 
 /* uploading files */
 .file-upload-button {
-    border: 1px solid #ccc;
-    padding: 5px 5px;
-    cursor: pointer;
-    background-color: DodgerBlue;
-    color: white;
     width: 100%;
+    /*padding: 5px 5px;*/
+    cursor: pointer;
+    color: silver;
+    background-color: #282828;
+
+    border-top: 1px solid silver;
 }
 
 .upload-image {
@@ -22,27 +34,53 @@
     min-height: 100px;
 }
 
-.upload-image-panel {
-    min-width: 250px;
-    border-style: solid;
-}
-
 .upload-file-format {
-    color: white;
+    width: 100%;
+    color: silver;
+
+    background-color: #282828;
+
+    border-top: 1px solid silver;
 }
 
 .branches {
-    min-width: 500px
+    min-width: 500px;
+    color: silver;
+    background-color: #282828;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: silver;
+    border-radius: 25px;
 }
 
 .output-file-format {
-    min-width: 500px
+    min-width: 500px;
+    background-color: #282828;
+    color: silver;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: silver;
+    border-radius: 25px;
 }
 
 .choose-sites {
-    min-width: 500px
+    min-width: 500px;
+    color: silver;
+    background-color: #282828;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: silver;
+    border-radius: 25px;
 }
 
 .submit {
-    min-width: 500px
+    min-width: 500px;
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: silver;
+    border-radius: 25px;
 }

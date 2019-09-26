@@ -77,6 +77,16 @@
     <!--    <img src="{{url_for('static', filename='tree.png')}}" alt="coloured tree" class="w3-image w3-opacity-min" width="100" height="100">-->
 </header>
 
+<!-- TODO remove these temp markers just to show where middle of window is-->
+<!--<div class="" style="margin-left: 0%; margin-right: 50%; background-color:red;">-->
+<!--    <span>50%</span>-->
+<!--</div>-->
+
+<!--<div class="" style="margin-left: 50%; margin-right: 0%; background-color:blue;">-->
+<!--    <span>50%</span>-->
+<!--</div>-->
+
+
 
 <!-- App interface -->
 <div class="app-interface">
@@ -111,7 +121,7 @@
 
         <!-- Colour branches checkbox -->
         <div class="w3-row w3-container w3-padding">
-            <div class="w3-col s6 w3-indigo w3-center branches">
+            <div class="w3-col s6 w3-center branches">
                 <!-- TODO format checkbox nicely -->
                 <input type="checkbox" name="branches" value="True" {{form['branches']}}> Colour branches </input>
             </div>
@@ -119,7 +129,7 @@
 
         <!-- Output file format -->
         <div class="w3-row w3-container w3-padding">
-            <div class="w3-col s6 w3-indigo w3-center output-file-format">
+            <div class="w3-col s6 w3-center output-file-format">
                <div>
                    <label for="output_format">Output file format:</label>
                </div>
@@ -132,15 +142,15 @@
 
                 <!-- Choose sites -->
         <div class="w3-row w3-container w3-padding">
-            <div class="w3-col s6 w3-indigo w3-center choose-sites">
+            <div class="w3-col s6 w3-center choose-sites">
                <input type="radio" name="choose_sites" value="{{all_sites_id}}" {{form['choose_sites_all']}}>All sites<br>
                <input type="radio" name="choose_sites" value="SITE_RANGE" {{form['choose_sites_range']}}>Choose sites:<br>
-               <input type="text" name="sites_range" value="{{form['sites_string']}}">
+               <input type="text"  name="sites_range" value="{{form['sites_string']}}">
             </div>
         </div>
 
         <div class="w3-row w3-container w3-padding">
-            <div class="w3-col s6 w3-indigo w3-center submit">
+            <div class="w3-col s6 w3-center submit">
                <input type="submit">
             </div>
         </div>
@@ -148,14 +158,7 @@
     </form>
 </div>
 
-<!-- TODO remove these temp markers just to show where middle of window is-->
-<div class="" style="margin-left: 0%; margin-right: 50%; background-color:red;">
-    <span>50%</span>
-</div>
 
-<div class="" style="margin-left: 50%; margin-right: 0%; background-color:blue;">
-    <span>50%</span>
-</div>
 
 <div>
 {% with messages = get_flashed_messages(with_categories=true) %}
