@@ -157,17 +157,25 @@
         </div>
     </form>
 
-    <div>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                        <p>{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+</div>
+    <div class="gap">
+        <span style="display: none;">Messages:</span>
     </div>
 
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="message">
+                <span class="close-button" onclick="this.parentElement.style.display='none';">&times;</span>
+                {% for category, message in messages %}
+                    <p>{{ message }}</p>
+<!--                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus egestas sed sed risus pretium quam. Pharetra magna ac placerat vestibulum. Maecenas sed enim ut sem viverra aliquet eget sit. Dignissim suspendisse in est ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras ornare arcu dui vivamus. Tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada. Tempus quam pellentesque nec nam aliquam. In egestas erat imperdiet sed euismod. Diam maecenas sed enim ut sem viverra aliquet eget. In mollis nunc sed id. Senectus et netus et malesuada. Ac turpis egestas sed tempus urna et pharetra. Enim lobortis scelerisque fermentum dui faucibus in. Placerat in egestas erat imperdiet. Consectetur adipiscing elit ut aliquam purus sit amet luctus venenatis. Nulla pharetra diam sit amet nisl suscipit adipiscing bibendum est. Quis imperdiet massa tincidunt nunc pulvinar. Morbi tristique senectus et netus et malesuada fames. </p>-->
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 </div>
+
 
 
 <div id="about" class="about">

@@ -4,7 +4,8 @@
     height: 550px;
     color: silver;
     background-color: #282828;
-
+    border: 1px;
+    border-color: silver;
     border-radius: 25px;
 }
 
@@ -85,8 +86,39 @@
     border-radius: 25px;
 }
 
-.messages {
+.gap {
+    margin: auto;
+    width: 532px;
+    height: 10px;
 }
+
+.message {
+    padding: 10px;
+    margin: auto;
+    width: 532px;
+    color: #282828;
+    background-color: silver;
+    border-radius: 25px;
+    border: 1px;
+    border-color: #282828;
+}
+
+.close-button {
+  margin-left: 15px;
+  color: #282828;
+  font-weight: bold;
+  float: right;
+  font-size: 33px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.close-button:hover {
+  color: white;
+}
+
+
 
 .about{
     margin: 20% 20%;
