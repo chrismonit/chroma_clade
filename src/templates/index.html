@@ -43,7 +43,7 @@
 <body class="w3-white">
 
 <!-- Icon Bar (Sidebar - hidden on small screens) -->
-<nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center">
+<nav class="w3-sidebar w3-bar-block w3-small w3-hide-small w3-center w3-white" style="border: 1px solid silver;">
   <!-- Avatar image in top left corner -->
   <img src="{{url_for('static', filename='tree.png')}}" style="width:100%" class="w3-white">
   <a href="#" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
@@ -155,26 +155,40 @@
                <input type="submit">
             </div>
         </div>
-
     </form>
+
+    <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                        <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
 </div>
 
 
-<div id="about">
-    <p></p>
-
-
+<div id="about" class="about">
+    <h1>About</h1>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus egestas sed sed risus pretium quam. Pharetra magna ac placerat vestibulum. Maecenas sed enim ut sem viverra aliquet eget sit. Dignissim suspendisse in est ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras ornare arcu dui vivamus. Tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada. Tempus quam pellentesque nec nam aliquam. In egestas erat imperdiet sed euismod. Diam maecenas sed enim ut sem viverra aliquet eget. In mollis nunc sed id. Senectus et netus et malesuada. Ac turpis egestas sed tempus urna et pharetra. Enim lobortis scelerisque fermentum dui faucibus in. Placerat in egestas erat imperdiet. Consectetur adipiscing elit ut aliquam purus sit amet luctus venenatis. Nulla pharetra diam sit amet nisl suscipit adipiscing bibendum est. Quis imperdiet massa tincidunt nunc pulvinar. Morbi tristique senectus et netus et malesuada fames.
+    </p>
+        Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa. Tempor commodo ullamcorper a lacus vestibulum sed arcu non. Malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Tincidunt augue interdum velit euismod in. Ac feugiat sed lectus vestibulum mattis ullamcorper. Libero volutpat sed cras ornare arcu dui vivamus arcu felis. Malesuada fames ac turpis egestas maecenas pharetra. At erat pellentesque adipiscing commodo elit. Enim facilisis gravida neque convallis a cras. Vel turpis nunc eget lorem dolor. Egestas maecenas pharetra convallis posuere morbi leo urna molestie at. Urna cursus eget nunc scelerisque viverra mauris. Nec feugiat in fermentum posuere urna. Nulla malesuada pellentesque elit eget gravida cum sociis natoque.
+    </p>
+    <p>
+        Malesuada bibendum arcu vitae elementum curabitur vitae nunc. Orci porta non pulvinar neque laoreet suspendisse interdum consectetur libero. Amet luctus venenatis lectus magna. Pharetra massa massa ultricies mi quis. Leo vel orci porta non pulvinar neque laoreet. Libero id faucibus nisl tincidunt eget nullam non nisi est. Turpis tincidunt id aliquet risus feugiat in. Volutpat est velit egestas dui id. Sed elementum tempus egestas sed sed risus pretium quam vulputate. Sed pulvinar proin gravida hendrerit lectus a. Nunc non blandit massa enim nec dui nunc mattis. Non arcu risus quis varius quam quisque id diam. Neque convallis a cras semper auctor neque vitae. Lacus sed viverra tellus in hac. Bibendum ut tristique et egestas quis ipsum suspendisse ultrices gravida.
+    </p>
+    <p>
+        Augue neque gravida in fermentum et sollicitudin ac orci. Eu mi bibendum neque egestas. Odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus. Mattis molestie a iaculis at erat pellentesque adipiscing. Mi bibendum neque egestas congue quisque. Tellus orci ac auctor augue mauris augue neque. Habitasse platea dictumst vestibulum rhoncus est pellentesque elit. Purus in massa tempor nec feugiat nisl pretium. In nibh mauris cursus mattis molestie. Vitae purus faucibus ornare suspendisse sed nisi lacus. Rhoncus dolor purus non enim. Nisl suscipit adipiscing bibendum est ultricies integer.
+    </p>
+    <p>
+        Amet massa vitae tortor condimentum. Imperdiet proin fermentum leo vel orci. Pellentesque nec nam aliquam sem et. Neque volutpat ac tincidunt vitae. Neque egestas congue quisque egestas diam in arcu cursus euismod. Quam elementum pulvinar etiam non quam lacus. Laoreet sit amet cursus sit amet dictum sit amet justo. Penatibus et magnis dis parturient montes nascetur ridiculus mus mauris. Volutpat lacus laoreet non curabitur gravida. Nunc sed velit dignissim sodales. Turpis massa tincidunt dui ut ornare. Etiam erat velit scelerisque in dictum non. Gravida in fermentum et sollicitudin ac orci phasellus egestas. Dictum varius duis at consectetur lorem donec. Nunc mattis enim ut tellus elementum sagittis. Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant. Pellentesque id nibh tortor id aliquet lectus proin. In hac habitasse platea dictumst vestibulum rhoncus. Ultrices eros in cursus turpis massa tincidunt dui ut ornare.
+    </p>
 </div>
 
-<div>
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-                <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-</div>
+
 
 
 
