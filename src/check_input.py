@@ -7,6 +7,7 @@ OUT_PREFIX = "col_"
 SITES_DELIM = ","
 RANGE_DELIM = "-"
 COLOUR_DELIM = ","
+ACCEPTABLE_SITE_STRING_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '\t', ',', '-', ' ']
 
 class InputError(ValueError):
     pass
@@ -86,6 +87,8 @@ class Input:
                 self.sites = list(range(self.align.get_alignment_length()))
             elif not any(char.isdigit() for char in sites_string):
                 raise InputError("Oops: no digits given for site numbers")
+            elif not all([character in ACCEPTABLE_SITE_STRING_CHARS for character in sites_string]):
+                raise InputError("Oops: don't understand values for alignment sites")
             else:
                 input_sites = [x-1 for x in self._parse_sites(sites_string, SITES_DELIM)] # -1 to make zero based 
                 for input_site in input_sites:

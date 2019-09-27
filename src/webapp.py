@@ -59,9 +59,9 @@ class FormData:
     TREE_IN_FORMATS = ("newick", "nexus")
     ALIGNMENT_IN_FORMATS = ("fasta", "nexus")
     TREE_OUT_FORMATS = ("figtree", "xml")
-    EXAMPLE_SITES_STRING = "e.g. 1-5, 9, 11-13"
+    DEFAULT_SITES_STRING = ""
     def __init__(self, branches=False, tree_in_format="newick", alignment_in_format="fasta", tree_out_format="figtree",
-                 all_sites=True, sites_string=EXAMPLE_SITES_STRING):
+                 all_sites=True, sites_string=DEFAULT_SITES_STRING):
 
         # NB this is not for validating user input, just ensuring values provided are acceptable
         if tree_in_format not in FormData.TREE_IN_FORMATS:
@@ -124,7 +124,7 @@ def index():
             except ValueError:
                 raise InputError(format_file_error_message("alignment", app.config["MAX_FILENAME_LENGTH"], ALIGNMENT_FILE_EXTENSIONS))
 
-            colour_file = os.path.join(os.path.dirname(__file__), Input.DEFAULT_COL_FILE)
+            colour_file = os.path.join(os.path.dirname(__file__), Input.DEFAULT_COL_FILE)  # TODO allow user to upload one/pick colours
 
             out_name = os.path.basename(tree_path)
             out_name = OUTPUT_FILE_PREIX + out_name
@@ -140,7 +140,7 @@ def index():
             submitted_data = FormData(
                 branches=branches, alignment_in_format=align_in_format, tree_in_format=tree_in_format,
                 tree_out_format=tree_out_format,
-                sites_string=(FormData.EXAMPLE_SITES_STRING if request.form["choose_sites"] == ALL_SITES_ID else request.form["sites_range"]),
+                sites_string=(FormData.DEFAULT_SITES_STRING if request.form["choose_sites"] == ALL_SITES_ID else request.form["sites_range"]),
                 all_sites=(request.form["choose_sites"] == ALL_SITES_ID))
             return render_template("index.html", form=submitted_data.get())
         except Exception as e:
