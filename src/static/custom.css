@@ -119,10 +119,16 @@
 }
 
 
-
+/* TODO combine these?*/
 .about{
     margin: 20% 20%;
 }
 
+.examples{
+    margin: 20% 20%;
+}
 
+.how-to{
+    margin: 20% 20%;
+}
 

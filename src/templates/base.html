@@ -32,22 +32,26 @@
     <i class="fa fa-home w3-xxlarge"></i>
     <p>ChromaClade</p>
   </a>
+<a href="#about" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-user w3-xxlarge"></i>
+    <p>ABOUT</p>
+  </a>
   <a href="#examples" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
     <i class="fa fa-eye w3-xxlarge"></i>
     <p>EXAMPLES</p>
   </a>
-  <a href="#about" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
-    <i class="fa fa-user w3-xxlarge"></i>
-    <p>ABOUT</p>
-  </a>
-</nav>
+  <a href="#how-to" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-eye w3-xxlarge"></i>
+    <p>HOW</p>
+
+  </nav>
 
 <!-- Navbar on small screens (Hidden on medium and large screens) -->
 <div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
   <div class="w3-bar w3-white w3-opacity w3-hover-opacity-off w3-center w3-small">
     <a href="#" class="w3-bar-item w3-button" style="width:25% !important">ChromaClade</a>
-    <a href="#examples" class="w3-bar-item w3-button" style="width:25% !important">Examples</a>
     <a href="#about" class="w3-bar-item w3-button" style="width:25% !important">About</a>
+    <a href="#examples" class="w3-bar-item w3-button" style="width:25% !important">Examples</a>
   </div>
 </div>
 
@@ -68,19 +72,60 @@
 <div id="about" class="about">
     <h1>About</h1>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempus egestas sed sed risus pretium quam. Pharetra magna ac placerat vestibulum. Maecenas sed enim ut sem viverra aliquet eget sit. Dignissim suspendisse in est ante in nibh mauris cursus mattis. Sed blandit libero volutpat sed cras ornare arcu dui vivamus. Tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada. Tempus quam pellentesque nec nam aliquam. In egestas erat imperdiet sed euismod. Diam maecenas sed enim ut sem viverra aliquet eget. In mollis nunc sed id. Senectus et netus et malesuada. Ac turpis egestas sed tempus urna et pharetra. Enim lobortis scelerisque fermentum dui faucibus in. Placerat in egestas erat imperdiet. Consectetur adipiscing elit ut aliquam purus sit amet luctus venenatis. Nulla pharetra diam sit amet nisl suscipit adipiscing bibendum est. Quis imperdiet massa tincidunt nunc pulvinar. Morbi tristique senectus et netus et malesuada fames.
+    ChromaClade is a bioinformatics program that produces visualisations combining sequence and phylogenetic data. It annotates taxon names in a phylogenetic tree with amino acids found at individual sites in a corresponding sequence alignment. Residue-specific colour codes enable easy inspection by eye and the resulting trees can be viewed in any of several popular tree-viewing programs.
     </p>
-        Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa. Tempor commodo ullamcorper a lacus vestibulum sed arcu non. Malesuada nunc vel risus commodo viverra maecenas accumsan lacus. Tincidunt augue interdum velit euismod in. Ac feugiat sed lectus vestibulum mattis ullamcorper. Libero volutpat sed cras ornare arcu dui vivamus arcu felis. Malesuada fames ac turpis egestas maecenas pharetra. At erat pellentesque adipiscing commodo elit. Enim facilisis gravida neque convallis a cras. Vel turpis nunc eget lorem dolor. Egestas maecenas pharetra convallis posuere morbi leo urna molestie at. Urna cursus eget nunc scelerisque viverra mauris. Nec feugiat in fermentum posuere urna. Nulla malesuada pellentesque elit eget gravida cum sociis natoque.
-    </p>
+
+
+    <!-- TODO pictorial explanation of what it does -->
+
+
+
+    <!-- TODO how to cite, link to towers lab and contact -->
+</div>
+       
+<div id="how-to" class="how-to">
+    <h1>Using ChromaClade</h1>
+
+    <h3>Input</h3>
     <p>
-        Malesuada bibendum arcu vitae elementum curabitur vitae nunc. Orci porta non pulvinar neque laoreet suspendisse interdum consectetur libero. Amet luctus venenatis lectus magna. Pharetra massa massa ultricies mi quis. Leo vel orci porta non pulvinar neque laoreet. Libero id faucibus nisl tincidunt eget nullam non nisi est. Turpis tincidunt id aliquet risus feugiat in. Volutpat est velit egestas dui id. Sed elementum tempus egestas sed sed risus pretium quam vulputate. Sed pulvinar proin gravida hendrerit lectus a. Nunc non blandit massa enim nec dui nunc mattis. Non arcu risus quis varius quam quisque id diam. Neque convallis a cras semper auctor neque vitae. Lacus sed viverra tellus in hac. Bibendum ut tristique et egestas quis ipsum suspendisse ultrices gravida.
+Use the buttons to select the files containing your tree and your corresponding alignment. 
     </p>
+
     <p>
-        Augue neque gravida in fermentum et sollicitudin ac orci. Eu mi bibendum neque egestas. Odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus. Mattis molestie a iaculis at erat pellentesque adipiscing. Mi bibendum neque egestas congue quisque. Tellus orci ac auctor augue mauris augue neque. Habitasse platea dictumst vestibulum rhoncus est pellentesque elit. Purus in massa tempor nec feugiat nisl pretium. In nibh mauris cursus mattis molestie. Vitae purus faucibus ornare suspendisse sed nisi lacus. Rhoncus dolor purus non enim. Nisl suscipit adipiscing bibendum est ultricies integer.
+    Use the dropdown to select the <b>file format</b> for your input files: either <a href="https://en.wikipedia.org/wiki/Newick_format">Newick</a> or <a href="https://en.wikipedia.org/wiki/Nexus_file">Nexus</a> format for trees and <a href="https://en.wikipedia.org/wiki/FASTA_format">Fasta</a> or Nexus format for alignment. Tools are available for converting between tree formats (e.g. <a href="http://phylogeny.lirmm.fr/phylo_cgi/data_converter.cgi">phylogeny.fr</a>) and alignment formats (e.g. <a href="https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/">EBI tools</a>).
     </p>
+
     <p>
-        Amet massa vitae tortor condimentum. Imperdiet proin fermentum leo vel orci. Pellentesque nec nam aliquam sem et. Neque volutpat ac tincidunt vitae. Neque egestas congue quisque egestas diam in arcu cursus euismod. Quam elementum pulvinar etiam non quam lacus. Laoreet sit amet cursus sit amet dictum sit amet justo. Penatibus et magnis dis parturient montes nascetur ridiculus mus mauris. Volutpat lacus laoreet non curabitur gravida. Nunc sed velit dignissim sodales. Turpis massa tincidunt dui ut ornare. Etiam erat velit scelerisque in dictum non. Gravida in fermentum et sollicitudin ac orci phasellus egestas. Dictum varius duis at consectetur lorem donec. Nunc mattis enim ut tellus elementum sagittis. Lorem ipsum dolor sit amet consectetur adipiscing elit pellentesque habitant. Pellentesque id nibh tortor id aliquet lectus proin. In hac habitasse platea dictumst vestibulum rhoncus. Ultrices eros in cursus turpis massa tincidunt dui ut ornare.
+The alignment would ordinarily be amino acid sequences (e.g. translated from the nucleotide sequences used to first estimate the tree) but the method will work perfectly well with nucleotide states too. 
     </p>
+
+    <h3>Output</h3>
+
+    <p>
+The output is a set of trees saved to a single file, where taxon names have been annotated according to the amino acid found in that taxon's sequence. E.g. if methionine is found at position 1 in the human sequence, then <code>human</code> becomes <code>human__site_1__M</code>. In addition, the taxon name will be assigned a colour specific to methionine.
+    </p>
+    
+    <p>
+Use the dropdown to select the <b>output file format</b> for the output file, either a Nexus format file specifically compatible with the <a href="http://tree.bio.ed.ac.uk/software/figtree/">FigTree</a> tree viewer, or the PhyloXML format compatible with other viewers such as <a href="https://sites.google.com/site/cmzmasek/home/software/archaeopteryx">Archaeopteryx</a>.
+    </p>
+
+    <p>
+Branches can also be coloured by amino acids observed in descendent taxa, by clicking the <b>Colour branches</b> checkbox. Annotated trees can be made for a subset of sites by clicking the <b>Choose sites</b> checkbox and entering the site ranges to include, just as you would specify pages of a document to print.
+    </p>
+
+    <!-- TODO Note about how long it stays on server? -->
+
+</div>
+
+
+<div id="examples" class="examples">
+    <h1>Examples</h1>  <!-- TODO use copy from paper, paraphrased -->
+    These are sequences of the PB2 protein found in influenza A viruses infecting humans and birds. Below is a colour-annotated tree produced by ChromaClade and visualised in [FigTree]<a href="http://tree.bio.ed.ac.uk/software/figtree/), showing residues observed at site 271, namely threonine (blue), alanine (red) and isoleucine (purple).
+
+    <p align="center">
+        <img src="{{url_for('static', filename='pb2_271.jpg')}}" alt="PB2 site 271" width="300"/>
+    </p>
+
 </div>
 
 
