@@ -34,16 +34,16 @@
   </a>
 <a href="#about" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
     <i class="fa fa-user w3-xxlarge"></i>
-    <p>ABOUT</p>
-  </a>
-  <a href="#examples" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
-    <i class="fa fa-eye w3-xxlarge"></i>
-    <p>EXAMPLES</p>
+    <p>About</p>
   </a>
   <a href="#how-to" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
+    <i class="fa fa-book w3-xxlarge"></i>
+    <p>How to</p>
+  <a href="#examples" class="w3-bar-item w3-button w3-padding-large w3-hover-black">
     <i class="fa fa-eye w3-xxlarge"></i>
-    <p>HOW</p>
-
+    <p>Examples</p>
+  </a>
+  
   </nav>
 
 <!-- Navbar on small screens (Hidden on medium and large screens) -->
@@ -51,6 +51,7 @@
   <div class="w3-bar w3-white w3-opacity w3-hover-opacity-off w3-center w3-small">
     <a href="#" class="w3-bar-item w3-button" style="width:25% !important">ChromaClade</a>
     <a href="#about" class="w3-bar-item w3-button" style="width:25% !important">About</a>
+    <a href="#how-to" class="w3-bar-item w3-button" style="width:25% !important">How to</a>
     <a href="#examples" class="w3-bar-item w3-button" style="width:25% !important">Examples</a>
   </div>
 </div>
@@ -67,6 +68,12 @@
 {% block main %}{% endblock %}
 </main>
 
+<p class="w3-center self-promotion">
+    ChromaClade is developed and maintained by <a href="https://uk.linkedin.com/in/chrismonit" target="_blank">Christopher Monit</a>. It is the result of my past postdoctoral research work in the <a href="https://www.ucl.ac.uk/towers-lab/" target="_blank">Greg Towers laboratory</a>.
+    <!-- TODO and funded by... -->
+</p>
+
+<i class="fa fa-book"></i>
 
 
 <div id="about" class="about">
@@ -75,8 +82,8 @@
     ChromaClade is a bioinformatics program that produces visualisations combining sequence and phylogenetic data. It annotates taxon names in a phylogenetic tree with amino acids found at individual sites in a corresponding sequence alignment. Residue-specific colour codes enable easy inspection by eye and the resulting trees can be viewed in any of several popular tree-viewing programs.
     </p>
 
+    <img src="{{url_for('static', filename='explanation.png')}}" alt="ChromaClade summary" class="w3-image w3-opacity-min">
 
-    <!-- TODO pictorial explanation of what it does -->
 
 
 
@@ -85,6 +92,7 @@
        
 <div id="how-to" class="how-to">
     <h1>Using ChromaClade</h1>
+    <!-- TODO add instructions about making alignments and trees -->
 
     <h3>Input</h3>
     <p>
@@ -92,7 +100,7 @@ Use the buttons to select the files containing your tree and your corresponding 
     </p>
 
     <p>
-    Use the dropdown to select the <b>file format</b> for your input files: either <a href="https://en.wikipedia.org/wiki/Newick_format">Newick</a> or <a href="https://en.wikipedia.org/wiki/Nexus_file">Nexus</a> format for trees and <a href="https://en.wikipedia.org/wiki/FASTA_format">Fasta</a> or Nexus format for alignment. Tools are available for converting between tree formats (e.g. <a href="http://phylogeny.lirmm.fr/phylo_cgi/data_converter.cgi">phylogeny.fr</a>) and alignment formats (e.g. <a href="https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/">EBI tools</a>).
+    Use the dropdown to select the <b>file format</b> for your input files: either <a href="https://en.wikipedia.org/wiki/Newick_format" target="_blank">Newick</a> or <a href="https://en.wikipedia.org/wiki/Nexus_file" target="_blank">Nexus</a> format for trees and <a href="https://en.wikipedia.org/wiki/FASTA_format" target="_blank">Fasta</a> or Nexus format for alignment. Tools are available for converting between tree formats (e.g. <a href="http://phylogeny.lirmm.fr/phylo_cgi/data_converter.cgi" target="_blank">phylogeny.fr</a>) and alignment formats (e.g. <a href="https://www.ebi.ac.uk/Tools/sfc/emboss_seqret/" target="_blank">EBI tools</a>).
     </p>
 
     <p>
@@ -106,7 +114,7 @@ The output is a set of trees saved to a single file, where taxon names have been
     </p>
     
     <p>
-Use the dropdown to select the <b>output file format</b> for the output file, either a Nexus format file specifically compatible with the <a href="http://tree.bio.ed.ac.uk/software/figtree/">FigTree</a> tree viewer, or the PhyloXML format compatible with other viewers such as <a href="https://sites.google.com/site/cmzmasek/home/software/archaeopteryx">Archaeopteryx</a>.
+Use the dropdown to select the <b>output file format</b> for the output file, either a Nexus format file specifically compatible with the <a href="http://tree.bio.ed.ac.uk/software/figtree/" target="_blank">FigTree</a> tree viewer, or the PhyloXML format compatible with other viewers such as <a href="https://sites.google.com/site/cmzmasek/home/software/archaeopteryx" target="_blank">Archaeopteryx</a>.
     </p>
 
     <p>
@@ -120,7 +128,7 @@ Branches can also be coloured by amino acids observed in descendent taxa, by cli
 
 <div id="examples" class="examples">
     <h1>Examples</h1>  <!-- TODO use copy from paper, paraphrased -->
-    These are sequences of the PB2 protein found in influenza A viruses infecting humans and birds. Below is a colour-annotated tree produced by ChromaClade and visualised in [FigTree]<a href="http://tree.bio.ed.ac.uk/software/figtree/), showing residues observed at site 271, namely threonine (blue), alanine (red) and isoleucine (purple).
+    These are sequences of the PB2 protein found in influenza A viruses infecting humans and birds. Below is a colour-annotated tree produced by ChromaClade and visualised in <a href="http://tree.bio.ed.ac.uk/software/figtree/" target="_blank">FigTree</a>, showing residues observed at site 271, namely threonine (blue), alanine (red) and isoleucine (purple).
 
     <p align="center">
         <img src="{{url_for('static', filename='pb2_271.jpg')}}" alt="PB2 site 271" width="300"/>
