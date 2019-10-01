@@ -1,4 +1,4 @@
-.app-interface {
+.app-panel {
     margin: auto;
     width: 532px;
     height: 550px;
@@ -138,16 +138,22 @@
 }
 
 /*results page*/
+
+.results-panel {
+    margin: auto;
+    width: 532px;
+    height: 550px;
+    color: #282828;
+    background-color: white;
+    border: 1px solid silver;
+    border-radius: 25px;
+}
+
 /* TODO could merge with submit button style*/
 .home-button {
-    background-color: silver;
-    color: #282828;
-    padding: 14px 25px;
-    text-align: center;
-
-    border-style: solid;
-    border-width: 1px;
-    border-color: silver;
-    border-radius: 25px;
-
+    padding-top: 100px;
+    background-color: #282828;
+    color: silver;
 }
+
+
