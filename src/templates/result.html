@@ -3,10 +3,11 @@
 {% block main %}
 
 <!-- TODO make download button etc. want to make similar size to app interface to preserve layout! --> 
-<div class="w3-center" style="margin: auto">
-    <a href="{{ url_for('download', filename=out_name) }}">Download</a>
-    <br>
-    <a href="{{ url_for('index') }}">Home</a>
+<div class="w3-center app-interface" >
+    <div>
+        <span>Download: <a href="{{ url_for('download', filename=out_name) }}">{{out_name}}</a></span>
+    </div>
+    <a class="home-button" href="{{ url_for('index') }}">Home</a>
 </div>
 
 
