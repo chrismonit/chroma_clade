@@ -151,9 +151,11 @@
 
 /* TODO could merge with submit button style*/
 .home-button {
-    padding-top: 100px;
+    padding: 10px;
     background-color: #282828;
     color: silver;
+    border: 1px solid silver;
+    border-radius 25px;
 }
 
 

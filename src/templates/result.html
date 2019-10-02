@@ -2,7 +2,7 @@
 
 {% block main %}
 
-<!-- TODO make download button etc. want to make similar size to app interface to preserve layout! --> 
+<!-- TODO Improve styling of home button/link. May want to replace text for download file link -->
 <div class="w3-center results-panel" >
     <div style="padding-top: 125px; padding-bottom: 50px">
         <h1 >Download:</h1>
@@ -10,11 +10,17 @@
     <div class="w3-hover-black" style="">
         <a href="{{ url_for('download', filename=out_name) }}">{{out_name}}</a>
     </div>
+    <br>
     <p>
         Result files will be stored on the server for 24 hours
     </p>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <div style="">
-        <a class="w3-button" style="background-color: #282828" href="{{ url_for('index') }}">Home</a>
+        <a class="home-button" href="{{ url_for('index') }}">Home</a>
     </div>
 </div>
 
