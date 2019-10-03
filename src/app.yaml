@@ -1,0 +1,9 @@
+runtime: python37
+
+# the below handler is required to map http://chromaclade.com to https://chromaclade.com for all traffic
+# script refers to the entrypoint of the application;
+# according an an error message I had previously, this must be set to 'auto' for the https mapping to work
+handlers:
+- url: /.*
+  secure: always
+  script: auto

@@ -181,4 +181,13 @@ def download(filename):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import pytz
+    from datetime import datetime
+    london = pytz.timezone("Europe/London")
+
+    try:
+        app.run(port=8080) # may need to add host and port fields here, and remove debug setting for deployment
+    except Exception as e:
+        with open("log_web.txt", "a") as f:
+            f.write(str(datetime.now(tz=timezone)), str(e))
+            
