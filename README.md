@@ -9,7 +9,10 @@ ChromaClade is a desktop bioinformatics application that produces visualisations
 This repository houses ChromaClade executables, documentation, example input/output and its source code. ChromaClade has been developed and distributed by Christopher Monit.
 
 If you use ChromaClade please cite
-> Monit, C., Goldstein, R. A. and Towers, G. J. (submitted) ChromaClade: Combined visualisation of phylogenetic and sequence data 
+
+>	Monit, C., Goldstein, R.A. and Towers, G.J. (2019) ChromaClade: Combined visualisation of phylogenetic and sequence data, *BMC Evolutionary Biology* 19, 186
+https://doi.org/10.1186/s12862-019-1518-9
+ 
 
 
 ## Examples
